@@ -1,0 +1,4822 @@
+[
+  {
+    "dni": "25331980",
+    "partido": "Ahora Nación",
+    "score": 20.0
+  },
+  {
+    "dni": "17903382",
+    "partido": "Alianza para el Progreso",
+    "score": 20.0
+  },
+  {
+    "dni": "10783805",
+    "partido": "Juntos por el Perú",
+    "score": 20.0
+  },
+  {
+    "dni": "10636218",
+    "partido": "Integridad Democrática",
+    "score": 20.0
+  },
+  {
+    "dni": "06303156",
+    "partido": "País para Todos",
+    "score": 20.0
+  },
+  {
+    "dni": "10273657",
+    "partido": "Libertad Popular",
+    "score": 20.0
+  },
+  {
+    "dni": "07615582",
+    "partido": "Fuerza y Libertad",
+    "score": 20.0
+  },
+  {
+    "dni": "40707652",
+    "partido": "Perú Acción",
+    "score": 20.0
+  },
+  {
+    "dni": "07240879",
+    "partido": "Unidad Nacional",
+    "score": 20.0
+  },
+  {
+    "dni": "09892236",
+    "partido": "Alianza para el Progreso",
+    "score": 19.0
+  },
+  {
+    "dni": "06776011",
+    "partido": "Alianza para el Progreso",
+    "score": 17.0
+  },
+  {
+    "dni": "09240724",
+    "partido": "Unido Perú",
+    "score": 17.0
+  },
+  {
+    "dni": "08558627",
+    "partido": "Ahora Nación",
+    "score": 15.0
+  },
+  {
+    "dni": "08761632",
+    "partido": "Ahora Nación",
+    "score": 15.0
+  },
+  {
+    "dni": "01127044",
+    "partido": "Ahora Nación",
+    "score": 15.0
+  },
+  {
+    "dni": "09376064",
+    "partido": "Renovación Popular",
+    "score": 15.0
+  },
+  {
+    "dni": "10307948",
+    "partido": "Fuerza Popular",
+    "score": 15.0
+  },
+  {
+    "dni": "08266314",
+    "partido": "Fuerza Popular",
+    "score": 15.0
+  },
+  {
+    "dni": "08261544",
+    "partido": "Fuerza Popular",
+    "score": 15.0
+  },
+  {
+    "dni": "06645276",
+    "partido": "Buen Gobierno",
+    "score": 15.0
+  },
+  {
+    "dni": "07260881",
+    "partido": "Integridad Democrática",
+    "score": 15.0
+  },
+  {
+    "dni": "02794821",
+    "partido": "Integridad Democrática",
+    "score": 15.0
+  },
+  {
+    "dni": "10306852",
+    "partido": "Integridad Democrática",
+    "score": 15.0
+  },
+  {
+    "dni": "07813923",
+    "partido": "Partido Morado",
+    "score": 15.0
+  },
+  {
+    "dni": "06242968",
+    "partido": "Cooperación Popular",
+    "score": 15.0
+  },
+  {
+    "dni": "40799023",
+    "partido": "Unido Perú",
+    "score": 15.0
+  },
+  {
+    "dni": "43297941",
+    "partido": "Unido Perú",
+    "score": 15.0
+  },
+  {
+    "dni": "43330672",
+    "partido": "Unido Perú",
+    "score": 15.0
+  },
+  {
+    "dni": "07485705",
+    "partido": "Unido Perú",
+    "score": 15.0
+  },
+  {
+    "dni": "15594926",
+    "partido": "País para Todos",
+    "score": 15.0
+  },
+  {
+    "dni": "29520242",
+    "partido": "País para Todos",
+    "score": 15.0
+  },
+  {
+    "dni": "09303898",
+    "partido": "País para Todos",
+    "score": 15.0
+  },
+  {
+    "dni": "43293233",
+    "partido": "País para Todos",
+    "score": 15.0
+  },
+  {
+    "dni": "31012948",
+    "partido": "País para Todos",
+    "score": 15.0
+  },
+  {
+    "dni": "08199906",
+    "partido": "Libertad Popular",
+    "score": 15.0
+  },
+  {
+    "dni": "40422398",
+    "partido": "Libertad Popular",
+    "score": 15.0
+  },
+  {
+    "dni": "40036102",
+    "partido": "Libertad Popular",
+    "score": 15.0
+  },
+  {
+    "dni": "43561262",
+    "partido": "Libertad Popular",
+    "score": 15.0
+  },
+  {
+    "dni": "40095926",
+    "partido": "Libertad Popular",
+    "score": 15.0
+  },
+  {
+    "dni": "09392269",
+    "partido": "Perú Primero",
+    "score": 15.0
+  },
+  {
+    "dni": "00190779",
+    "partido": "Perú Primero",
+    "score": 15.0
+  },
+  {
+    "dni": "03130342",
+    "partido": "Perú Primero",
+    "score": 15.0
+  },
+  {
+    "dni": "43686805",
+    "partido": "Perú Primero",
+    "score": 15.0
+  },
+  {
+    "dni": "06785430",
+    "partido": "Primero La Gente",
+    "score": 15.0
+  },
+  {
+    "dni": "28201257",
+    "partido": "Fe en el Perú",
+    "score": 15.0
+  },
+  {
+    "dni": "09302839",
+    "partido": "Avanza País",
+    "score": 15.0
+  },
+  {
+    "dni": "10401183",
+    "partido": "Avanza País",
+    "score": 15.0
+  },
+  {
+    "dni": "08299598",
+    "partido": "Avanza País",
+    "score": 15.0
+  },
+  {
+    "dni": "33343153",
+    "partido": "FREPAP",
+    "score": 15.0
+  },
+  {
+    "dni": "25681995",
+    "partido": "Fuerza y Libertad",
+    "score": 15.0
+  },
+  {
+    "dni": "10774189",
+    "partido": "Fuerza y Libertad",
+    "score": 15.0
+  },
+  {
+    "dni": "19913206",
+    "partido": "Fuerza y Libertad",
+    "score": 15.0
+  },
+  {
+    "dni": "21088224",
+    "partido": "Fuerza y Libertad",
+    "score": 15.0
+  },
+  {
+    "dni": "10301214",
+    "partido": "APRA",
+    "score": 15.0
+  },
+  {
+    "dni": "09163750",
+    "partido": "APRA",
+    "score": 15.0
+  },
+  {
+    "dni": "06248592",
+    "partido": "APRA",
+    "score": 15.0
+  },
+  {
+    "dni": "06218402",
+    "partido": "Verde",
+    "score": 15.0
+  },
+  {
+    "dni": "16484970",
+    "partido": "Perú Federal",
+    "score": 15.0
+  },
+  {
+    "dni": "16715743",
+    "partido": "Somos Perú",
+    "score": 15.0
+  },
+  {
+    "dni": "40356100",
+    "partido": "Somos Perú",
+    "score": 15.0
+  },
+  {
+    "dni": "09673565",
+    "partido": "PPP",
+    "score": 15.0
+  },
+  {
+    "dni": "09162582",
+    "partido": "PPP",
+    "score": 15.0
+  },
+  {
+    "dni": "05402721",
+    "partido": "Perú Acción",
+    "score": 15.0
+  },
+  {
+    "dni": "16794778",
+    "partido": "Sí Creo",
+    "score": 15.0
+  },
+  {
+    "dni": "07246887",
+    "partido": "Podemos Perú",
+    "score": 15.0
+  },
+  {
+    "dni": "10006722",
+    "partido": "Unidad Nacional",
+    "score": 15.0
+  },
+  {
+    "dni": "07575995",
+    "partido": "Unidad Nacional",
+    "score": 15.0
+  },
+  {
+    "dni": "06466585",
+    "partido": "Perú Libre",
+    "score": 15.0
+  },
+  {
+    "dni": "19805447",
+    "partido": "Perú Libre",
+    "score": 15.0
+  },
+  {
+    "dni": "20066854",
+    "partido": "Perú Libre",
+    "score": 15.0
+  },
+  {
+    "dni": "40374263",
+    "partido": "Integridad Democrática",
+    "score": 14.0
+  },
+  {
+    "dni": "25417613",
+    "partido": "País para Todos",
+    "score": 14.0
+  },
+  {
+    "dni": "06002807",
+    "partido": "Venceremos",
+    "score": 14.0
+  },
+  {
+    "dni": "23716842",
+    "partido": "FREPAP",
+    "score": 14.0
+  },
+  {
+    "dni": "06449530",
+    "partido": "APRA",
+    "score": 14.0
+  },
+  {
+    "dni": "40175203",
+    "partido": "Frente de la Esperanza",
+    "score": 14.0
+  },
+  {
+    "dni": "08162504",
+    "partido": "Frente de la Esperanza",
+    "score": 14.0
+  },
+  {
+    "dni": "07751982",
+    "partido": "Progresemos",
+    "score": 14.0
+  },
+  {
+    "dni": "01539305",
+    "partido": "Renovación Popular",
+    "score": 13.0
+  },
+  {
+    "dni": "18114960",
+    "partido": "Alianza para el Progreso",
+    "score": 13.0
+  },
+  {
+    "dni": "10804834",
+    "partido": "Alianza para el Progreso",
+    "score": 13.0
+  },
+  {
+    "dni": "07354387",
+    "partido": "Alianza para el Progreso",
+    "score": 13.0
+  },
+  {
+    "dni": "05210955",
+    "partido": "Alianza para el Progreso",
+    "score": 13.0
+  },
+  {
+    "dni": "19903031",
+    "partido": "Avanza País",
+    "score": 13.0
+  },
+  {
+    "dni": "27153111",
+    "partido": "Somos Perú",
+    "score": 13.0
+  },
+  {
+    "dni": "10474708",
+    "partido": "Frente de la Esperanza",
+    "score": 13.0
+  },
+  {
+    "dni": "09904425",
+    "partido": "Frente de la Esperanza",
+    "score": 13.0
+  },
+  {
+    "dni": "17976113",
+    "partido": "PRIN",
+    "score": 13.0
+  },
+  {
+    "dni": "04742579",
+    "partido": "Ahora Nación",
+    "score": 12.0
+  },
+  {
+    "dni": "07559128",
+    "partido": "Renovación Popular",
+    "score": 12.0
+  },
+  {
+    "dni": "42750152",
+    "partido": "Juntos por el Perú",
+    "score": 12.0
+  },
+  {
+    "dni": "08655412",
+    "partido": "Integridad Democrática",
+    "score": 12.0
+  },
+  {
+    "dni": "25405787",
+    "partido": "Partido Morado",
+    "score": 12.0
+  },
+  {
+    "dni": "27557657",
+    "partido": "Primero La Gente",
+    "score": 12.0
+  },
+  {
+    "dni": "32534376",
+    "partido": "FREPAP",
+    "score": 12.0
+  },
+  {
+    "dni": "21134079",
+    "partido": "FREPAP",
+    "score": 12.0
+  },
+  {
+    "dni": "06168608",
+    "partido": "APRA",
+    "score": 12.0
+  },
+  {
+    "dni": "05362026",
+    "partido": "Verde",
+    "score": 12.0
+  },
+  {
+    "dni": "23889981",
+    "partido": "Somos Perú",
+    "score": 12.0
+  },
+  {
+    "dni": "32796381",
+    "partido": "PPP",
+    "score": 12.0
+  },
+  {
+    "dni": "40311520",
+    "partido": "Sí Creo",
+    "score": 12.0
+  },
+  {
+    "dni": "40858548",
+    "partido": "Podemos Perú",
+    "score": 12.0
+  },
+  {
+    "dni": "23980637",
+    "partido": "Progresemos",
+    "score": 12.0
+  },
+  {
+    "dni": "18113682",
+    "partido": "Unidad Nacional",
+    "score": 12.0
+  },
+  {
+    "dni": "09932455",
+    "partido": "Unidad Nacional",
+    "score": 12.0
+  },
+  {
+    "dni": "01311614",
+    "partido": "Perú Libre",
+    "score": 12.0
+  },
+  {
+    "dni": "43391265",
+    "partido": "Perú Libre",
+    "score": 12.0
+  },
+  {
+    "dni": "20057129",
+    "partido": "Perú Libre",
+    "score": 12.0
+  },
+  {
+    "dni": "07803059",
+    "partido": "Ahora Nación",
+    "score": 11.0
+  },
+  {
+    "dni": "18071086",
+    "partido": "Un Camino Diferente",
+    "score": 11.0
+  },
+  {
+    "dni": "26705695",
+    "partido": "Ahora Nación",
+    "score": 10.0
+  },
+  {
+    "dni": "07755878",
+    "partido": "Ahora Nación",
+    "score": 10.0
+  },
+  {
+    "dni": "40106921",
+    "partido": "Ahora Nación",
+    "score": 10.0
+  },
+  {
+    "dni": "06272152",
+    "partido": "Ahora Nación",
+    "score": 10.0
+  },
+  {
+    "dni": "09099445",
+    "partido": "Ahora Nación",
+    "score": 10.0
+  },
+  {
+    "dni": "07845838",
+    "partido": "Renovación Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "06178060",
+    "partido": "Renovación Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "21520551",
+    "partido": "Renovación Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "07590902",
+    "partido": "Renovación Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "40433187",
+    "partido": "Fuerza Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "08195809",
+    "partido": "Fuerza Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "08262491",
+    "partido": "Fuerza Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "21564196",
+    "partido": "Fuerza Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "05277192",
+    "partido": "Fuerza Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "02811100",
+    "partido": "Fuerza Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "02794608",
+    "partido": "Alianza para el Progreso",
+    "score": 10.0
+  },
+  {
+    "dni": "16757459",
+    "partido": "Alianza para el Progreso",
+    "score": 10.0
+  },
+  {
+    "dni": "23272702",
+    "partido": "Alianza para el Progreso",
+    "score": 10.0
+  },
+  {
+    "dni": "18032382",
+    "partido": "Alianza para el Progreso",
+    "score": 10.0
+  },
+  {
+    "dni": "21456255",
+    "partido": "Alianza para el Progreso",
+    "score": 10.0
+  },
+  {
+    "dni": "05340651",
+    "partido": "Alianza para el Progreso",
+    "score": 10.0
+  },
+  {
+    "dni": "09153143",
+    "partido": "Juntos por el Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "25402972",
+    "partido": "Juntos por el Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "07793210",
+    "partido": "Buen Gobierno",
+    "score": 10.0
+  },
+  {
+    "dni": "07231335",
+    "partido": "Buen Gobierno",
+    "score": 10.0
+  },
+  {
+    "dni": "43360309",
+    "partido": "Buen Gobierno",
+    "score": 10.0
+  },
+  {
+    "dni": "06876967",
+    "partido": "Buen Gobierno",
+    "score": 10.0
+  },
+  {
+    "dni": "10565213",
+    "partido": "Buen Gobierno",
+    "score": 10.0
+  },
+  {
+    "dni": "09436538",
+    "partido": "Buen Gobierno",
+    "score": 10.0
+  },
+  {
+    "dni": "20052276",
+    "partido": "Buen Gobierno",
+    "score": 10.0
+  },
+  {
+    "dni": "07651031",
+    "partido": "Obras",
+    "score": 10.0
+  },
+  {
+    "dni": "43879107",
+    "partido": "Integridad Democrática",
+    "score": 10.0
+  },
+  {
+    "dni": "09336553",
+    "partido": "Integridad Democrática",
+    "score": 10.0
+  },
+  {
+    "dni": "06656244",
+    "partido": "Integridad Democrática",
+    "score": 10.0
+  },
+  {
+    "dni": "07850559",
+    "partido": "Integridad Democrática",
+    "score": 10.0
+  },
+  {
+    "dni": "16802775",
+    "partido": "Integridad Democrática",
+    "score": 10.0
+  },
+  {
+    "dni": "07230228",
+    "partido": "Integridad Democrática",
+    "score": 10.0
+  },
+  {
+    "dni": "07521119",
+    "partido": "Integridad Democrática",
+    "score": 10.0
+  },
+  {
+    "dni": "09552537",
+    "partido": "Partido Morado",
+    "score": 10.0
+  },
+  {
+    "dni": "23928025",
+    "partido": "Partido Morado",
+    "score": 10.0
+  },
+  {
+    "dni": "10621266",
+    "partido": "Partido Morado",
+    "score": 10.0
+  },
+  {
+    "dni": "08536727",
+    "partido": "Partido Morado",
+    "score": 10.0
+  },
+  {
+    "dni": "43938404",
+    "partido": "Partido Morado",
+    "score": 10.0
+  },
+  {
+    "dni": "01211014",
+    "partido": "Cooperación Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "10786164",
+    "partido": "Cooperación Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "04742284",
+    "partido": "Unido Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "08449831",
+    "partido": "Unido Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "06654879",
+    "partido": "País para Todos",
+    "score": 10.0
+  },
+  {
+    "dni": "09273006",
+    "partido": "País para Todos",
+    "score": 10.0
+  },
+  {
+    "dni": "40469605",
+    "partido": "País para Todos",
+    "score": 10.0
+  },
+  {
+    "dni": "23012817",
+    "partido": "País para Todos",
+    "score": 10.0
+  },
+  {
+    "dni": "08191008",
+    "partido": "Libertad Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "07266096",
+    "partido": "Libertad Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "07605117",
+    "partido": "Libertad Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "10271096",
+    "partido": "Libertad Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "07130975",
+    "partido": "Libertad Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "10006370",
+    "partido": "Libertad Popular",
+    "score": 10.0
+  },
+  {
+    "dni": "16468258",
+    "partido": "Venceremos",
+    "score": 10.0
+  },
+  {
+    "dni": "06658111",
+    "partido": "Venceremos",
+    "score": 10.0
+  },
+  {
+    "dni": "27080597",
+    "partido": "Venceremos",
+    "score": 10.0
+  },
+  {
+    "dni": "08539958",
+    "partido": "Venceremos",
+    "score": 10.0
+  },
+  {
+    "dni": "32869200",
+    "partido": "Venceremos",
+    "score": 10.0
+  },
+  {
+    "dni": "09679658",
+    "partido": "Venceremos",
+    "score": 10.0
+  },
+  {
+    "dni": "02664050",
+    "partido": "Venceremos",
+    "score": 10.0
+  },
+  {
+    "dni": "09729218",
+    "partido": "Venceremos",
+    "score": 10.0
+  },
+  {
+    "dni": "03339762",
+    "partido": "Venceremos",
+    "score": 10.0
+  },
+  {
+    "dni": "04411300",
+    "partido": "Perú Primero",
+    "score": 10.0
+  },
+  {
+    "dni": "40077944",
+    "partido": "Perú Primero",
+    "score": 10.0
+  },
+  {
+    "dni": "10762763",
+    "partido": "Perú Primero",
+    "score": 10.0
+  },
+  {
+    "dni": "02852583",
+    "partido": "Perú Primero",
+    "score": 10.0
+  },
+  {
+    "dni": "09817415",
+    "partido": "Perú Primero",
+    "score": 10.0
+  },
+  {
+    "dni": "06127396",
+    "partido": "Perú Primero",
+    "score": 10.0
+  },
+  {
+    "dni": "29160479",
+    "partido": "Perú Primero",
+    "score": 10.0
+  },
+  {
+    "dni": "06733992",
+    "partido": "Perú Primero",
+    "score": 10.0
+  },
+  {
+    "dni": "09304369",
+    "partido": "Perú Primero",
+    "score": 10.0
+  },
+  {
+    "dni": "23932556",
+    "partido": "Primero La Gente",
+    "score": 10.0
+  },
+  {
+    "dni": "10342732",
+    "partido": "Primero La Gente",
+    "score": 10.0
+  },
+  {
+    "dni": "07777874",
+    "partido": "Primero La Gente",
+    "score": 10.0
+  },
+  {
+    "dni": "07914344",
+    "partido": "Primero La Gente",
+    "score": 10.0
+  },
+  {
+    "dni": "09602797",
+    "partido": "Primero La Gente",
+    "score": 10.0
+  },
+  {
+    "dni": "10257086",
+    "partido": "Primero La Gente",
+    "score": 10.0
+  },
+  {
+    "dni": "08501683",
+    "partido": "Fe en el Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "43401358",
+    "partido": "Fe en el Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "08274679",
+    "partido": "Avanza País",
+    "score": 10.0
+  },
+  {
+    "dni": "43287528",
+    "partido": "Avanza País",
+    "score": 10.0
+  },
+  {
+    "dni": "08251768",
+    "partido": "Avanza País",
+    "score": 10.0
+  },
+  {
+    "dni": "07772498",
+    "partido": "Avanza País",
+    "score": 10.0
+  },
+  {
+    "dni": "40195635",
+    "partido": "Avanza País",
+    "score": 10.0
+  },
+  {
+    "dni": "80523585",
+    "partido": "Fuerza y Libertad",
+    "score": 10.0
+  },
+  {
+    "dni": "08726151",
+    "partido": "Fuerza y Libertad",
+    "score": 10.0
+  },
+  {
+    "dni": "25853189",
+    "partido": "Fuerza y Libertad",
+    "score": 10.0
+  },
+  {
+    "dni": "09751464",
+    "partido": "APRA",
+    "score": 10.0
+  },
+  {
+    "dni": "10786178",
+    "partido": "APRA",
+    "score": 10.0
+  },
+  {
+    "dni": "07537643",
+    "partido": "APRA",
+    "score": 10.0
+  },
+  {
+    "dni": "29680315",
+    "partido": "APRA",
+    "score": 10.0
+  },
+  {
+    "dni": "09086129",
+    "partido": "APRA",
+    "score": 10.0
+  },
+  {
+    "dni": "09565161",
+    "partido": "APRA",
+    "score": 10.0
+  },
+  {
+    "dni": "04415907",
+    "partido": "PTE",
+    "score": 10.0
+  },
+  {
+    "dni": "07951357",
+    "partido": "PTE",
+    "score": 10.0
+  },
+  {
+    "dni": "07254352",
+    "partido": "Verde",
+    "score": 10.0
+  },
+  {
+    "dni": "09453366",
+    "partido": "Verde",
+    "score": 10.0
+  },
+  {
+    "dni": "26614247",
+    "partido": "Perú Federal",
+    "score": 10.0
+  },
+  {
+    "dni": "08805228",
+    "partido": "Perú Federal",
+    "score": 10.0
+  },
+  {
+    "dni": "08255194",
+    "partido": "Perú Federal",
+    "score": 10.0
+  },
+  {
+    "dni": "08116131",
+    "partido": "Perú Federal",
+    "score": 10.0
+  },
+  {
+    "dni": "26677064",
+    "partido": "Perú Federal",
+    "score": 10.0
+  },
+  {
+    "dni": "44078565",
+    "partido": "Somos Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "25001963",
+    "partido": "Somos Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "80283971",
+    "partido": "Somos Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "16121633",
+    "partido": "Frente de la Esperanza",
+    "score": 10.0
+  },
+  {
+    "dni": "28298938",
+    "partido": "Frente de la Esperanza",
+    "score": 10.0
+  },
+  {
+    "dni": "43294988",
+    "partido": "Frente de la Esperanza",
+    "score": 10.0
+  },
+  {
+    "dni": "10126282",
+    "partido": "Frente de la Esperanza",
+    "score": 10.0
+  },
+  {
+    "dni": "43317845",
+    "partido": "Frente de la Esperanza",
+    "score": 10.0
+  },
+  {
+    "dni": "09568388",
+    "partido": "Frente de la Esperanza",
+    "score": 10.0
+  },
+  {
+    "dni": "43409673",
+    "partido": "PPP",
+    "score": 10.0
+  },
+  {
+    "dni": "43448254",
+    "partido": "PPP",
+    "score": 10.0
+  },
+  {
+    "dni": "40034360",
+    "partido": "PRIN",
+    "score": 10.0
+  },
+  {
+    "dni": "10266270",
+    "partido": "Sí Creo",
+    "score": 10.0
+  },
+  {
+    "dni": "49017178",
+    "partido": "Podemos Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "44649199",
+    "partido": "Podemos Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "43267304",
+    "partido": "Podemos Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "08605531",
+    "partido": "Podemos Perú",
+    "score": 10.0
+  },
+  {
+    "dni": "24711696",
+    "partido": "Progresemos",
+    "score": 10.0
+  },
+  {
+    "dni": "40304890",
+    "partido": "Progresemos",
+    "score": 10.0
+  },
+  {
+    "dni": "19404985",
+    "partido": "Un Camino Diferente",
+    "score": 10.0
+  },
+  {
+    "dni": "40193458",
+    "partido": "Un Camino Diferente",
+    "score": 10.0
+  },
+  {
+    "dni": "43315918",
+    "partido": "Unidad Nacional",
+    "score": 10.0
+  },
+  {
+    "dni": "23802843",
+    "partido": "Unidad Nacional",
+    "score": 10.0
+  },
+  {
+    "dni": "16422667",
+    "partido": "Unidad Nacional",
+    "score": 10.0
+  },
+  {
+    "dni": "08124491",
+    "partido": "Unidad Nacional",
+    "score": 10.0
+  },
+  {
+    "dni": "20107161",
+    "partido": "Perú Libre",
+    "score": 10.0
+  },
+  {
+    "dni": "06776959",
+    "partido": "Fuerza Popular",
+    "score": 9.0
+  },
+  {
+    "dni": "09970891",
+    "partido": "Obras",
+    "score": 9.0
+  },
+  {
+    "dni": "40676234",
+    "partido": "Perú Acción",
+    "score": 9.0
+  },
+  {
+    "dni": "07406585",
+    "partido": "Perú Acción",
+    "score": 9.0
+  },
+  {
+    "dni": "10691398",
+    "partido": "Sí Creo",
+    "score": 9.0
+  },
+  {
+    "dni": "07632023",
+    "partido": "Perú Libre",
+    "score": 9.0
+  },
+  {
+    "dni": "10404860",
+    "partido": "Renovación Popular",
+    "score": 7.0
+  },
+  {
+    "dni": "10381510",
+    "partido": "Renovación Popular",
+    "score": 7.0
+  },
+  {
+    "dni": "18067974",
+    "partido": "Renovación Popular",
+    "score": 7.0
+  },
+  {
+    "dni": "15408077",
+    "partido": "Fuerza Popular",
+    "score": 7.0
+  },
+  {
+    "dni": "21448945",
+    "partido": "Fuerza Popular",
+    "score": 7.0
+  },
+  {
+    "dni": "29672486",
+    "partido": "Alianza para el Progreso",
+    "score": 7.0
+  },
+  {
+    "dni": "05618721",
+    "partido": "Alianza para el Progreso",
+    "score": 7.0
+  },
+  {
+    "dni": "18151793",
+    "partido": "Alianza para el Progreso",
+    "score": 7.0
+  },
+  {
+    "dni": "10212293",
+    "partido": "Alianza para el Progreso",
+    "score": 7.0
+  },
+  {
+    "dni": "10139458",
+    "partido": "Juntos por el Perú",
+    "score": 7.0
+  },
+  {
+    "dni": "09609537",
+    "partido": "Buen Gobierno",
+    "score": 7.0
+  },
+  {
+    "dni": "02702955",
+    "partido": "Buen Gobierno",
+    "score": 7.0
+  },
+  {
+    "dni": "02376613",
+    "partido": "Obras",
+    "score": 7.0
+  },
+  {
+    "dni": "08801117",
+    "partido": "Obras",
+    "score": 7.0
+  },
+  {
+    "dni": "07738992",
+    "partido": "Partido Morado",
+    "score": 7.0
+  },
+  {
+    "dni": "09764094",
+    "partido": "Partido Morado",
+    "score": 7.0
+  },
+  {
+    "dni": "80668107",
+    "partido": "Unido Perú",
+    "score": 7.0
+  },
+  {
+    "dni": "26723870",
+    "partido": "Unido Perú",
+    "score": 7.0
+  },
+  {
+    "dni": "32838183",
+    "partido": "Perú Primero",
+    "score": 7.0
+  },
+  {
+    "dni": "00107153",
+    "partido": "Primero La Gente",
+    "score": 7.0
+  },
+  {
+    "dni": "00478096",
+    "partido": "Primero La Gente",
+    "score": 7.0
+  },
+  {
+    "dni": "10058209",
+    "partido": "Fe en el Perú",
+    "score": 7.0
+  },
+  {
+    "dni": "04339260",
+    "partido": "FREPAP",
+    "score": 7.0
+  },
+  {
+    "dni": "03370387",
+    "partido": "APRA",
+    "score": 7.0
+  },
+  {
+    "dni": "17435068",
+    "partido": "APRA",
+    "score": 7.0
+  },
+  {
+    "dni": "18157357",
+    "partido": "PTE",
+    "score": 7.0
+  },
+  {
+    "dni": "07164447",
+    "partido": "Perú Federal",
+    "score": 7.0
+  },
+  {
+    "dni": "19337683",
+    "partido": "Perú Federal",
+    "score": 7.0
+  },
+  {
+    "dni": "09378621",
+    "partido": "Perú Federal",
+    "score": 7.0
+  },
+  {
+    "dni": "07655010",
+    "partido": "Perú Federal",
+    "score": 7.0
+  },
+  {
+    "dni": "18140210",
+    "partido": "Somos Perú",
+    "score": 7.0
+  },
+  {
+    "dni": "09952318",
+    "partido": "Somos Perú",
+    "score": 7.0
+  },
+  {
+    "dni": "27673959",
+    "partido": "Somos Perú",
+    "score": 7.0
+  },
+  {
+    "dni": "29247491",
+    "partido": "Frente de la Esperanza",
+    "score": 7.0
+  },
+  {
+    "dni": "08142464",
+    "partido": "Frente de la Esperanza",
+    "score": 7.0
+  },
+  {
+    "dni": "23930593",
+    "partido": "PPP",
+    "score": 7.0
+  },
+  {
+    "dni": "10355825",
+    "partido": "PPP",
+    "score": 7.0
+  },
+  {
+    "dni": "20099934",
+    "partido": "PPP",
+    "score": 7.0
+  },
+  {
+    "dni": "00076154",
+    "partido": "Perú Acción",
+    "score": 7.0
+  },
+  {
+    "dni": "08870092",
+    "partido": "PRIN",
+    "score": 7.0
+  },
+  {
+    "dni": "09563930",
+    "partido": "PRIN",
+    "score": 7.0
+  },
+  {
+    "dni": "06784974",
+    "partido": "PRIN",
+    "score": 7.0
+  },
+  {
+    "dni": "43328757",
+    "partido": "Sí Creo",
+    "score": 7.0
+  },
+  {
+    "dni": "08266996",
+    "partido": "Sí Creo",
+    "score": 7.0
+  },
+  {
+    "dni": "02411906",
+    "partido": "Sí Creo",
+    "score": 7.0
+  },
+  {
+    "dni": "10801835",
+    "partido": "Sí Creo",
+    "score": 7.0
+  },
+  {
+    "dni": "17930875",
+    "partido": "Sí Creo",
+    "score": 7.0
+  },
+  {
+    "dni": "24981180",
+    "partido": "Progresemos",
+    "score": 7.0
+  },
+  {
+    "dni": "00819751",
+    "partido": "Unidad Nacional",
+    "score": 7.0
+  },
+  {
+    "dni": "40724667",
+    "partido": "Perú Libre",
+    "score": 7.0
+  },
+  {
+    "dni": "20073840",
+    "partido": "Perú Libre",
+    "score": 7.0
+  },
+  {
+    "dni": "09483562",
+    "partido": "Renovación Popular",
+    "score": 6.0
+  },
+  {
+    "dni": "08586800",
+    "partido": "Juntos por el Perú",
+    "score": 6.0
+  },
+  {
+    "dni": "00072379",
+    "partido": "Unido Perú",
+    "score": 6.0
+  },
+  {
+    "dni": "10729183",
+    "partido": "Perú Primero",
+    "score": 6.0
+  },
+  {
+    "dni": "32799698",
+    "partido": "APRA",
+    "score": 6.0
+  },
+  {
+    "dni": "08149998",
+    "partido": "Verde",
+    "score": 6.0
+  },
+  {
+    "dni": "29535812",
+    "partido": "Verde",
+    "score": 6.0
+  },
+  {
+    "dni": "07707778",
+    "partido": "Perú Federal",
+    "score": 6.0
+  },
+  {
+    "dni": "19330425",
+    "partido": "Perú Federal",
+    "score": 6.0
+  },
+  {
+    "dni": "25742495",
+    "partido": "Frente de la Esperanza",
+    "score": 6.0
+  },
+  {
+    "dni": "25707576",
+    "partido": "Perú Acción",
+    "score": 6.0
+  },
+  {
+    "dni": "21545374",
+    "partido": "Ahora Nación",
+    "score": 5.0
+  },
+  {
+    "dni": "17826805",
+    "partido": "Ahora Nación",
+    "score": 5.0
+  },
+  {
+    "dni": "09434755",
+    "partido": "Ahora Nación",
+    "score": 5.0
+  },
+  {
+    "dni": "40204874",
+    "partido": "Ahora Nación",
+    "score": 5.0
+  },
+  {
+    "dni": "29666418",
+    "partido": "Ahora Nación",
+    "score": 5.0
+  },
+  {
+    "dni": "16767746",
+    "partido": "Ahora Nación",
+    "score": 5.0
+  },
+  {
+    "dni": "29285160",
+    "partido": "Ahora Nación",
+    "score": 5.0
+  },
+  {
+    "dni": "32855132",
+    "partido": "Ahora Nación",
+    "score": 5.0
+  },
+  {
+    "dni": "40318653",
+    "partido": "Ahora Nación",
+    "score": 5.0
+  },
+  {
+    "dni": "25799622",
+    "partido": "Renovación Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "16429203",
+    "partido": "Renovación Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "19996239",
+    "partido": "Renovación Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "07237776",
+    "partido": "Renovación Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "40697243",
+    "partido": "Renovación Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "06977611",
+    "partido": "Renovación Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "07960843",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "07704730",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "07831436",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "08911520",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "43341622",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "07201147",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "29731107",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "16766539",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "08723038",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "42133581",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "10181163",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "02883935",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "08963680",
+    "partido": "Fuerza Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "80143959",
+    "partido": "Alianza para el Progreso",
+    "score": 5.0
+  },
+  {
+    "dni": "70047055",
+    "partido": "Alianza para el Progreso",
+    "score": 5.0
+  },
+  {
+    "dni": "16545163",
+    "partido": "Alianza para el Progreso",
+    "score": 5.0
+  },
+  {
+    "dni": "02863193",
+    "partido": "Alianza para el Progreso",
+    "score": 5.0
+  },
+  {
+    "dni": "23964409",
+    "partido": "Alianza para el Progreso",
+    "score": 5.0
+  },
+  {
+    "dni": "07536914",
+    "partido": "Alianza para el Progreso",
+    "score": 5.0
+  },
+  {
+    "dni": "21487528",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "24716071",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "10035168",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "29632775",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "42134579",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "02792297",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "21453924",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "25700579",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "06972125",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "01305031",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "09933376",
+    "partido": "Juntos por el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "07567598",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "08050134",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "06704752",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "07619185",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "09131897",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "07676748",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "10585130",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "07565994",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "08033374",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "06227538",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "15995608",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "07244295",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "02623573",
+    "partido": "Buen Gobierno",
+    "score": 5.0
+  },
+  {
+    "dni": "10063223",
+    "partido": "Obras",
+    "score": 5.0
+  },
+  {
+    "dni": "28275670",
+    "partido": "Obras",
+    "score": 5.0
+  },
+  {
+    "dni": "10792022",
+    "partido": "Obras",
+    "score": 5.0
+  },
+  {
+    "dni": "41767813",
+    "partido": "Obras",
+    "score": 5.0
+  },
+  {
+    "dni": "09633411",
+    "partido": "Obras",
+    "score": 5.0
+  },
+  {
+    "dni": "15852217",
+    "partido": "Obras",
+    "score": 5.0
+  },
+  {
+    "dni": "07964787",
+    "partido": "Integridad Democrática",
+    "score": 5.0
+  },
+  {
+    "dni": "07973181",
+    "partido": "Integridad Democrática",
+    "score": 5.0
+  },
+  {
+    "dni": "10219991",
+    "partido": "Integridad Democrática",
+    "score": 5.0
+  },
+  {
+    "dni": "06495078",
+    "partido": "Integridad Democrática",
+    "score": 5.0
+  },
+  {
+    "dni": "43749600",
+    "partido": "Integridad Democrática",
+    "score": 5.0
+  },
+  {
+    "dni": "10136751",
+    "partido": "Integridad Democrática",
+    "score": 5.0
+  },
+  {
+    "dni": "06981876",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "07253914",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "07515940",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "10274640",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "08740971",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "10790199",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "08220007",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "10449649",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "10055124",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "08618960",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "06607129",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "07290631",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "06805712",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "09886358",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "08720299",
+    "partido": "Partido Morado",
+    "score": 5.0
+  },
+  {
+    "dni": "02417724",
+    "partido": "Cooperación Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "06279342",
+    "partido": "Cooperación Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "06861436",
+    "partido": "Cooperación Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "10762074",
+    "partido": "Unido Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "01317313",
+    "partido": "Unido Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "32304953",
+    "partido": "País para Todos",
+    "score": 5.0
+  },
+  {
+    "dni": "40767221",
+    "partido": "País para Todos",
+    "score": 5.0
+  },
+  {
+    "dni": "06804970",
+    "partido": "País para Todos",
+    "score": 5.0
+  },
+  {
+    "dni": "22103507",
+    "partido": "País para Todos",
+    "score": 5.0
+  },
+  {
+    "dni": "07214164",
+    "partido": "Libertad Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "06666789",
+    "partido": "Libertad Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "10336504",
+    "partido": "Libertad Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "08165072",
+    "partido": "Libertad Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "03640391",
+    "partido": "Libertad Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "16002270",
+    "partido": "Libertad Popular",
+    "score": 5.0
+  },
+  {
+    "dni": "06261560",
+    "partido": "Venceremos",
+    "score": 5.0
+  },
+  {
+    "dni": "02886933",
+    "partido": "Venceremos",
+    "score": 5.0
+  },
+  {
+    "dni": "07543866",
+    "partido": "Venceremos",
+    "score": 5.0
+  },
+  {
+    "dni": "06251953",
+    "partido": "Venceremos",
+    "score": 5.0
+  },
+  {
+    "dni": "21529721",
+    "partido": "Venceremos",
+    "score": 5.0
+  },
+  {
+    "dni": "07930712",
+    "partido": "Venceremos",
+    "score": 5.0
+  },
+  {
+    "dni": "41258762",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "23999250",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "29292100",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "08157214",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "31649147",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "33262869",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "07961318",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "06887887",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "20040086",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "19909824",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "41128349",
+    "partido": "Perú Primero",
+    "score": 5.0
+  },
+  {
+    "dni": "09677079",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "07867789",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "29666430",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "06200373",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "20085925",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "10182930",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "08936887",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "10808292",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "08785763",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "09386487",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "09753559",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "07750301",
+    "partido": "Primero La Gente",
+    "score": 5.0
+  },
+  {
+    "dni": "08801399",
+    "partido": "Fe en el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "07225554",
+    "partido": "Fe en el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "07905879",
+    "partido": "Fe en el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "25860495",
+    "partido": "Fe en el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "09894334",
+    "partido": "Fe en el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "10140230",
+    "partido": "Fe en el Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "01157063",
+    "partido": "Avanza País",
+    "score": 5.0
+  },
+  {
+    "dni": "09635662",
+    "partido": "Avanza País",
+    "score": 5.0
+  },
+  {
+    "dni": "25807537",
+    "partido": "Avanza País",
+    "score": 5.0
+  },
+  {
+    "dni": "10221387",
+    "partido": "Avanza País",
+    "score": 5.0
+  },
+  {
+    "dni": "08123159",
+    "partido": "Avanza País",
+    "score": 5.0
+  },
+  {
+    "dni": "09389605",
+    "partido": "Avanza País",
+    "score": 5.0
+  },
+  {
+    "dni": "09649507",
+    "partido": "Avanza País",
+    "score": 5.0
+  },
+  {
+    "dni": "04626836",
+    "partido": "Avanza País",
+    "score": 5.0
+  },
+  {
+    "dni": "09148129",
+    "partido": "FREPAP",
+    "score": 5.0
+  },
+  {
+    "dni": "29203539",
+    "partido": "FREPAP",
+    "score": 5.0
+  },
+  {
+    "dni": "29098815",
+    "partido": "FREPAP",
+    "score": 5.0
+  },
+  {
+    "dni": "09718935",
+    "partido": "Fuerza y Libertad",
+    "score": 5.0
+  },
+  {
+    "dni": "25856257",
+    "partido": "Fuerza y Libertad",
+    "score": 5.0
+  },
+  {
+    "dni": "25834689",
+    "partido": "Fuerza y Libertad",
+    "score": 5.0
+  },
+  {
+    "dni": "08240215",
+    "partido": "Fuerza y Libertad",
+    "score": 5.0
+  },
+  {
+    "dni": "21103072",
+    "partido": "Fuerza y Libertad",
+    "score": 5.0
+  },
+  {
+    "dni": "07745538",
+    "partido": "Fuerza y Libertad",
+    "score": 5.0
+  },
+  {
+    "dni": "20044221",
+    "partido": "Fuerza y Libertad",
+    "score": 5.0
+  },
+  {
+    "dni": "41616770",
+    "partido": "Fuerza y Libertad",
+    "score": 5.0
+  },
+  {
+    "dni": "06656534",
+    "partido": "APRA",
+    "score": 5.0
+  },
+  {
+    "dni": "15355636",
+    "partido": "APRA",
+    "score": 5.0
+  },
+  {
+    "dni": "07210262",
+    "partido": "APRA",
+    "score": 5.0
+  },
+  {
+    "dni": "06652331",
+    "partido": "APRA",
+    "score": 5.0
+  },
+  {
+    "dni": "09358097",
+    "partido": "APRA",
+    "score": 5.0
+  },
+  {
+    "dni": "06121544",
+    "partido": "APRA",
+    "score": 5.0
+  },
+  {
+    "dni": "02756757",
+    "partido": "APRA",
+    "score": 5.0
+  },
+  {
+    "dni": "08196203",
+    "partido": "APRA",
+    "score": 5.0
+  },
+  {
+    "dni": "08712004",
+    "partido": "APRA",
+    "score": 5.0
+  },
+  {
+    "dni": "10059851",
+    "partido": "APRA",
+    "score": 5.0
+  },
+  {
+    "dni": "08058852",
+    "partido": "PTE",
+    "score": 5.0
+  },
+  {
+    "dni": "40725889",
+    "partido": "PTE",
+    "score": 5.0
+  },
+  {
+    "dni": "05584885",
+    "partido": "PTE",
+    "score": 5.0
+  },
+  {
+    "dni": "09361514",
+    "partido": "PTE",
+    "score": 5.0
+  },
+  {
+    "dni": "05218404",
+    "partido": "PTE",
+    "score": 5.0
+  },
+  {
+    "dni": "09357660",
+    "partido": "PTE",
+    "score": 5.0
+  },
+  {
+    "dni": "08865630",
+    "partido": "PTE",
+    "score": 5.0
+  },
+  {
+    "dni": "28294396",
+    "partido": "PTE",
+    "score": 5.0
+  },
+  {
+    "dni": "09562959",
+    "partido": "Verde",
+    "score": 5.0
+  },
+  {
+    "dni": "10036631",
+    "partido": "Verde",
+    "score": 5.0
+  },
+  {
+    "dni": "41121519",
+    "partido": "Perú Federal",
+    "score": 5.0
+  },
+  {
+    "dni": "06752545",
+    "partido": "Perú Federal",
+    "score": 5.0
+  },
+  {
+    "dni": "08208132",
+    "partido": "Perú Federal",
+    "score": 5.0
+  },
+  {
+    "dni": "16145872",
+    "partido": "Perú Federal",
+    "score": 5.0
+  },
+  {
+    "dni": "17807700",
+    "partido": "Perú Federal",
+    "score": 5.0
+  },
+  {
+    "dni": "18010708",
+    "partido": "Somos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "40168347",
+    "partido": "Somos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "25567150",
+    "partido": "Somos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "07766088",
+    "partido": "Somos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "29299579",
+    "partido": "Somos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "25859024",
+    "partido": "Somos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "07253568",
+    "partido": "Somos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "10118944",
+    "partido": "Frente de la Esperanza",
+    "score": 5.0
+  },
+  {
+    "dni": "29591627",
+    "partido": "Frente de la Esperanza",
+    "score": 5.0
+  },
+  {
+    "dni": "09468215",
+    "partido": "Frente de la Esperanza",
+    "score": 5.0
+  },
+  {
+    "dni": "29685188",
+    "partido": "PPP",
+    "score": 5.0
+  },
+  {
+    "dni": "40758358",
+    "partido": "PPP",
+    "score": 5.0
+  },
+  {
+    "dni": "16563291",
+    "partido": "PPP",
+    "score": 5.0
+  },
+  {
+    "dni": "40846145",
+    "partido": "PPP",
+    "score": 5.0
+  },
+  {
+    "dni": "08263758",
+    "partido": "Perú Acción",
+    "score": 5.0
+  },
+  {
+    "dni": "43290769",
+    "partido": "Perú Acción",
+    "score": 5.0
+  },
+  {
+    "dni": "22081767",
+    "partido": "Perú Acción",
+    "score": 5.0
+  },
+  {
+    "dni": "00418021",
+    "partido": "Perú Acción",
+    "score": 5.0
+  },
+  {
+    "dni": "21142650",
+    "partido": "Perú Acción",
+    "score": 5.0
+  },
+  {
+    "dni": "10419588",
+    "partido": "Perú Acción",
+    "score": 5.0
+  },
+  {
+    "dni": "40226757",
+    "partido": "Perú Acción",
+    "score": 5.0
+  },
+  {
+    "dni": "20563238",
+    "partido": "PRIN",
+    "score": 5.0
+  },
+  {
+    "dni": "06656472",
+    "partido": "PRIN",
+    "score": 5.0
+  },
+  {
+    "dni": "18906774",
+    "partido": "PRIN",
+    "score": 5.0
+  },
+  {
+    "dni": "06434981",
+    "partido": "PRIN",
+    "score": 5.0
+  },
+  {
+    "dni": "21080373",
+    "partido": "PRIN",
+    "score": 5.0
+  },
+  {
+    "dni": "08429837",
+    "partido": "PRIN",
+    "score": 5.0
+  },
+  {
+    "dni": "42901444",
+    "partido": "PRIN",
+    "score": 5.0
+  },
+  {
+    "dni": "08783312",
+    "partido": "Sí Creo",
+    "score": 5.0
+  },
+  {
+    "dni": "06521988",
+    "partido": "Sí Creo",
+    "score": 5.0
+  },
+  {
+    "dni": "07396763",
+    "partido": "Sí Creo",
+    "score": 5.0
+  },
+  {
+    "dni": "08783312",
+    "partido": "Sí Creo",
+    "score": 5.0
+  },
+  {
+    "dni": "09379859",
+    "partido": "Sí Creo",
+    "score": 5.0
+  },
+  {
+    "dni": "10613656",
+    "partido": "Sí Creo",
+    "score": 5.0
+  },
+  {
+    "dni": "41608058",
+    "partido": "Sí Creo",
+    "score": 5.0
+  },
+  {
+    "dni": "09957717",
+    "partido": "Sí Creo",
+    "score": 5.0
+  },
+  {
+    "dni": "09180469",
+    "partido": "Sí Creo",
+    "score": 5.0
+  },
+  {
+    "dni": "07881480",
+    "partido": "Podemos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "09575873",
+    "partido": "Podemos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "07745528",
+    "partido": "Podemos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "09143590",
+    "partido": "Podemos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "07013079",
+    "partido": "Podemos Perú",
+    "score": 5.0
+  },
+  {
+    "dni": "43287529",
+    "partido": "Progresemos",
+    "score": 5.0
+  },
+  {
+    "dni": "10066654",
+    "partido": "Progresemos",
+    "score": 5.0
+  },
+  {
+    "dni": "09549967",
+    "partido": "Un Camino Diferente",
+    "score": 5.0
+  },
+  {
+    "dni": "09720636",
+    "partido": "Un Camino Diferente",
+    "score": 5.0
+  },
+  {
+    "dni": "18032469",
+    "partido": "Un Camino Diferente",
+    "score": 5.0
+  },
+  {
+    "dni": "18089713",
+    "partido": "Un Camino Diferente",
+    "score": 5.0
+  },
+  {
+    "dni": "18172534",
+    "partido": "Un Camino Diferente",
+    "score": 5.0
+  },
+  {
+    "dni": "18123441",
+    "partido": "Un Camino Diferente",
+    "score": 5.0
+  },
+  {
+    "dni": "40728264",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "29567624",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "31188558",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "06340660",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "06286597",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "25470735",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "40807022",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "10472653",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "07789821",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "09537520",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "07151008",
+    "partido": "Unidad Nacional",
+    "score": 5.0
+  },
+  {
+    "dni": "10305232",
+    "partido": "Perú Libre",
+    "score": 5.0
+  },
+  {
+    "dni": "41005490",
+    "partido": "Perú Libre",
+    "score": 5.0
+  },
+  {
+    "dni": "42699423",
+    "partido": "Perú Libre",
+    "score": 5.0
+  },
+  {
+    "dni": "31173024",
+    "partido": "Perú Libre",
+    "score": 5.0
+  },
+  {
+    "dni": "07485530",
+    "partido": "Perú Libre",
+    "score": 5.0
+  },
+  {
+    "dni": "08787268",
+    "partido": "Perú Libre",
+    "score": 5.0
+  },
+  {
+    "dni": "06779966",
+    "partido": "Perú Libre",
+    "score": 5.0
+  },
+  {
+    "dni": "09568163",
+    "partido": "Perú Libre",
+    "score": 5.0
+  },
+  {
+    "dni": "19254198",
+    "partido": "Perú Libre",
+    "score": 5.0
+  },
+  {
+    "dni": "06801933",
+    "partido": "Perú Libre",
+    "score": 5.0
+  },
+  {
+    "dni": "05293154",
+    "partido": "Ahora Nación",
+    "score": 4.0
+  },
+  {
+    "dni": "80146948",
+    "partido": "Ahora Nación",
+    "score": 4.0
+  },
+  {
+    "dni": "31616560",
+    "partido": "Ahora Nación",
+    "score": 4.0
+  },
+  {
+    "dni": "09347247",
+    "partido": "Ahora Nación",
+    "score": 4.0
+  },
+  {
+    "dni": "09153292",
+    "partido": "Renovación Popular",
+    "score": 4.0
+  },
+  {
+    "dni": "07258001",
+    "partido": "Renovación Popular",
+    "score": 4.0
+  },
+  {
+    "dni": "07882250",
+    "partido": "Renovación Popular",
+    "score": 4.0
+  },
+  {
+    "dni": "09763353",
+    "partido": "Renovación Popular",
+    "score": 4.0
+  },
+  {
+    "dni": "04641322",
+    "partido": "Fuerza Popular",
+    "score": 4.0
+  },
+  {
+    "dni": "06282599",
+    "partido": "Alianza para el Progreso",
+    "score": 4.0
+  },
+  {
+    "dni": "19809735",
+    "partido": "Alianza para el Progreso",
+    "score": 4.0
+  },
+  {
+    "dni": "18182763",
+    "partido": "Alianza para el Progreso",
+    "score": 4.0
+  },
+  {
+    "dni": "40009977",
+    "partido": "Juntos por el Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "16558562",
+    "partido": "Juntos por el Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "06846780",
+    "partido": "Buen Gobierno",
+    "score": 4.0
+  },
+  {
+    "dni": "07250032",
+    "partido": "Obras",
+    "score": 4.0
+  },
+  {
+    "dni": "09303706",
+    "partido": "Obras",
+    "score": 4.0
+  },
+  {
+    "dni": "09666577",
+    "partido": "Obras",
+    "score": 4.0
+  },
+  {
+    "dni": "80612217",
+    "partido": "Obras",
+    "score": 4.0
+  },
+  {
+    "dni": "06769680",
+    "partido": "Obras",
+    "score": 4.0
+  },
+  {
+    "dni": "16658418",
+    "partido": "Integridad Democrática",
+    "score": 4.0
+  },
+  {
+    "dni": "00236481",
+    "partido": "Integridad Democrática",
+    "score": 4.0
+  },
+  {
+    "dni": "09154524",
+    "partido": "Integridad Democrática",
+    "score": 4.0
+  },
+  {
+    "dni": "09521747",
+    "partido": "Integridad Democrática",
+    "score": 4.0
+  },
+  {
+    "dni": "09887788",
+    "partido": "Integridad Democrática",
+    "score": 4.0
+  },
+  {
+    "dni": "24945598",
+    "partido": "Partido Morado",
+    "score": 4.0
+  },
+  {
+    "dni": "09860694",
+    "partido": "Partido Morado",
+    "score": 4.0
+  },
+  {
+    "dni": "17910128",
+    "partido": "Cooperación Popular",
+    "score": 4.0
+  },
+  {
+    "dni": "10379271",
+    "partido": "Cooperación Popular",
+    "score": 4.0
+  },
+  {
+    "dni": "24710373",
+    "partido": "Cooperación Popular",
+    "score": 4.0
+  },
+  {
+    "dni": "44315446",
+    "partido": "Unido Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "16757582",
+    "partido": "Unido Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "09095243",
+    "partido": "Unido Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "09411811",
+    "partido": "País para Todos",
+    "score": 4.0
+  },
+  {
+    "dni": "10160561",
+    "partido": "País para Todos",
+    "score": 4.0
+  },
+  {
+    "dni": "09689506",
+    "partido": "Venceremos",
+    "score": 4.0
+  },
+  {
+    "dni": "09375873",
+    "partido": "Primero La Gente",
+    "score": 4.0
+  },
+  {
+    "dni": "06540545",
+    "partido": "Primero La Gente",
+    "score": 4.0
+  },
+  {
+    "dni": "10417514",
+    "partido": "Primero La Gente",
+    "score": 4.0
+  },
+  {
+    "dni": "40203248",
+    "partido": "FREPAP",
+    "score": 4.0
+  },
+  {
+    "dni": "22243864",
+    "partido": "FREPAP",
+    "score": 4.0
+  },
+  {
+    "dni": "40356580",
+    "partido": "FREPAP",
+    "score": 4.0
+  },
+  {
+    "dni": "08541564",
+    "partido": "Fuerza y Libertad",
+    "score": 4.0
+  },
+  {
+    "dni": "44293952",
+    "partido": "Fuerza y Libertad",
+    "score": 4.0
+  },
+  {
+    "dni": "40094050",
+    "partido": "PTE",
+    "score": 4.0
+  },
+  {
+    "dni": "06161792",
+    "partido": "PTE",
+    "score": 4.0
+  },
+  {
+    "dni": "25827444",
+    "partido": "PTE",
+    "score": 4.0
+  },
+  {
+    "dni": "40074913",
+    "partido": "PTE",
+    "score": 4.0
+  },
+  {
+    "dni": "15405017",
+    "partido": "Perú Federal",
+    "score": 4.0
+  },
+  {
+    "dni": "16143185",
+    "partido": "Perú Federal",
+    "score": 4.0
+  },
+  {
+    "dni": "09820002",
+    "partido": "Somos Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "22510256",
+    "partido": "Somos Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "25717413",
+    "partido": "Somos Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "15726720",
+    "partido": "Somos Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "17442403",
+    "partido": "Somos Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "17929536",
+    "partido": "Somos Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "03660752",
+    "partido": "Frente de la Esperanza",
+    "score": 4.0
+  },
+  {
+    "dni": "06798570",
+    "partido": "Frente de la Esperanza",
+    "score": 4.0
+  },
+  {
+    "dni": "20419460",
+    "partido": "Frente de la Esperanza",
+    "score": 4.0
+  },
+  {
+    "dni": "32874925",
+    "partido": "PPP",
+    "score": 4.0
+  },
+  {
+    "dni": "20105966",
+    "partido": "Perú Acción",
+    "score": 4.0
+  },
+  {
+    "dni": "09199220",
+    "partido": "Perú Acción",
+    "score": 4.0
+  },
+  {
+    "dni": "09988890",
+    "partido": "PRIN",
+    "score": 4.0
+  },
+  {
+    "dni": "40818054",
+    "partido": "PRIN",
+    "score": 4.0
+  },
+  {
+    "dni": "08674665",
+    "partido": "PRIN",
+    "score": 4.0
+  },
+  {
+    "dni": "07529695",
+    "partido": "PRIN",
+    "score": 4.0
+  },
+  {
+    "dni": "10586241",
+    "partido": "Sí Creo",
+    "score": 4.0
+  },
+  {
+    "dni": "08363824",
+    "partido": "Sí Creo",
+    "score": 4.0
+  },
+  {
+    "dni": "07604684",
+    "partido": "Sí Creo",
+    "score": 4.0
+  },
+  {
+    "dni": "10139319",
+    "partido": "Sí Creo",
+    "score": 4.0
+  },
+  {
+    "dni": "10159075",
+    "partido": "Sí Creo",
+    "score": 4.0
+  },
+  {
+    "dni": "00128200",
+    "partido": "Sí Creo",
+    "score": 4.0
+  },
+  {
+    "dni": "00114875",
+    "partido": "Podemos Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "09017412",
+    "partido": "Podemos Perú",
+    "score": 4.0
+  },
+  {
+    "dni": "08168825",
+    "partido": "Unidad Nacional",
+    "score": 4.0
+  },
+  {
+    "dni": "08245933",
+    "partido": "Unidad Nacional",
+    "score": 4.0
+  },
+  {
+    "dni": "07700600",
+    "partido": "Unidad Nacional",
+    "score": 4.0
+  },
+  {
+    "dni": "20051068",
+    "partido": "Perú Libre",
+    "score": 4.0
+  },
+  {
+    "dni": "09969912",
+    "partido": "Perú Libre",
+    "score": 4.0
+  },
+  {
+    "dni": "19864589",
+    "partido": "Perú Libre",
+    "score": 4.0
+  },
+  {
+    "dni": "20075990",
+    "partido": "Perú Libre",
+    "score": 4.0
+  },
+  {
+    "dni": "29470620",
+    "partido": "Ahora Nación",
+    "score": 2.0
+  },
+  {
+    "dni": "06762849",
+    "partido": "Ahora Nación",
+    "score": 2.0
+  },
+  {
+    "dni": "16520088",
+    "partido": "Ahora Nación",
+    "score": 2.0
+  },
+  {
+    "dni": "01149309",
+    "partido": "Ahora Nación",
+    "score": 2.0
+  },
+  {
+    "dni": "08235876",
+    "partido": "Renovación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "45209282",
+    "partido": "Renovación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "06281336",
+    "partido": "Renovación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "25716428",
+    "partido": "Renovación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "07670848",
+    "partido": "Renovación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "80285197",
+    "partido": "Renovación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "09709749",
+    "partido": "Renovación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "40222052",
+    "partido": "Renovación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "09980339",
+    "partido": "Fuerza Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "01235019",
+    "partido": "Fuerza Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "16161900",
+    "partido": "Fuerza Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "33734661",
+    "partido": "Fuerza Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "25839717",
+    "partido": "Alianza para el Progreso",
+    "score": 2.0
+  },
+  {
+    "dni": "29565135",
+    "partido": "Alianza para el Progreso",
+    "score": 2.0
+  },
+  {
+    "dni": "29687622",
+    "partido": "Alianza para el Progreso",
+    "score": 2.0
+  },
+  {
+    "dni": "27409088",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "06243785",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "07703966",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "10157176",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "00515099",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "40290367",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "02643304",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "22319228",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "16302428",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "15750703",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "40706053",
+    "partido": "Juntos por el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "10477571",
+    "partido": "Buen Gobierno",
+    "score": 2.0
+  },
+  {
+    "dni": "40251366",
+    "partido": "Buen Gobierno",
+    "score": 2.0
+  },
+  {
+    "dni": "43331132",
+    "partido": "Buen Gobierno",
+    "score": 2.0
+  },
+  {
+    "dni": "09842713",
+    "partido": "Buen Gobierno",
+    "score": 2.0
+  },
+  {
+    "dni": "07883267",
+    "partido": "Buen Gobierno",
+    "score": 2.0
+  },
+  {
+    "dni": "08568152",
+    "partido": "Buen Gobierno",
+    "score": 2.0
+  },
+  {
+    "dni": "07412350",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "09657472",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "06051085",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "41745335",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "09134214",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "08764850",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "08681023",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "09978367",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "09686315",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "08365513",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "09578726",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "08330795",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "33340112",
+    "partido": "Obras",
+    "score": 2.0
+  },
+  {
+    "dni": "07561974",
+    "partido": "Integridad Democrática",
+    "score": 2.0
+  },
+  {
+    "dni": "00251799",
+    "partido": "Integridad Democrática",
+    "score": 2.0
+  },
+  {
+    "dni": "25459604",
+    "partido": "Integridad Democrática",
+    "score": 2.0
+  },
+  {
+    "dni": "20020362",
+    "partido": "Integridad Democrática",
+    "score": 2.0
+  },
+  {
+    "dni": "25478461",
+    "partido": "Integridad Democrática",
+    "score": 2.0
+  },
+  {
+    "dni": "06777186",
+    "partido": "Integridad Democrática",
+    "score": 2.0
+  },
+  {
+    "dni": "19882183",
+    "partido": "Partido Morado",
+    "score": 2.0
+  },
+  {
+    "dni": "10241874",
+    "partido": "Partido Morado",
+    "score": 2.0
+  },
+  {
+    "dni": "15693515",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "10099743",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "21255991",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "08123783",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "44181707",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "08138204",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "43058756",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "02730140",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "10714591",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "24489451",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "27749222",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "09928827",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "15427702",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "27853010",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "40459760",
+    "partido": "Cooperación Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "07108230",
+    "partido": "Unido Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "07039066",
+    "partido": "Unido Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "21567095",
+    "partido": "País para Todos",
+    "score": 2.0
+  },
+  {
+    "dni": "07928586",
+    "partido": "País para Todos",
+    "score": 2.0
+  },
+  {
+    "dni": "06054414",
+    "partido": "País para Todos",
+    "score": 2.0
+  },
+  {
+    "dni": "10762325",
+    "partido": "País para Todos",
+    "score": 2.0
+  },
+  {
+    "dni": "42077582",
+    "partido": "País para Todos",
+    "score": 2.0
+  },
+  {
+    "dni": "32960241",
+    "partido": "País para Todos",
+    "score": 2.0
+  },
+  {
+    "dni": "25463894",
+    "partido": "País para Todos",
+    "score": 2.0
+  },
+  {
+    "dni": "09174186",
+    "partido": "Libertad Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "10276716",
+    "partido": "Libertad Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "15449983",
+    "partido": "Libertad Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "05377156",
+    "partido": "Libertad Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "07694366",
+    "partido": "Libertad Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "10490414",
+    "partido": "Libertad Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "07422819",
+    "partido": "Libertad Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "09805105",
+    "partido": "Libertad Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "28313802",
+    "partido": "Libertad Popular",
+    "score": 2.0
+  },
+  {
+    "dni": "07608964",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "09349250",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "33649439",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "02382593",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "01044947",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "31475940",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "32805454",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "33565105",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "09653021",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "03088559",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "07501394",
+    "partido": "Venceremos",
+    "score": 2.0
+  },
+  {
+    "dni": "10129700",
+    "partido": "Perú Primero",
+    "score": 2.0
+  },
+  {
+    "dni": "10613285",
+    "partido": "Perú Primero",
+    "score": 2.0
+  },
+  {
+    "dni": "09475875",
+    "partido": "Primero La Gente",
+    "score": 2.0
+  },
+  {
+    "dni": "09372198",
+    "partido": "Primero La Gente",
+    "score": 2.0
+  },
+  {
+    "dni": "08072098",
+    "partido": "Fe en el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "10557247",
+    "partido": "Fe en el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "10058757",
+    "partido": "Fe en el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "07275051",
+    "partido": "Fe en el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "06801572",
+    "partido": "Fe en el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "02612157",
+    "partido": "Fe en el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "10063040",
+    "partido": "Fe en el Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "09145206",
+    "partido": "Avanza País",
+    "score": 2.0
+  },
+  {
+    "dni": "09077358",
+    "partido": "Avanza País",
+    "score": 2.0
+  },
+  {
+    "dni": "40694348",
+    "partido": "Avanza País",
+    "score": 2.0
+  },
+  {
+    "dni": "80083807",
+    "partido": "Avanza País",
+    "score": 2.0
+  },
+  {
+    "dni": "09788517",
+    "partido": "Avanza País",
+    "score": 2.0
+  },
+  {
+    "dni": "10525632",
+    "partido": "Avanza País",
+    "score": 2.0
+  },
+  {
+    "dni": "07572809",
+    "partido": "Avanza País",
+    "score": 2.0
+  },
+  {
+    "dni": "00831446",
+    "partido": "Avanza País",
+    "score": 2.0
+  },
+  {
+    "dni": "21485428",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "40001029",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "10128510",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "04635502",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "15864640",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "18120387",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "29168255",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "25575781",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "02720199",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "00420627",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "21857244",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "16496317",
+    "partido": "FREPAP",
+    "score": 2.0
+  },
+  {
+    "dni": "40411110",
+    "partido": "Fuerza y Libertad",
+    "score": 2.0
+  },
+  {
+    "dni": "21288690",
+    "partido": "Fuerza y Libertad",
+    "score": 2.0
+  },
+  {
+    "dni": "25720927",
+    "partido": "Fuerza y Libertad",
+    "score": 2.0
+  },
+  {
+    "dni": "20593130",
+    "partido": "Fuerza y Libertad",
+    "score": 2.0
+  },
+  {
+    "dni": "20973616",
+    "partido": "Fuerza y Libertad",
+    "score": 2.0
+  },
+  {
+    "dni": "10691682",
+    "partido": "Fuerza y Libertad",
+    "score": 2.0
+  },
+  {
+    "dni": "20571021",
+    "partido": "Fuerza y Libertad",
+    "score": 2.0
+  },
+  {
+    "dni": "09661308",
+    "partido": "Fuerza y Libertad",
+    "score": 2.0
+  },
+  {
+    "dni": "10291705",
+    "partido": "Fuerza y Libertad",
+    "score": 2.0
+  },
+  {
+    "dni": "19996821",
+    "partido": "Fuerza y Libertad",
+    "score": 2.0
+  },
+  {
+    "dni": "08745608",
+    "partido": "APRA",
+    "score": 2.0
+  },
+  {
+    "dni": "09145785",
+    "partido": "APRA",
+    "score": 2.0
+  },
+  {
+    "dni": "08905609",
+    "partido": "APRA",
+    "score": 2.0
+  },
+  {
+    "dni": "09347311",
+    "partido": "APRA",
+    "score": 2.0
+  },
+  {
+    "dni": "22437422",
+    "partido": "APRA",
+    "score": 2.0
+  },
+  {
+    "dni": "16423581",
+    "partido": "PTE",
+    "score": 2.0
+  },
+  {
+    "dni": "08107258",
+    "partido": "PTE",
+    "score": 2.0
+  },
+  {
+    "dni": "40154322",
+    "partido": "PTE",
+    "score": 2.0
+  },
+  {
+    "dni": "22064552",
+    "partido": "PTE",
+    "score": 2.0
+  },
+  {
+    "dni": "00007518",
+    "partido": "PTE",
+    "score": 2.0
+  },
+  {
+    "dni": "09803888",
+    "partido": "PTE",
+    "score": 2.0
+  },
+  {
+    "dni": "29715553",
+    "partido": "PTE",
+    "score": 2.0
+  },
+  {
+    "dni": "32657602",
+    "partido": "PTE",
+    "score": 2.0
+  },
+  {
+    "dni": "09307547",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "01295689",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "10446596",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "07897641",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "41104647",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "09084712",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "80056117",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "08671144",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "09595329",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "80255411",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "09513176",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "09133222",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "09268085",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "10561029",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "22093337",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "15962311",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "07090191",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "10796069",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "15627432",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "03607025",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "09528983",
+    "partido": "Verde",
+    "score": 2.0
+  },
+  {
+    "dni": "09040622",
+    "partido": "Perú Federal",
+    "score": 2.0
+  },
+  {
+    "dni": "80433831",
+    "partido": "Perú Federal",
+    "score": 2.0
+  },
+  {
+    "dni": "16167452",
+    "partido": "Perú Federal",
+    "score": 2.0
+  },
+  {
+    "dni": "27547396",
+    "partido": "Perú Federal",
+    "score": 2.0
+  },
+  {
+    "dni": "15656356",
+    "partido": "Perú Federal",
+    "score": 2.0
+  },
+  {
+    "dni": "02375259",
+    "partido": "Somos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "05614776",
+    "partido": "Somos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "10276189",
+    "partido": "Somos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "22245035",
+    "partido": "Somos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "00954676",
+    "partido": "Somos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "23962652",
+    "partido": "Frente de la Esperanza",
+    "score": 2.0
+  },
+  {
+    "dni": "29230424",
+    "partido": "Frente de la Esperanza",
+    "score": 2.0
+  },
+  {
+    "dni": "00062767",
+    "partido": "Frente de la Esperanza",
+    "score": 2.0
+  },
+  {
+    "dni": "08294598",
+    "partido": "Frente de la Esperanza",
+    "score": 2.0
+  },
+  {
+    "dni": "41468162",
+    "partido": "Frente de la Esperanza",
+    "score": 2.0
+  },
+  {
+    "dni": "32948742",
+    "partido": "Frente de la Esperanza",
+    "score": 2.0
+  },
+  {
+    "dni": "33766138",
+    "partido": "Frente de la Esperanza",
+    "score": 2.0
+  },
+  {
+    "dni": "01548743",
+    "partido": "Frente de la Esperanza",
+    "score": 2.0
+  },
+  {
+    "dni": "40042080",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "32928393",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "09450704",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "08305016",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "06122459",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "10121997",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "20591425",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "23923643",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "08187712",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "06973444",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "32972493",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "09019362",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "15411799",
+    "partido": "PPP",
+    "score": 2.0
+  },
+  {
+    "dni": "17430886",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "31013678",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "28302777",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "32538154",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "32040254",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "09435092",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "40015313",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "00223692",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "19416323",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "10442760",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "25724565",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "43790584",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "05396317",
+    "partido": "Perú Acción",
+    "score": 2.0
+  },
+  {
+    "dni": "25723190",
+    "partido": "PRIN",
+    "score": 2.0
+  },
+  {
+    "dni": "09263541",
+    "partido": "PRIN",
+    "score": 2.0
+  },
+  {
+    "dni": "80295221",
+    "partido": "PRIN",
+    "score": 2.0
+  },
+  {
+    "dni": "09372936",
+    "partido": "PRIN",
+    "score": 2.0
+  },
+  {
+    "dni": "00470056",
+    "partido": "PRIN",
+    "score": 2.0
+  },
+  {
+    "dni": "08331507",
+    "partido": "PRIN",
+    "score": 2.0
+  },
+  {
+    "dni": "09482732",
+    "partido": "PRIN",
+    "score": 2.0
+  },
+  {
+    "dni": "10356936",
+    "partido": "PRIN",
+    "score": 2.0
+  },
+  {
+    "dni": "80381437",
+    "partido": "PRIN",
+    "score": 2.0
+  },
+  {
+    "dni": "08296382",
+    "partido": "PRIN",
+    "score": 2.0
+  },
+  {
+    "dni": "07752770",
+    "partido": "Sí Creo",
+    "score": 2.0
+  },
+  {
+    "dni": "08243138",
+    "partido": "Sí Creo",
+    "score": 2.0
+  },
+  {
+    "dni": "20004181",
+    "partido": "Sí Creo",
+    "score": 2.0
+  },
+  {
+    "dni": "23700696",
+    "partido": "Sí Creo",
+    "score": 2.0
+  },
+  {
+    "dni": "00459607",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "21144434",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "09173557",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "09217014",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "08615868",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "40320033",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "25644863",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "00111437",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "07162348",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "09956599",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "08663273",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "09617809",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "10078461",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "09644840",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "40000185",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "07049680",
+    "partido": "Podemos Perú",
+    "score": 2.0
+  },
+  {
+    "dni": "07240324",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "07641046",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "08380574",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "41754568",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "06808708",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "07753593",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "16008986",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "04624619",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "09591183",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "16021328",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "15978348",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "42046640",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "15975855",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "15977661",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "08306174",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "80285646",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "80405406",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "06610504",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "15981116",
+    "partido": "Progresemos",
+    "score": 2.0
+  },
+  {
+    "dni": "18087659",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "17834654",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "18119695",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "32125542",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "18220972",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "18857710",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "17432014",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "41338105",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "32136631",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "32115620",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "17433476",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "08680275",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "32122946",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "09263905",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "32136253",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "32125755",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "10778814",
+    "partido": "Un Camino Diferente",
+    "score": 2.0
+  },
+  {
+    "dni": "07776007",
+    "partido": "Unidad Nacional",
+    "score": 2.0
+  },
+  {
+    "dni": "40248378",
+    "partido": "Unidad Nacional",
+    "score": 2.0
+  },
+  {
+    "dni": "06710344",
+    "partido": "Unidad Nacional",
+    "score": 2.0
+  },
+  {
+    "dni": "20054502",
+    "partido": "Unidad Nacional",
+    "score": 2.0
+  },
+  {
+    "dni": "08753838",
+    "partido": "Unidad Nacional",
+    "score": 2.0
+  },
+  {
+    "dni": "30581647",
+    "partido": "Unidad Nacional",
+    "score": 2.0
+  },
+  {
+    "dni": "06354697",
+    "partido": "Perú Libre",
+    "score": 2.0
+  },
+  {
+    "dni": "16655831",
+    "partido": "Perú Libre",
+    "score": 2.0
+  },
+  {
+    "dni": "28237461",
+    "partido": "Perú Libre",
+    "score": 2.0
+  },
+  {
+    "dni": "06561990",
+    "partido": "Perú Libre",
+    "score": 2.0
+  },
+  {
+    "dni": "42377791",
+    "partido": "Perú Libre",
+    "score": 2.0
+  },
+  {
+    "dni": "40725826",
+    "partido": "Perú Libre",
+    "score": 2.0
+  },
+  {
+    "dni": "23170336",
+    "partido": "Obras",
+    "score": 1.0
+  },
+  {
+    "dni": "04025718",
+    "partido": "Obras",
+    "score": 1.0
+  },
+  {
+    "dni": "45566461",
+    "partido": "Cooperación Popular",
+    "score": 1.0
+  },
+  {
+    "dni": "40556371",
+    "partido": "Cooperación Popular",
+    "score": 1.0
+  },
+  {
+    "dni": "33949567",
+    "partido": "Cooperación Popular",
+    "score": 1.0
+  },
+  {
+    "dni": "44013194",
+    "partido": "Cooperación Popular",
+    "score": 1.0
+  },
+  {
+    "dni": "06172893",
+    "partido": "Fe en el Perú",
+    "score": 1.0
+  },
+  {
+    "dni": "08312487",
+    "partido": "FREPAP",
+    "score": 1.0
+  },
+  {
+    "dni": "00992904",
+    "partido": "FREPAP",
+    "score": 1.0
+  },
+  {
+    "dni": "40457668",
+    "partido": "FREPAP",
+    "score": 1.0
+  },
+  {
+    "dni": "10776413",
+    "partido": "FREPAP",
+    "score": 1.0
+  },
+  {
+    "dni": "01211021",
+    "partido": "FREPAP",
+    "score": 1.0
+  },
+  {
+    "dni": "21865678",
+    "partido": "FREPAP",
+    "score": 1.0
+  },
+  {
+    "dni": "04328061",
+    "partido": "FREPAP",
+    "score": 1.0
+  },
+  {
+    "dni": "08175267",
+    "partido": "Frente de la Esperanza",
+    "score": 1.0
+  },
+  {
+    "dni": "04405481",
+    "partido": "Un Camino Diferente",
+    "score": 1.0
+  },
+  {
+    "dni": "18049273",
+    "partido": "Un Camino Diferente",
+    "score": 1.0
+  },
+  {
+    "dni": "17400951",
+    "partido": "Un Camino Diferente",
+    "score": 1.0
+  },
+  {
+    "dni": "41879544",
+    "partido": "Unido Perú",
+    "score": 0.0
+  },
+  {
+    "dni": "20427242",
+    "partido": "Frente de la Esperanza",
+    "score": 0.0
+  },
+  {
+    "dni": "21146889",
+    "partido": "Perú Acción",
+    "score": 0.0
+  },
+  {
+    "dni": "08170494",
+    "partido": "Progresemos",
+    "score": 0.0
+  },
+  {
+    "dni": "40852617",
+    "partido": "Progresemos",
+    "score": 0.0
+  },
+  {
+    "dni": "15977667",
+    "partido": "Progresemos",
+    "score": 0.0
+  },
+  {
+    "dni": "10095860",
+    "partido": "Un Camino Diferente",
+    "score": 0.0
+  }
+]

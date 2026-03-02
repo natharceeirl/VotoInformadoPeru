@@ -1,0 +1,1183 @@
+{
+  "descripcion": "Estadísticas detalladas por partido político",
+  "partidos": [
+    {
+      "id": 1,
+      "partido": "Ahora Nación",
+      "ingresos_mensuales_totales": {
+        "promedio": 8509.764911,
+        "desviacion_estandar": 8326.952824,
+        "num_con_cero": 0,
+        "num_candidatos": 0
+      },
+      "preparacion_academica": {
+        "promedio": 7.392857,
+        "desviacion_estandar": 4.77136
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 6872.407438,
+        "desviacion_estandar": 5479.232665,
+        "num_candidatos": 28,
+        "num_candidatos_efectivos": 28
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.285714,
+        "tk2": 0.285714,
+        "tk3": 0.277778
+      },
+      "congresistas_reelegidos": 1,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 2,
+      "partido": "Renovación Popular",
+      "ingresos_mensuales_totales": {
+        "promedio": 15310.844109,
+        "desviacion_estandar": 29497.025197,
+        "num_con_cero": 7,
+        "num_candidatos": 0.241379
+      },
+      "preparacion_academica": {
+        "promedio": 5.827586,
+        "desviacion_estandar": 3.694291
+      },
+      "sentencias_judiciales": {
+        "total": 5,
+        "porcentaje": 0.172414
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 13614.284722,
+        "desviacion_estandar": 10648.482328,
+        "num_candidatos": 29,
+        "num_candidatos_efectivos": 22
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 0,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 2,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 3,
+      "partido": "Fuerza Popular",
+      "ingresos_mensuales_totales": {
+        "promedio": 16195.718083,
+        "desviacion_estandar": 14402.227228,
+        "num_con_cero": 1,
+        "num_candidatos": 0.033333
+      },
+      "preparacion_academica": {
+        "promedio": 6.833333,
+        "desviacion_estandar": 3.760808
+      },
+      "sentencias_judiciales": {
+        "total": 6,
+        "porcentaje": 0.2
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 15141.925556,
+        "desviacion_estandar": 10657.682887,
+        "num_candidatos": 30,
+        "num_candidatos_efectivos": 29
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 0,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 5,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 4,
+      "partido": "Alianza para el Progreso",
+      "ingresos_mensuales_totales": {
+        "promedio": 42399.069828,
+        "desviacion_estandar": 150040.034455,
+        "num_con_cero": 3,
+        "num_candidatos": 0.103448
+      },
+      "preparacion_academica": {
+        "promedio": 8.413793,
+        "desviacion_estandar": 4.924554
+      },
+      "sentencias_judiciales": {
+        "total": 7,
+        "porcentaje": 0.241379
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 16393.701,
+        "desviacion_estandar": 12570.067628,
+        "num_candidatos": 29,
+        "num_candidatos_efectivos": 26
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 0,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 4,
+      "candidatos_reinfo": 1.470588
+    },
+    {
+      "id": 5,
+      "partido": "Juntos por el Perú",
+      "ingresos_mensuales_totales": {
+        "promedio": 8226.718111,
+        "desviacion_estandar": 16506.917091,
+        "num_con_cero": 8,
+        "num_candidatos": 0.266667
+      },
+      "preparacion_academica": {
+        "promedio": 5,
+        "desviacion_estandar": 3.85066
+      },
+      "sentencias_judiciales": {
+        "total": 2,
+        "porcentaje": 0.066667
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 7985.343333,
+        "desviacion_estandar": 10804.793562,
+        "num_candidatos": 30,
+        "num_candidatos_efectivos": 22
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 0,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 4,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 6,
+      "partido": "Buen Gobierno",
+      "ingresos_mensuales_totales": {
+        "promedio": 6373.258889,
+        "desviacion_estandar": 8562.917146,
+        "num_con_cero": 2,
+        "num_candidatos": 0.066667
+      },
+      "preparacion_academica": {
+        "promedio": 6,
+        "desviacion_estandar": 3.25894
+      },
+      "sentencias_judiciales": {
+        "total": 1,
+        "porcentaje": 0.033333
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 5266.158025,
+        "desviacion_estandar": 5446.812571,
+        "num_candidatos": 30,
+        "num_candidatos_efectivos": 28
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.166667,
+        "tk2": 0.166667,
+        "tk3": 0.183333
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 7,
+      "partido": "Obras",
+      "ingresos_mensuales_totales": {
+        "promedio": 2769.831361,
+        "desviacion_estandar": 5039.998136,
+        "num_con_cero": 9,
+        "num_candidatos": 0.3
+      },
+      "preparacion_academica": {
+        "promedio": 3.7,
+        "desviacion_estandar": 2.291664
+      },
+      "sentencias_judiciales": {
+        "total": 2,
+        "porcentaje": 0.066667
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 3308.486842,
+        "desviacion_estandar": 4320.501213,
+        "num_candidatos": 30,
+        "num_candidatos_efectivos": 21
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.2,
+        "tk2": 0.2,
+        "tk3": 0.183333
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 8,
+      "partido": "Integridad Democrática",
+      "ingresos_mensuales_totales": {
+        "promedio": 3869.726028,
+        "desviacion_estandar": 5453.110163,
+        "num_con_cero": 14,
+        "num_candidatos": 0.466667
+      },
+      "preparacion_academica": {
+        "promedio": 7.433333,
+        "desviacion_estandar": 4.952765
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 6195.968722,
+        "desviacion_estandar": 3777.018692,
+        "num_candidatos": 30,
+        "num_candidatos_efectivos": 16
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.1,
+        "tk2": 0.1,
+        "tk3": 0.116667
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 9,
+      "partido": "Partido Morado",
+      "ingresos_mensuales_totales": {
+        "promedio": 8654.148571,
+        "desviacion_estandar": 10863.373378,
+        "num_con_cero": 1,
+        "num_candidatos": 0.035714
+      },
+      "preparacion_academica": {
+        "promedio": 6.357143,
+        "desviacion_estandar": 3.04551
+      },
+      "sentencias_judiciales": {
+        "total": 2,
+        "porcentaje": 0.071429
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 6928.595897,
+        "desviacion_estandar": 7778.2237,
+        "num_candidatos": 28,
+        "num_candidatos_efectivos": 27
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 0,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 7.936508
+    },
+    {
+      "id": 10,
+      "partido": "Cooperación Popular",
+      "ingresos_mensuales_totales": {
+        "promedio": 3355.883929,
+        "desviacion_estandar": 6460.059517,
+        "num_con_cero": 0,
+        "num_candidatos": 0
+      },
+      "preparacion_academica": {
+        "promedio": 3.428571,
+        "desviacion_estandar": 3.236694
+      },
+      "sentencias_judiciales": {
+        "total": 1,
+        "porcentaje": 0.035714
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 1885.57716,
+        "desviacion_estandar": 1651.334803,
+        "num_candidatos": 28,
+        "num_candidatos_efectivos": 28
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.214286,
+        "tk2": 0.214286,
+        "tk3": 0.290909
+      },
+      "congresistas_reelegidos": 1,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 11,
+      "partido": "Unido Perú",
+      "ingresos_mensuales_totales": {
+        "promedio": 4439.021991,
+        "desviacion_estandar": 3820.428607,
+        "num_con_cero": 2,
+        "num_candidatos": 0.111111
+      },
+      "preparacion_academica": {
+        "promedio": 7.944444,
+        "desviacion_estandar": 5.384861
+      },
+      "sentencias_judiciales": {
+        "total": 2,
+        "porcentaje": 0.111111
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 4105.059722,
+        "desviacion_estandar": 2638.256739,
+        "num_candidatos": 18,
+        "num_candidatos_efectivos": 16
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.333333,
+        "tk2": 0.333333,
+        "tk3": 0.357143
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 12,
+      "partido": "País para Todos",
+      "ingresos_mensuales_totales": {
+        "promedio": 7261.484861,
+        "desviacion_estandar": 10930.684274,
+        "num_con_cero": 5,
+        "num_candidatos": 0.208333
+      },
+      "preparacion_academica": {
+        "promedio": 7.958333,
+        "desviacion_estandar": 5.751969
+      },
+      "sentencias_judiciales": {
+        "total": 1,
+        "porcentaje": 0.041667
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 7635.322407,
+        "desviacion_estandar": 7237.490354,
+        "num_candidatos": 24,
+        "num_candidatos_efectivos": 19
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.291667,
+        "tk2": 0.291667,
+        "tk3": 0.288462
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 13,
+      "partido": "Libertad Popular",
+      "ingresos_mensuales_totales": {
+        "promedio": 9145.144784,
+        "desviacion_estandar": 10920.547831,
+        "num_con_cero": 2,
+        "num_candidatos": 0.074074
+      },
+      "preparacion_academica": {
+        "promedio": 7.518519,
+        "desviacion_estandar": 5.493845
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 9840.371215,
+        "desviacion_estandar": 11266.098485,
+        "num_candidatos": 27,
+        "num_candidatos_efectivos": 25
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.148148,
+        "tk2": 0.148148,
+        "tk3": 0.140351
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 14,
+      "partido": "Venceremos",
+      "ingresos_mensuales_totales": {
+        "promedio": 7024.084405,
+        "desviacion_estandar": 13559.355647,
+        "num_con_cero": 7,
+        "num_candidatos": 0.25
+      },
+      "preparacion_academica": {
+        "promedio": 5.714286,
+        "desviacion_estandar": 3.808929
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 6629.489375,
+        "desviacion_estandar": 8459.616986,
+        "num_candidatos": 28,
+        "num_candidatos_efectivos": 21
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 1,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 1,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 15,
+      "partido": "Perú Primero",
+      "ingresos_mensuales_totales": {
+        "promedio": 8740.468452,
+        "desviacion_estandar": 9730.765557,
+        "num_con_cero": 3,
+        "num_candidatos": 0.107143
+      },
+      "preparacion_academica": {
+        "promedio": 7.928571,
+        "desviacion_estandar": 3.886621
+      },
+      "sentencias_judiciales": {
+        "total": 3,
+        "porcentaje": 0.107143
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 8821.595486,
+        "desviacion_estandar": 8228.242824,
+        "num_candidatos": 28,
+        "num_candidatos_efectivos": 25
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.285714,
+        "tk2": 0.5,
+        "tk3": 0.45614
+      },
+      "congresistas_reelegidos": 2,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 16,
+      "partido": "Primero La Gente",
+      "ingresos_mensuales_totales": {
+        "promedio": 21686.197562,
+        "desviacion_estandar": 71085.079208,
+        "num_con_cero": 4,
+        "num_candidatos": 0.148148
+      },
+      "preparacion_academica": {
+        "promedio": 6.555556,
+        "desviacion_estandar": 3.178453
+      },
+      "sentencias_judiciales": {
+        "total": 4,
+        "porcentaje": 0.148148
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 9599.962159,
+        "desviacion_estandar": 8256.910632,
+        "num_candidatos": 27,
+        "num_candidatos_efectivos": 23
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.296296,
+        "tk2": 0.296296,
+        "tk3": 0.285714
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 17,
+      "partido": "Fe en el Perú",
+      "ingresos_mensuales_totales": {
+        "promedio": 4809.555,
+        "desviacion_estandar": 4477.762522,
+        "num_con_cero": 2,
+        "num_candidatos": 0.111111
+      },
+      "preparacion_academica": {
+        "promedio": 4.933333,
+        "desviacion_estandar": 3.899939
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 4705.047917,
+        "desviacion_estandar": 3248.551172,
+        "num_candidatos": 18,
+        "num_candidatos_efectivos": 16
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.333333,
+        "tk2": 0.333333,
+        "tk3": 0.357143
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 18,
+      "partido": "Avanza País",
+      "ingresos_mensuales_totales": {
+        "promedio": 14076.754433,
+        "desviacion_estandar": 17844.180332,
+        "num_con_cero": 10,
+        "num_candidatos": 0.4
+      },
+      "preparacion_academica": {
+        "promedio": 6.56,
+        "desviacion_estandar": 4.565085
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 20119.150774,
+        "desviacion_estandar": 12384.043207,
+        "num_candidatos": 25,
+        "num_candidatos_efectivos": 15
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 0,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 2,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 19,
+      "partido": "FREPAP",
+      "ingresos_mensuales_totales": {
+        "promedio": 1215.608972,
+        "desviacion_estandar": 2435.31557,
+        "num_con_cero": 22,
+        "num_candidatos": 0.733333
+      },
+      "preparacion_academica": {
+        "promedio": 3.933333,
+        "desviacion_estandar": 4.033766
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 3958.937976,
+        "desviacion_estandar": 2234.150878,
+        "num_candidatos": 30,
+        "num_candidatos_efectivos": 8
+      },
+      "tasa_korrupcion": {
+        "tk1": 0,
+        "tk2": 0,
+        "tk3": 0
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 2.857143
+    },
+    {
+      "id": 20,
+      "partido": "Fuerza y Libertad",
+      "ingresos_mensuales_totales": {
+        "promedio": 6745.804345,
+        "desviacion_estandar": 12148.142065,
+        "num_con_cero": 8,
+        "num_candidatos": 0.285714
+      },
+      "preparacion_academica": {
+        "promedio": 6.357143,
+        "desviacion_estandar": 5.236724
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 6684.739956,
+        "desviacion_estandar": 5683.906639,
+        "num_candidatos": 28,
+        "num_candidatos_efectivos": 20
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.214286,
+        "tk2": 0.214286,
+        "tk3": 0.181818
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 21,
+      "partido": "APRA",
+      "ingresos_mensuales_totales": {
+        "promedio": 9421.01227,
+        "desviacion_estandar": 12702.091484,
+        "num_con_cero": 7,
+        "num_candidatos": 0.241379
+      },
+      "preparacion_academica": {
+        "promedio": 7.275862,
+        "desviacion_estandar": 4.15672
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 10545.747103,
+        "desviacion_estandar": 10193.437488,
+        "num_candidatos": 29,
+        "num_candidatos_efectivos": 22
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 0,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 22,
+      "partido": "PTE",
+      "ingresos_mensuales_totales": {
+        "promedio": 5187.045725,
+        "desviacion_estandar": 6176.789033,
+        "num_con_cero": 2,
+        "num_candidatos": 0.086957
+      },
+      "preparacion_academica": {
+        "promedio": 4.304348,
+        "desviacion_estandar": 2.32447
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 4911.605965,
+        "desviacion_estandar": 4247.817567,
+        "num_candidatos": 23,
+        "num_candidatos_efectivos": 21
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.26087,
+        "tk2": 0.26087,
+        "tk3": 0.212766
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 3.636364
+    },
+    {
+      "id": 23,
+      "partido": "Verde",
+      "ingresos_mensuales_totales": {
+        "promedio": 2099.071983,
+        "desviacion_estandar": 3078.842291,
+        "num_con_cero": 8,
+        "num_candidatos": 0.275862
+      },
+      "preparacion_academica": {
+        "promedio": 3.827586,
+        "desviacion_estandar": 3.53623
+      },
+      "sentencias_judiciales": {
+        "total": 1,
+        "porcentaje": 0.034483
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 2283.516875,
+        "desviacion_estandar": 1743.921087,
+        "num_candidatos": 29,
+        "num_candidatos_efectivos": 21
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.206897,
+        "tk2": 0.206897,
+        "tk3": 0.42
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 24,
+      "partido": "Perú Federal",
+      "ingresos_mensuales_totales": {
+        "promedio": 6968.473403,
+        "desviacion_estandar": 12427.861469,
+        "num_con_cero": 4,
+        "num_candidatos": 0.166667
+      },
+      "preparacion_academica": {
+        "promedio": 6.166667,
+        "desviacion_estandar": 3.344907
+      },
+      "sentencias_judiciales": {
+        "total": 5,
+        "porcentaje": 0.208333
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 5808.308509,
+        "desviacion_estandar": 6834.830471,
+        "num_candidatos": 24,
+        "num_candidatos_efectivos": 20
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.125,
+        "tk2": 0.125,
+        "tk3": 0.48
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 5.172414
+    },
+    {
+      "id": 25,
+      "partido": "Somos Perú",
+      "ingresos_mensuales_totales": {
+        "promedio": 9184.330149,
+        "desviacion_estandar": 11278.689789,
+        "num_con_cero": 3,
+        "num_candidatos": 0.107143
+      },
+      "preparacion_academica": {
+        "promedio": 6.25,
+        "desviacion_estandar": 3.883727
+      },
+      "sentencias_judiciales": {
+        "total": 2,
+        "porcentaje": 0.071429
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 9126.253229,
+        "desviacion_estandar": 10094.300405,
+        "num_candidatos": 28,
+        "num_candidatos_efectivos": 25
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 0,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 3,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 26,
+      "partido": "Frente de la Esperanza",
+      "ingresos_mensuales_totales": {
+        "promedio": 5274.146552,
+        "desviacion_estandar": 5161.108619,
+        "num_con_cero": 6,
+        "num_candidatos": 0.206897
+      },
+      "preparacion_academica": {
+        "promedio": 6.137931,
+        "desviacion_estandar": 4.340212
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 6193.193182,
+        "desviacion_estandar": 4524.036836,
+        "num_candidatos": 29,
+        "num_candidatos_efectivos": 23
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.344828,
+        "tk2": 0.344828,
+        "tk3": 0.310345
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 27,
+      "partido": "PPP",
+      "ingresos_mensuales_totales": {
+        "promedio": 3655.775513,
+        "desviacion_estandar": 4488.236451,
+        "num_con_cero": 2,
+        "num_candidatos": 0.076923
+      },
+      "preparacion_academica": {
+        "promedio": 5.115385,
+        "desviacion_estandar": 4.140791
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 2747.618261,
+        "desviacion_estandar": 2178.62438,
+        "num_candidatos": 26,
+        "num_candidatos_efectivos": 24
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.153846,
+        "tk2": 0.153846,
+        "tk3": 0.132075
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 28,
+      "partido": "Perú Acción",
+      "ingresos_mensuales_totales": {
+        "promedio": 2006.784483,
+        "desviacion_estandar": 3854.639662,
+        "num_con_cero": 15,
+        "num_candidatos": 0.517241
+      },
+      "preparacion_academica": {
+        "promedio": 4.655172,
+        "desviacion_estandar": 4.236541
+      },
+      "sentencias_judiciales": {
+        "total": 2,
+        "porcentaje": 0.068966
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 3201.032051,
+        "desviacion_estandar": 3222.401069,
+        "num_candidatos": 29,
+        "num_candidatos_efectivos": 14
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.172414,
+        "tk2": 0.172414,
+        "tk3": 0.172414
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 4.411765
+    },
+    {
+      "id": 29,
+      "partido": "PRIN",
+      "ingresos_mensuales_totales": {
+        "promedio": 4237.820032,
+        "desviacion_estandar": 7281.75623,
+        "num_con_cero": 6,
+        "num_candidatos": 0.230769
+      },
+      "preparacion_academica": {
+        "promedio": 4.423077,
+        "desviacion_estandar": 2.730173
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 4132.455482,
+        "desviacion_estandar": 5084.246221,
+        "num_candidatos": 26,
+        "num_candidatos_efectivos": 20
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.192308,
+        "tk2": 0.192308,
+        "tk3": 0.2
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 3.076923
+    },
+    {
+      "id": 30,
+      "partido": "Sí Creo",
+      "ingresos_mensuales_totales": {
+        "promedio": 6754.430357,
+        "desviacion_estandar": 11672.216442,
+        "num_con_cero": 4,
+        "num_candidatos": 0.142857
+      },
+      "preparacion_academica": {
+        "promedio": 5.642857,
+        "desviacion_estandar": 2.984085
+      },
+      "sentencias_judiciales": {
+        "total": 1,
+        "porcentaje": 0.035714
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 6318.527536,
+        "desviacion_estandar": 9815.150013,
+        "num_candidatos": 28,
+        "num_candidatos_efectivos": 24
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.178571,
+        "tk2": 0.178571,
+        "tk3": 0.214286
+      },
+      "congresistas_reelegidos": 2,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 31,
+      "partido": "Podemos Perú",
+      "ingresos_mensuales_totales": {
+        "promedio": 39105.942701,
+        "desviacion_estandar": 175592.725588,
+        "num_con_cero": 9,
+        "num_candidatos": 0.310345
+      },
+      "preparacion_academica": {
+        "promedio": 4.551724,
+        "desviacion_estandar": 3.728138
+      },
+      "sentencias_judiciales": {
+        "total": 3,
+        "porcentaje": 0.103448
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 9165.955917,
+        "desviacion_estandar": 10401.253476,
+        "num_candidatos": 29,
+        "num_candidatos_efectivos": 20
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 0,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 4,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 32,
+      "partido": "Progresemos",
+      "ingresos_mensuales_totales": {
+        "promedio": 3332.619655,
+        "desviacion_estandar": 8810.571979,
+        "num_con_cero": 22,
+        "num_candidatos": 0.758621
+      },
+      "preparacion_academica": {
+        "promedio": 3.482759,
+        "desviacion_estandar": 3.601792
+      },
+      "sentencias_judiciales": {
+        "total": 2,
+        "porcentaje": 0.068966
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 10289.161667,
+        "desviacion_estandar": 11328.179485,
+        "num_candidatos": 29,
+        "num_candidatos_efectivos": 7
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.103448,
+        "tk2": 0.103448,
+        "tk3": 0.122807
+      },
+      "congresistas_reelegidos": 1,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 33,
+      "partido": "Un Camino Diferente",
+      "ingresos_mensuales_totales": {
+        "promedio": 301.324028,
+        "desviacion_estandar": 1162.14986,
+        "num_con_cero": 26,
+        "num_candidatos": 0.866667
+      },
+      "preparacion_academica": {
+        "promedio": 3.266667,
+        "desviacion_estandar": 2.765967
+      },
+      "sentencias_judiciales": {
+        "total": 0,
+        "porcentaje": 0
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 1179.906944,
+        "desviacion_estandar": 1931.905865,
+        "num_candidatos": 30,
+        "num_candidatos_efectivos": 4
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.3,
+        "tk2": 0.3,
+        "tk3": 0.25
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 34,
+      "partido": "Unidad Nacional",
+      "ingresos_mensuales_totales": {
+        "promedio": 9451.902389,
+        "desviacion_estandar": 13072.38566,
+        "num_con_cero": 5,
+        "num_candidatos": 0.166667
+      },
+      "preparacion_academica": {
+        "promedio": 6.666667,
+        "desviacion_estandar": 4.551115
+      },
+      "sentencias_judiciales": {
+        "total": 1,
+        "porcentaje": 0.033333
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 9506.695208,
+        "desviacion_estandar": 10210.971838,
+        "num_candidatos": 30,
+        "num_candidatos_efectivos": 25
+      },
+      "tasa_korrupcion": {
+        "tk1": 0.366667,
+        "tk2": 0.366667,
+        "tk3": 0.333333
+      },
+      "congresistas_reelegidos": 0,
+      "candidatos_reinfo": 7.142857
+    },
+    {
+      "id": 35,
+      "partido": "Perú Libre",
+      "ingresos_mensuales_totales": {
+        "promedio": 12131.860972,
+        "desviacion_estandar": 12582.361409,
+        "num_con_cero": 1,
+        "num_candidatos": 0.033333
+      },
+      "preparacion_academica": {
+        "promedio": 6.4,
+        "desviacion_estandar": 4.132295
+      },
+      "sentencias_judiciales": {
+        "total": 3,
+        "porcentaje": 0.1
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": 11726.84628,
+        "desviacion_estandar": 12000.672954,
+        "num_candidatos": 30,
+        "num_candidatos_efectivos": 29
+      },
+      "tasa_korrupcion": {
+        "tk1": 1,
+        "tk2": 0,
+        "tk3": 1
+      },
+      "congresistas_reelegidos": 6,
+      "candidatos_reinfo": 0
+    },
+    {
+      "id": 36,
+      "partido": "Salvemos al Perú",
+      "ingresos_mensuales_totales": {
+        "promedio": null,
+        "desviacion_estandar": null,
+        "num_con_cero": null,
+        "num_candidatos": null
+      },
+      "preparacion_academica": {
+        "promedio": null,
+        "desviacion_estandar": null
+      },
+      "sentencias_judiciales": {
+        "total": null,
+        "porcentaje": null
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": null,
+        "desviacion_estandar": null,
+        "num_candidatos": null,
+        "num_candidatos_efectivos": null
+      },
+      "tasa_korrupcion": {
+        "tk1": null,
+        "tk2": null,
+        "tk3": null
+      },
+      "congresistas_reelegidos": null,
+      "candidatos_reinfo": null
+    },
+    {
+      "id": 37,
+      "partido": "Perú Moderno",
+      "ingresos_mensuales_totales": {
+        "promedio": null,
+        "desviacion_estandar": null,
+        "num_con_cero": null,
+        "num_candidatos": null
+      },
+      "preparacion_academica": {
+        "promedio": null,
+        "desviacion_estandar": null
+      },
+      "sentencias_judiciales": {
+        "total": null,
+        "porcentaje": null
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": null,
+        "desviacion_estandar": null,
+        "num_candidatos": null,
+        "num_candidatos_efectivos": null
+      },
+      "tasa_korrupcion": {
+        "tk1": null,
+        "tk2": null,
+        "tk3": null
+      },
+      "congresistas_reelegidos": null,
+      "candidatos_reinfo": null
+    },
+    {
+      "id": 38,
+      "partido": "CPP",
+      "ingresos_mensuales_totales": {
+        "promedio": null,
+        "desviacion_estandar": null,
+        "num_con_cero": null,
+        "num_candidatos": null
+      },
+      "preparacion_academica": {
+        "promedio": null,
+        "desviacion_estandar": null
+      },
+      "sentencias_judiciales": {
+        "total": null,
+        "porcentaje": null
+      },
+      "ingresos_mensuales_efectivos": {
+        "promedio": null,
+        "desviacion_estandar": null,
+        "num_candidatos": null,
+        "num_candidatos_efectivos": null
+      },
+      "tasa_korrupcion": {
+        "tk1": null,
+        "tk2": null,
+        "tk3": null
+      },
+      "congresistas_reelegidos": null,
+      "candidatos_reinfo": null
+    }
+  ]
+}

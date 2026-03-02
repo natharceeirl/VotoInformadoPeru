@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(node -e:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(flutter pub get)",
+      "Bash(dart run flutter_launcher_icons)",
+      "Bash(flutter pub deps)"
+    ]
+  }
+}

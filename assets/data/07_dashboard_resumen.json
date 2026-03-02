@@ -1,0 +1,313 @@
+{
+  "titulo": "Dashboard - Elecciones Senado Nacional Perú 2026",
+  "subtitulo": "Índice de Transparencia y Riesgo de Corrupción por Partido Político",
+  "resumen": {
+    "total_partidos": 35,
+    "total_candidatos_evaluados": 964,
+    "candidatos_con_sentencias": 56,
+    "candidatos_en_reinfo": 64,
+    "partidos_con_equipo_completo_30": 9
+  },
+  "mejores_partidos_escala35": [
+    {
+      "posicion": 1,
+      "partido": "Integridad Democrática",
+      "valor_compuesto": 7.133,
+      "puntaje_sentencias": 35,
+      "puntaje_preparacion": 30,
+      "puntaje_ingresos_no_declarados": 5,
+      "puntaje_ingresos_efectivos": 29,
+      "puntaje_infiltracion_pacto": 34,
+      "puntaje_reeleccion": 35,
+      "puntaje_equipo_completo": 35,
+      "puntaje_reinfo": 35,
+      "valor_compuesto_final": 30.451
+    },
+    {
+      "posicion": 2,
+      "partido": "Libertad Popular",
+      "valor_compuesto": 7.729,
+      "puntaje_sentencias": 35,
+      "puntaje_preparacion": 31,
+      "puntaje_ingresos_no_declarados": 25,
+      "puntaje_ingresos_efectivos": 16,
+      "puntaje_infiltracion_pacto": 31,
+      "puntaje_reeleccion": 35,
+      "puntaje_equipo_completo": 9,
+      "puntaje_reinfo": 35,
+      "valor_compuesto_final": 29.952
+    },
+    {
+      "posicion": 3,
+      "partido": "Fuerza y Libertad",
+      "valor_compuesto": 9.532,
+      "puntaje_sentencias": 35,
+      "puntaje_preparacion": 21,
+      "puntaje_ingresos_no_declarados": 9,
+      "puntaje_ingresos_efectivos": 35,
+      "puntaje_infiltracion_pacto": 29,
+      "puntaje_reeleccion": 35,
+      "puntaje_equipo_completo": 11,
+      "puntaje_reinfo": 35,
+      "valor_compuesto_final": 26.903
+    },
+    {
+      "posicion": 4,
+      "partido": "Ahora Nación",
+      "valor_compuesto": 11.181,
+      "puntaje_sentencias": 35,
+      "puntaje_preparacion": 29,
+      "puntaje_ingresos_no_declarados": 35,
+      "puntaje_ingresos_efectivos": 34,
+      "puntaje_infiltracion_pacto": 22,
+      "puntaje_reeleccion": 11,
+      "puntaje_equipo_completo": 11,
+      "puntaje_reinfo": 35,
+      "valor_compuesto_final": 26.904
+    },
+    {
+      "posicion": 5,
+      "partido": "PPP",
+      "valor_compuesto": 11.33,
+      "puntaje_sentencias": 35,
+      "puntaje_preparacion": 13,
+      "puntaje_ingresos_no_declarados": 25,
+      "puntaje_ingresos_efectivos": 7,
+      "puntaje_infiltracion_pacto": 32,
+      "puntaje_reeleccion": 35,
+      "puntaje_equipo_completo": 7,
+      "puntaje_reinfo": 35,
+      "valor_compuesto_final": 26.055
+    }
+  ],
+  "peores_partidos_escala35": [
+    {
+      "posicion": 35,
+      "partido": "Podemos Perú",
+      "valor_compuesto": 30.451,
+      "puntaje_sentencias": 8,
+      "puntaje_preparacion": 9,
+      "puntaje_ingresos_no_declarados": 7,
+      "puntaje_ingresos_efectivos": 22,
+      "puntaje_infiltracion_pacto": 1,
+      "puntaje_reeleccion": 3,
+      "puntaje_equipo_completo": 19,
+      "puntaje_reinfo": 35,
+      "valor_compuesto_final": 8.485
+    },
+    {
+      "posicion": 34,
+      "partido": "Renovación Popular",
+      "valor_compuesto": 29.953,
+      "puntaje_sentencias": 4,
+      "puntaje_preparacion": 16,
+      "puntaje_ingresos_no_declarados": 12,
+      "puntaje_ingresos_efectivos": 8,
+      "puntaje_infiltracion_pacto": 1,
+      "puntaje_reeleccion": 7,
+      "puntaje_equipo_completo": 19,
+      "puntaje_reinfo": 35,
+      "valor_compuesto_final": 9.284
+    },
+    {
+      "posicion": 33,
+      "partido": "Juntos por el Perú",
+      "valor_compuesto": 26.923,
+      "puntaje_sentencias": 10,
+      "puntaje_preparacion": 12,
+      "puntaje_ingresos_no_declarados": 9,
+      "puntaje_ingresos_efectivos": 28,
+      "puntaje_infiltracion_pacto": 1,
+      "puntaje_reeleccion": 3,
+      "puntaje_equipo_completo": 35,
+      "puntaje_reinfo": 35,
+      "valor_compuesto_final": 10.783
+    },
+    {
+      "posicion": 32,
+      "partido": "Alianza para el Progreso",
+      "valor_compuesto": 26.919,
+      "puntaje_sentencias": 1,
+      "puntaje_preparacion": 35,
+      "puntaje_ingresos_no_declarados": 22,
+      "puntaje_ingresos_efectivos": 4,
+      "puntaje_infiltracion_pacto": 1,
+      "puntaje_reeleccion": 3,
+      "puntaje_equipo_completo": 19,
+      "puntaje_reinfo": 8,
+      "valor_compuesto_final": 11.532
+    },
+    {
+      "posicion": 31,
+      "partido": "Somos Perú",
+      "valor_compuesto": 26.052,
+      "puntaje_sentencias": 10,
+      "puntaje_preparacion": 20,
+      "puntaje_ingresos_no_declarados": 22,
+      "puntaje_ingresos_efectivos": 24,
+      "puntaje_infiltracion_pacto": 1,
+      "puntaje_reeleccion": 6,
+      "puntaje_equipo_completo": 11,
+      "puntaje_reinfo": 35,
+      "valor_compuesto_final": 12.581
+    }
+  ],
+  "mejores_partidos_escala100": [
+    {
+      "posicion": 1,
+      "tasa_corrupcion": 7.133,
+      "partido": "Libertad Popular",
+      "score_sentencias": 100,
+      "score_preparacion": 89.359441,
+      "score_ingresos_no_declarados": 93.333333,
+      "score_ingresos_efectivos": 48.91047,
+      "score_libre_pacto": 85.964912,
+      "score_reeleccion": 100,
+      "score_equipo_completo": 90,
+      "score_reinfo": 100,
+      "score_total": 95.642973
+    },
+    {
+      "posicion": 2,
+      "tasa_corrupcion": 7.729,
+      "partido": "Ahora Nación",
+      "score_sentencias": 100,
+      "score_preparacion": 87.865925,
+      "score_ingresos_no_declarados": 100,
+      "score_ingresos_efectivos": 34.158536,
+      "score_libre_pacto": 72.222222,
+      "score_reeleccion": 96.666667,
+      "score_equipo_completo": 93.333333,
+      "score_reinfo": 100,
+      "score_total": 91.672001
+    },
+    {
+      "posicion": 3,
+      "tasa_corrupcion": 9.532,
+      "partido": "Integridad Democrática",
+      "score_sentencias": 100,
+      "score_preparacion": 88.346995,
+      "score_ingresos_no_declarados": 53.333333,
+      "score_ingresos_efectivos": 30.796373,
+      "score_libre_pacto": 88.333333,
+      "score_reeleccion": 100,
+      "score_equipo_completo": 100,
+      "score_reinfo": 100,
+      "score_total": 91.628884
+    },
+    {
+      "posicion": 4,
+      "tasa_corrupcion": 11.181,
+      "partido": "País para Todos",
+      "score_sentencias": 95.833333,
+      "score_preparacion": 94.586749,
+      "score_ingresos_no_declarados": 83.333333,
+      "score_ingresos_efectivos": 37.95052,
+      "score_libre_pacto": 71.153846,
+      "score_reeleccion": 100,
+      "score_equipo_completo": 80,
+      "score_reinfo": 100,
+      "score_total": 89.899004
+    },
+    {
+      "posicion": 5,
+      "tasa_corrupcion": 11.33,
+      "partido": "Buen Gobierno",
+      "score_sentencias": 96.666667,
+      "score_preparacion": 71.311475,
+      "score_ingresos_no_declarados": 93.333333,
+      "score_ingresos_efectivos": 26.174852,
+      "score_libre_pacto": 81.666667,
+      "score_reeleccion": 100,
+      "score_equipo_completo": 100,
+      "score_reinfo": 100,
+      "score_total": 89.492704
+    }
+  ],
+  "peores_partidos_escala100": [
+    {
+      "posicion": 35,
+      "tasa_corrupcion": 30.451,
+      "partido": "Podemos Perú",
+      "score_sentencias": 89.655172,
+      "score_preparacion": 54.098361,
+      "score_ingresos_no_declarados": 70,
+      "score_ingresos_efectivos": 45.558364,
+      "score_libre_pacto": 0,
+      "score_reeleccion": 86.666667,
+      "score_equipo_completo": 96.666667,
+      "score_reinfo": 100,
+      "score_total": 61.046383
+    },
+    {
+      "posicion": 34,
+      "tasa_corrupcion": 29.953,
+      "partido": "Juntos por el Perú",
+      "score_sentencias": 93.333333,
+      "score_preparacion": 59.42623,
+      "score_ingresos_no_declarados": 73.333333,
+      "score_ingresos_efectivos": 39.69026,
+      "score_libre_pacto": 0,
+      "score_reeleccion": 86.666667,
+      "score_equipo_completo": 100,
+      "score_reinfo": 100,
+      "score_total": 63.237092
+    },
+    {
+      "posicion": 33,
+      "tasa_corrupcion": 26.923,
+      "partido": "Renovación Popular",
+      "score_sentencias": 82.758621,
+      "score_preparacion": 69.262295,
+      "score_ingresos_no_declarados": 76.666667,
+      "score_ingresos_efectivos": 67.668287,
+      "score_libre_pacto": 0,
+      "score_reeleccion": 93.333333,
+      "score_equipo_completo": 96.666667,
+      "score_reinfo": 100,
+      "score_total": 64.791862
+    },
+    {
+      "posicion": 32,
+      "tasa_corrupcion": 26.919,
+      "partido": "Venceremos",
+      "score_sentencias": 100,
+      "score_preparacion": 67.915691,
+      "score_ingresos_no_declarados": 76.666667,
+      "score_ingresos_efectivos": 32.951139,
+      "score_libre_pacto": 0,
+      "score_reeleccion": 96.666667,
+      "score_equipo_completo": 93.333333,
+      "score_reinfo": 100,
+      "score_total": 67.262695
+    },
+    {
+      "posicion": 31,
+      "tasa_corrupcion": 26.052,
+      "partido": "Somos Perú",
+      "score_sentencias": 92.857143,
+      "score_preparacion": 74.282787,
+      "score_ingresos_no_declarados": 90,
+      "score_ingresos_efectivos": 45.361026,
+      "score_libre_pacto": 0,
+      "score_reeleccion": 90,
+      "score_equipo_completo": 93.333333,
+      "score_reinfo": 100,
+      "score_total": 68.036561
+    }
+  ],
+  "alertas_destacadas": [
+    {
+      "tipo": "REINFO",
+      "descripcion": "64 candidatos vinculados a registros de minería informal"
+    },
+    {
+      "tipo": "Pacto #PorEstosNo",
+      "descripcion": "Partidos con infiltración del pacto de corrupción identificados"
+    },
+    {
+      "tipo": "Ingresos Cero",
+      "descripcion": "Múltiples partidos con candidatos que declaran ingresos en cero"
+    }
+  ]
+}

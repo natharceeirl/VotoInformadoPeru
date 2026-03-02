@@ -1,0 +1,565 @@
+{
+  "descripcion": "Datos de indicadores por partido para visualización en gráficas (escala 0-100)",
+  "partidos": [
+    {
+      "partido": "Libertad Popular",
+      "posicion": 1,
+      "tasa_corrupcion": 7.133,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 89.359441,
+        "ingresos_no_declarados": 93.333333,
+        "ingresos_efectivos": 48.91047,
+        "libre_pacto": 85.964912,
+        "reeleccion": 100,
+        "equipo_completo": 90,
+        "reinfo": 100,
+        "total": 95.642973
+      }
+    },
+    {
+      "partido": "Ahora Nación",
+      "posicion": 2,
+      "tasa_corrupcion": 7.729,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 87.865925,
+        "ingresos_no_declarados": 100,
+        "ingresos_efectivos": 34.158536,
+        "libre_pacto": 72.222222,
+        "reeleccion": 96.666667,
+        "equipo_completo": 93.333333,
+        "reinfo": 100,
+        "total": 91.672001
+      }
+    },
+    {
+      "partido": "Integridad Democrática",
+      "posicion": 3,
+      "tasa_corrupcion": 9.532,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 88.346995,
+        "ingresos_no_declarados": 53.333333,
+        "ingresos_efectivos": 30.796373,
+        "libre_pacto": 88.333333,
+        "reeleccion": 100,
+        "equipo_completo": 100,
+        "reinfo": 100,
+        "total": 91.628884
+      }
+    },
+    {
+      "partido": "País para Todos",
+      "posicion": 4,
+      "tasa_corrupcion": 11.181,
+      "indicadores": {
+        "sentencias": 95.833333,
+        "preparacion": 94.586749,
+        "ingresos_no_declarados": 83.333333,
+        "ingresos_efectivos": 37.95052,
+        "libre_pacto": 71.153846,
+        "reeleccion": 100,
+        "equipo_completo": 80,
+        "reinfo": 100,
+        "total": 89.899004
+      }
+    },
+    {
+      "partido": "Buen Gobierno",
+      "posicion": 5,
+      "tasa_corrupcion": 11.33,
+      "indicadores": {
+        "sentencias": 96.666667,
+        "preparacion": 71.311475,
+        "ingresos_no_declarados": 93.333333,
+        "ingresos_efectivos": 26.174852,
+        "libre_pacto": 81.666667,
+        "reeleccion": 100,
+        "equipo_completo": 100,
+        "reinfo": 100,
+        "total": 89.492704
+      }
+    },
+    {
+      "partido": "Fuerza y Libertad",
+      "posicion": 6,
+      "tasa_corrupcion": 11.784,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 75.556206,
+        "ingresos_no_declarados": 73.333333,
+        "ingresos_efectivos": 33.225756,
+        "libre_pacto": 81.818182,
+        "reeleccion": 100,
+        "equipo_completo": 93.333333,
+        "reinfo": 100,
+        "total": 89.233074
+      }
+    },
+    {
+      "partido": "PPP",
+      "posicion": 7,
+      "tasa_corrupcion": 12.335,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 60.797604,
+        "ingresos_no_declarados": 93.333333,
+        "ingresos_efectivos": 13.656731,
+        "libre_pacto": 86.792453,
+        "reeleccion": 100,
+        "equipo_completo": 86.666667,
+        "reinfo": 100,
+        "total": 88.214137
+      }
+    },
+    {
+      "partido": "Unidad Nacional",
+      "posicion": 8,
+      "tasa_corrupcion": 14.166,
+      "indicadores": {
+        "sentencias": 96.666667,
+        "preparacion": 79.234973,
+        "ingresos_no_declarados": 83.333333,
+        "ingresos_efectivos": 47.251971,
+        "libre_pacto": 66.666667,
+        "reeleccion": 96.666667,
+        "equipo_completo": 100,
+        "reinfo": 92.857143,
+        "total": 86.693784
+      }
+    },
+    {
+      "partido": "Sí Creo",
+      "posicion": 9,
+      "tasa_corrupcion": 14.322,
+      "indicadores": {
+        "sentencias": 96.428571,
+        "preparacion": 67.066745,
+        "ingresos_no_declarados": 86.666667,
+        "ingresos_efectivos": 31.405538,
+        "libre_pacto": 78.571429,
+        "reeleccion": 93.333333,
+        "equipo_completo": 93.333333,
+        "reinfo": 100,
+        "total": 86.409293
+      }
+    },
+    {
+      "partido": "Frente de la Esperanza",
+      "posicion": 10,
+      "tasa_corrupcion": 14.461,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 72.95082,
+        "ingresos_no_declarados": 80,
+        "ingresos_efectivos": 30.782578,
+        "libre_pacto": 68.965517,
+        "reeleccion": 100,
+        "equipo_completo": 96.666667,
+        "reinfo": 100,
+        "total": 86.214005
+      }
+    },
+    {
+      "partido": "Unido Perú",
+      "posicion": 11,
+      "tasa_corrupcion": 14.865,
+      "indicadores": {
+        "sentencias": 88.888889,
+        "preparacion": 94.421676,
+        "ingresos_no_declarados": 93.333333,
+        "ingresos_efectivos": 20.403743,
+        "libre_pacto": 64.285714,
+        "reeleccion": 100,
+        "equipo_completo": 60,
+        "reinfo": 100,
+        "total": 85.542506
+      }
+    },
+    {
+      "partido": "Primero La Gente",
+      "posicion": 12,
+      "tasa_corrupcion": 15.721,
+      "indicadores": {
+        "sentencias": 85.185185,
+        "preparacion": 77.91439,
+        "ingresos_no_declarados": 86.666667,
+        "ingresos_efectivos": 47.715544,
+        "libre_pacto": 71.428571,
+        "reeleccion": 100,
+        "equipo_completo": 90,
+        "reinfo": 100,
+        "total": 85.300761
+      }
+    },
+    {
+      "partido": "Perú Primero",
+      "posicion": 13,
+      "tasa_corrupcion": 15.728,
+      "indicadores": {
+        "sentencias": 89.285714,
+        "preparacion": 94.233021,
+        "ingresos_no_declarados": 90,
+        "ingresos_efectivos": 43.846759,
+        "libre_pacto": 54.385965,
+        "reeleccion": 93.333333,
+        "equipo_completo": 93.333333,
+        "reinfo": 100,
+        "total": 84.969862
+      }
+    },
+    {
+      "partido": "PTE",
+      "posicion": 14,
+      "tasa_corrupcion": 15.927,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 51.158232,
+        "ingresos_no_declarados": 93.333333,
+        "ingresos_efectivos": 24.412591,
+        "libre_pacto": 78.723404,
+        "reeleccion": 100,
+        "equipo_completo": 76.666667,
+        "reinfo": 96.363636,
+        "total": 84.131976
+      }
+    },
+    {
+      "partido": "PRIN",
+      "posicion": 15,
+      "tasa_corrupcion": 16.525,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 52.569357,
+        "ingresos_no_declarados": 80,
+        "ingresos_efectivos": 20.53991,
+        "libre_pacto": 80,
+        "reeleccion": 100,
+        "equipo_completo": 86.666667,
+        "reinfo": 96.923077,
+        "total": 83.735354
+      }
+    },
+    {
+      "partido": "FREPAP",
+      "posicion": 16,
+      "tasa_corrupcion": 16.556,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 46.748634,
+        "ingresos_no_declarados": 26.666667,
+        "ingresos_efectivos": 19.677461,
+        "libre_pacto": 100,
+        "reeleccion": 100,
+        "equipo_completo": 100,
+        "reinfo": 97.142857,
+        "total": 82.873409
+      }
+    },
+    {
+      "partido": "Fe en el Perú",
+      "posicion": 17,
+      "tasa_corrupcion": 17.304,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 58.63388,
+        "ingresos_no_declarados": 93.333333,
+        "ingresos_efectivos": 23.385917,
+        "libre_pacto": 64.285714,
+        "reeleccion": 100,
+        "equipo_completo": 60,
+        "reinfo": 100,
+        "total": 81.317834
+      }
+    },
+    {
+      "partido": "Perú Acción",
+      "posicion": 18,
+      "tasa_corrupcion": 17.526,
+      "indicadores": {
+        "sentencias": 93.103448,
+        "preparacion": 55.327869,
+        "ingresos_no_declarados": 50,
+        "ingresos_efectivos": 15.910374,
+        "libre_pacto": 82.758621,
+        "reeleccion": 100,
+        "equipo_completo": 96.666667,
+        "reinfo": 95.588235,
+        "total": 80.457355
+      }
+    },
+    {
+      "partido": "Obras",
+      "posicion": 19,
+      "tasa_corrupcion": 18.07,
+      "indicadores": {
+        "sentencias": 93.333333,
+        "preparacion": 43.97541,
+        "ingresos_no_declarados": 70,
+        "ingresos_efectivos": 16.444466,
+        "libre_pacto": 81.666667,
+        "reeleccion": 100,
+        "equipo_completo": 100,
+        "reinfo": 100,
+        "total": 80.386305
+      }
+    },
+    {
+      "partido": "Cooperación Popular",
+      "posicion": 20,
+      "tasa_corrupcion": 18.664,
+      "indicadores": {
+        "sentencias": 96.428571,
+        "preparacion": 40.749415,
+        "ingresos_no_declarados": 100,
+        "ingresos_efectivos": 9.372051,
+        "libre_pacto": 70.909091,
+        "reeleccion": 96.666667,
+        "equipo_completo": 93.333333,
+        "reinfo": 100,
+        "total": 79.806234
+      }
+    },
+    {
+      "partido": "Progresemos",
+      "posicion": 21,
+      "tasa_corrupcion": 19.774,
+      "indicadores": {
+        "sentencias": 93.103448,
+        "preparacion": 41.393443,
+        "ingresos_no_declarados": 26.666667,
+        "ingresos_efectivos": 51.141133,
+        "libre_pacto": 87.719298,
+        "reeleccion": 96.666667,
+        "equipo_completo": 96.666667,
+        "reinfo": 100,
+        "total": 78.229098
+      }
+    },
+    {
+      "partido": "Perú Federal",
+      "posicion": 22,
+      "tasa_corrupcion": 20.109,
+      "indicadores": {
+        "sentencias": 79.166667,
+        "preparacion": 73.29235,
+        "ingresos_no_declarados": 86.666667,
+        "ingresos_efectivos": 28.869551,
+        "libre_pacto": 52,
+        "reeleccion": 100,
+        "equipo_completo": 80,
+        "reinfo": 94.827586,
+        "total": 76.32366
+      }
+    },
+    {
+      "partido": "Verde",
+      "posicion": 23,
+      "tasa_corrupcion": 20.867,
+      "indicadores": {
+        "sentencias": 96.551724,
+        "preparacion": 45.491803,
+        "ingresos_no_declarados": 73.333333,
+        "ingresos_efectivos": 11.349967,
+        "libre_pacto": 58.0,
+        "reeleccion": 100,
+        "equipo_completo": 96.666667,
+        "reinfo": 100,
+        "total": 75.493457
+      }
+    },
+    {
+      "partido": "Un Camino Diferente",
+      "posicion": 24,
+      "tasa_corrupcion": 21.713,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 38.825137,
+        "ingresos_no_declarados": 13.333333,
+        "ingresos_efectivos": 5.864596,
+        "libre_pacto": 75,
+        "reeleccion": 100,
+        "equipo_completo": 100,
+        "reinfo": 100,
+        "total": 73.16559
+      }
+    },
+    {
+      "partido": "APRA",
+      "posicion": 25,
+      "tasa_corrupcion": 22.71,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 86.47541,
+        "ingresos_no_declarados": 76.666667,
+        "ingresos_efectivos": 52.416462,
+        "libre_pacto": 0,
+        "reeleccion": 100,
+        "equipo_completo": 96.666667,
+        "reinfo": 100,
+        "total": 72.440905
+      }
+    },
+    {
+      "partido": "Avanza País",
+      "posicion": 26,
+      "tasa_corrupcion": 23.057,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 77.967213,
+        "ingresos_no_declarados": 66.666667,
+        "ingresos_efectivos": 100,
+        "libre_pacto": 0,
+        "reeleccion": 93.333333,
+        "equipo_completo": 83.333333,
+        "reinfo": 100,
+        "total": 70.786109
+      }
+    },
+    {
+      "partido": "Alianza para el Progreso",
+      "posicion": 27,
+      "tasa_corrupcion": 23.608,
+      "indicadores": {
+        "sentencias": 75.862069,
+        "preparacion": 100,
+        "ingresos_no_declarados": 90,
+        "ingresos_efectivos": 81.483066,
+        "libre_pacto": 0,
+        "reeleccion": 86.666667,
+        "equipo_completo": 96.666667,
+        "reinfo": 98.529412,
+        "total": 70.493141
+      }
+    },
+    {
+      "partido": "Partido Morado",
+      "posicion": 28,
+      "tasa_corrupcion": 23.805,
+      "indicadores": {
+        "sentencias": 92.857143,
+        "preparacion": 75.556206,
+        "ingresos_no_declarados": 96.666667,
+        "ingresos_efectivos": 34.437815,
+        "libre_pacto": 0,
+        "reeleccion": 100,
+        "equipo_completo": 93.333333,
+        "reinfo": 92.063492,
+        "total": 69.011926
+      }
+    },
+    {
+      "partido": "Perú Libre",
+      "posicion": 29,
+      "tasa_corrupcion": 24.162,
+      "indicadores": {
+        "sentencias": 90,
+        "preparacion": 76.065574,
+        "ingresos_no_declarados": 96.666667,
+        "ingresos_efectivos": 58.286984,
+        "libre_pacto": 0,
+        "reeleccion": 80,
+        "equipo_completo": 100,
+        "reinfo": 100,
+        "total": 68.323131
+      }
+    },
+    {
+      "partido": "Fuerza Popular",
+      "posicion": 30,
+      "tasa_corrupcion": 24.818,
+      "indicadores": {
+        "sentencias": 80,
+        "preparacion": 81.215847,
+        "ingresos_no_declarados": 96.666667,
+        "ingresos_efectivos": 75.261256,
+        "libre_pacto": 0,
+        "reeleccion": 83.333333,
+        "equipo_completo": 100,
+        "reinfo": 100,
+        "total": 68.036232
+      }
+    },
+    {
+      "partido": "Somos Perú",
+      "posicion": 31,
+      "tasa_corrupcion": 26.052,
+      "indicadores": {
+        "sentencias": 92.857143,
+        "preparacion": 74.282787,
+        "ingresos_no_declarados": 90,
+        "ingresos_efectivos": 45.361026,
+        "libre_pacto": 0,
+        "reeleccion": 90,
+        "equipo_completo": 93.333333,
+        "reinfo": 100,
+        "total": 68.036561
+      }
+    },
+    {
+      "partido": "Venceremos",
+      "posicion": 32,
+      "tasa_corrupcion": 26.919,
+      "indicadores": {
+        "sentencias": 100,
+        "preparacion": 67.915691,
+        "ingresos_no_declarados": 76.666667,
+        "ingresos_efectivos": 32.951139,
+        "libre_pacto": 0,
+        "reeleccion": 96.666667,
+        "equipo_completo": 93.333333,
+        "reinfo": 100,
+        "total": 67.262695
+      }
+    },
+    {
+      "partido": "Renovación Popular",
+      "posicion": 33,
+      "tasa_corrupcion": 26.923,
+      "indicadores": {
+        "sentencias": 82.758621,
+        "preparacion": 69.262295,
+        "ingresos_no_declarados": 76.666667,
+        "ingresos_efectivos": 67.668287,
+        "libre_pacto": 0,
+        "reeleccion": 93.333333,
+        "equipo_completo": 96.666667,
+        "reinfo": 100,
+        "total": 64.791862
+      }
+    },
+    {
+      "partido": "Juntos por el Perú",
+      "posicion": 34,
+      "tasa_corrupcion": 29.953,
+      "indicadores": {
+        "sentencias": 93.333333,
+        "preparacion": 59.42623,
+        "ingresos_no_declarados": 73.333333,
+        "ingresos_efectivos": 39.69026,
+        "libre_pacto": 0,
+        "reeleccion": 86.666667,
+        "equipo_completo": 100,
+        "reinfo": 100,
+        "total": 63.237092
+      }
+    },
+    {
+      "partido": "Podemos Perú",
+      "posicion": 35,
+      "tasa_corrupcion": 30.451,
+      "indicadores": {
+        "sentencias": 89.655172,
+        "preparacion": 54.098361,
+        "ingresos_no_declarados": 70,
+        "ingresos_efectivos": 45.558364,
+        "libre_pacto": 0,
+        "reeleccion": 86.666667,
+        "equipo_completo": 96.666667,
+        "reinfo": 100,
+        "total": 61.046383
+      }
+    }
+  ]
+}

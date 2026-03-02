@@ -1,0 +1,454 @@
+{
+  "descripcion": "Candidatos con vínculos a REINFO (Registro Integral de Formalización Minera - minería informal)",
+  "total": 64,
+  "candidatos": [
+    {
+      "partido": "Perú Federal",
+      "candidato": "Clemente Caceres Lazaro Humbero",
+      "tipo_eleccion": "Senador Nacional",
+      "numero_en_lista": 9,
+      "cantidad_mineras": 7
+    },
+    {
+      "partido": "Perú Federal",
+      "candidato": "Essenwanger Vasquez Solis Heidi",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Perú Federal",
+      "candidato": "Hurtado Vigura Eusebio",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Perú Federal",
+      "candidato": "Minaya Mendoza Armando",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 4
+    },
+    {
+      "partido": "Perú Federal",
+      "candidato": "Perez Chonate Walter Antonio",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Unidad Nacional",
+      "candidato": "Castillo Ortega Tania Libertad",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Unidad Nacional",
+      "candidato": "Cueva Urquizo Jhon",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Unidad Nacional",
+      "candidato": "Mamani Aquise Maribel",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 2
+    },
+    {
+      "partido": "Unidad Nacional",
+      "candidato": "Motta Casilla Ana María",
+      "tipo_eleccion": "Senador Nacional",
+      "numero_en_lista": 4,
+      "cantidad_mineras": 8
+    },
+    {
+      "partido": "Unidad Nacional",
+      "candidato": "Santiago Lozano Juan Carlos",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 2
+    },
+    {
+      "partido": "Renovación Popular",
+      "candidato": "Bernal Salas Javier Alcides",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Renovación Popular",
+      "candidato": "Dios Chiroque Francisco Carlos",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Renovación Popular",
+      "candidato": "Lianaje Palomino Kelly Debra",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Renovación Popular",
+      "candidato": "Vasquez Garcia de Arenaza Cecilia Francisca",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Renovación Popular",
+      "candidato": "Velasquez Tuesta Alfonso Felipe",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 4
+    },
+    {
+      "partido": "Somos Perú",
+      "candidato": "Espinoza Soto Gustavo Dacio",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 2
+    },
+    {
+      "partido": "Somos Perú",
+      "candidato": "Garcia Pedrera Sandra Mercedes",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 3
+    },
+    {
+      "partido": "Somos Perú",
+      "candidato": "Pillaca Sulca Samuel Santiago",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 2
+    },
+    {
+      "partido": "Somos Perú",
+      "candidato": "Vasquez Anamaria Noel Arthur",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Podemos Perú",
+      "candidato": "Chamorro Cervantes Elizabet Rufina",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Podemos Perú",
+      "candidato": "Del Carpio Gomez Elias Wilfredo",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 4
+    },
+    {
+      "partido": "Podemos Perú",
+      "candidato": "Romero Rodriguez Eulogio Amado",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "País para Todos",
+      "candidato": "Amanqui Quispe David Jesus",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 4
+    },
+    {
+      "partido": "País para Todos",
+      "candidato": "Bocanegra Haro Leydi",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "País para Todos",
+      "candidato": "Tapia Medina Gladys Victoria",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 3
+    },
+    {
+      "partido": "Salvemos al Perú",
+      "candidato": "Martinez Puma Ignacio Heraclio",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 2
+    },
+    {
+      "partido": "Salvemos al Perú",
+      "candidato": "Ojeda Cruz Exaltacion",
+      "tipo_eleccion": "Senador",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Salvemos al Perú",
+      "candidato": "Quintanilla Zea Mario Solfio",
+      "tipo_eleccion": "Senador",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "FREPAP",
+      "candidato": "Contreras Bernardo Milton",
+      "tipo_eleccion": "Senador Nacional",
+      "numero_en_lista": 15,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "FREPAP",
+      "candidato": "Dominguez Perez Noemi Elizabeth",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "FREPAP",
+      "candidato": "Uscamayta Totocayo Rodrigues Juan",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Alianza para el Progreso",
+      "candidato": "Espinoza Matos Maria Jesus",
+      "tipo_eleccion": "Senador Nacional",
+      "numero_en_lista": 30,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Alianza para el Progreso",
+      "candidato": "Guillen Jimenez Percy",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 4
+    },
+    {
+      "partido": "Juntos por el Perú",
+      "candidato": "Maguiña Villarreal Luis Edgar",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Juntos por el Perú",
+      "candidato": "Yauri Aquino Zoila Soledad",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Buen Gobierno",
+      "candidato": "Loaiza Cuba Wasington",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Buen Gobierno",
+      "candidato": "Mendieta Quispe Ulises Pablo",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Frente de la Esperanza",
+      "candidato": "Quispe Condori Yesica",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Frente de la Esperanza",
+      "candidato": "Tapia Orlandini Geiner",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Partido Morado",
+      "candidato": "Quiroz Diaz Manuel Andres",
+      "tipo_eleccion": "Senador Nacional",
+      "numero_en_lista": 3,
+      "cantidad_mineras": 5
+    },
+    {
+      "partido": "Partido Morado",
+      "candidato": "Rodriguez Rondoy Juan Carlos",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 3
+    },
+    {
+      "partido": "PPP",
+      "candidato": "Alvarez Montoya Paola",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "PPP",
+      "candidato": "Cabrera Espinal Rodmy Alfonso",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 4
+    },
+    {
+      "partido": "Identidad Democrática",
+      "candidato": "Alvarado Olanda Bernardo Gilerto",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Identidad Democrática",
+      "candidato": "Lopez Hernandez Juan Carlos",
+      "tipo_eleccion": "Parlam Andino",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Perú Libre",
+      "candidato": "Lopez Ccama John",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Perú Libre",
+      "candidato": "Valverde Calipuy Adolfo Luis",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Perú Primero",
+      "candidato": "Lucana Mamani Ulises",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Perú Primero",
+      "candidato": "Tacar Yucra Saul",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "PRIN",
+      "candidato": "Anaya Mendoza Edgar Filoter",
+      "tipo_eleccion": "Senador Nacional",
+      "numero_en_lista": 20,
+      "cantidad_mineras": 5
+    },
+    {
+      "partido": "PRIN",
+      "candidato": "Morales Santana Noelia Mariel",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Perú Moderno",
+      "candidato": "Diaz Cieza Humberto",
+      "tipo_eleccion": "Parlam Andino",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Perú Moderno",
+      "candidato": "Olivares Marcos Gustavo Adolfo",
+      "tipo_eleccion": "Senador",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Progresemos",
+      "candidato": "Guillen Meza Wendy Gabriela",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 5
+    },
+    {
+      "partido": "Progresemos",
+      "candidato": "Rodriguez Sanchez Teofilo Yonel",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Ahora Nación",
+      "candidato": "Villavicencio Choque Raul",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Fe en el Perú",
+      "candidato": "Vargas Sanchez Ricardo",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Fuerza y Libertad",
+      "candidato": "Altamirano Rojas Jose Luis",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "APRA",
+      "candidato": "Iglesias Vasquez Leoncio Martin",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "PTE",
+      "candidato": "Gomez Portocarrero Carlos Alberto",
+      "tipo_eleccion": "Senador Nacional",
+      "numero_en_lista": 19,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Verde",
+      "candidato": "Sotomayor Chauhuaylla Sixto Gilber",
+      "tipo_eleccion": "Diputado",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Cooperación Popular",
+      "candidato": "Ore Rojas Emiliano",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Perú Acción",
+      "candidato": "Navarrete Pillaca Adrian Mariano",
+      "tipo_eleccion": "Senador Nacional",
+      "numero_en_lista": 9,
+      "cantidad_mineras": 1
+    },
+    {
+      "partido": "Un Camino Diferente",
+      "candidato": "Pajares Claudet Teodomiro Horacio",
+      "tipo_eleccion": "Senador Regional",
+      "numero_en_lista": null,
+      "cantidad_mineras": 1
+    }
+  ]
+}

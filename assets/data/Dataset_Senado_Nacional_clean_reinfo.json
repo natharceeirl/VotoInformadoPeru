@@ -1,0 +1,444 @@
+{
+   "Ahora Nacion": [
+      {
+         "Candidato": "Villavicencio Choque Raul",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Alianza para el Progreso": [
+      {
+         "Candidato": "Espinoza Matos Maria Jesus",
+         "Elección": "Senador Nacional",
+         "# en Lista": 30,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Guillen Jimenez Percy",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 4
+      }
+   ],
+   "APRA": [
+      {
+         "Candidato": "Iglesias Vasquez Leoncio Martin",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Cooperación Popular": [
+      {
+         "Candidato": "Ore Rojas Emiliano",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Fe en el Perú": [
+      {
+         "Candidato": "Vargas Sanchez Ricardo",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Frente de la Esperanza 2021": [
+      {
+         "Candidato": "Quispe Condori Yesica",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Tapia Orlandini Geiner",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "FREPAP": [
+      {
+         "Candidato": "Contreras Bernardo Milton",
+         "Elección": "Senador Nacional",
+         "# en Lista": 15,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Dominguez Perez Noemi Elizabeth",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Uscamayta Totocayo Rodrigues Juan",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Fuerza y Libertad": [
+      {
+         "Candidato": "Altamirano Rojas Jose Luis",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Identidad Democratica": [
+      {
+         "Candidato": "Alvarado Olanda Bernardo Gilerto",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Lopez Hernandez Juan Carlos",
+         "Elección": "Parlamento Andino",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Juntos por el Perú": [
+      {
+         "Candidato": "Maguiña Villarreal Luis Edgar",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Yauri Aquino Zoila Soledad",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "País para Todos": [
+      {
+         "Candidato": "Amanqui Quispe David Jesus",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 4
+      },
+      {
+         "Candidato": "Bocanegra Haro Leydi",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Tapia Medina Gladys Victoria",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 3
+      }
+   ],
+   "Buen Gobierno": [
+      {
+         "Candidato": "Loaiza Cuba Wasington",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Mendieta Quispe Ulises Pablo",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Partido Morado": [
+      {
+         "Candidato": "Quiroz Diaz Manuel Andres",
+         "Elección": "Senador Nacional",
+         "# en Lista": 3,
+         "# Cantidad": 5
+      },
+      {
+         "Candidato": "Rodriguez Rondoy Juan Carlos",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 3
+      }
+   ],
+   "Perú Accion": [
+      {
+         "Candidato": "Navarrete Pillaca Adrian Mariano",
+         "Elección": "Senador Nacional",
+         "# en Lista": 9,
+         "# Cantidad": 1
+      }
+   ],
+   "Perú Federal": [
+      {
+         "Candidato": "Clemente Caceres Lazaro Humbero",
+         "Elección": "Senador Nacional",
+         "# en Lista": 9,
+         "# Cantidad": 7
+      },
+      {
+         "Candidato": "Essenwanger Vasquez Solis Heidi",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Hurtado Vigura Eusebio",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Minaya Mendoza Armando",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 4
+      },
+      {
+         "Candidato": "Perez Chonate Walter Antonio",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Perú Libre": [
+      {
+         "Candidato": "Lopez Ccama John",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Valverde Calipuy Adolfo Luis",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Perú Moderno": [
+      {
+         "Candidato": "Diaz Cieza Humberto",
+         "Elección": "Parlamento Andino",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Olivares Marcos Gustavo Adolfo",
+         "Elección": "Senador",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Perú Primero": [
+      {
+         "Candidato": "Lucana Mamani Ulises",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Tacar Yucra Saul",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Podemos Perú": [
+      {
+         "Candidato": "Chamorro Cervantes Elizabet Rufina",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Del Carpio Gomez Elias Wilfredo",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 4
+      },
+      {
+         "Candidato": "Romero Rodriguez Eulogio Amado",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "PPP": [
+      {
+         "Candidato": "Alvarez Montoya Paola",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Cabrera Espinal Rodmy Alfonso",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 4
+      }
+   ],
+   "PRIN": [
+      {
+         "Candidato": "Anaya Mendoza Edgar Filoter",
+         "Elección": "Senador Nacional",
+         "# en Lista": 20,
+         "# Cantidad": 5
+      },
+      {
+         "Candidato": "Morales Santana Noelia Mariel",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Progresemos": [
+      {
+         "Candidato": "Guillen Meza Wendy Gabriela",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 5
+      },
+      {
+         "Candidato": "Rodriguez Sanchez Teofilo Yonel",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "PTE": [
+      {
+         "Candidato": "Gomez Portocarrero Carlos Alberto",
+         "Elección": "Senador Nacional",
+         "# en Lista": 19,
+         "# Cantidad": 1
+      }
+   ],
+   "Renovación Popular": [
+      {
+         "Candidato": "Bernal Salas Javier Alcides",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Dios Chiroque Francisco Carlos",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Lianaje Palomino Kelly Debra",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Vasquez Garcia de Arenaza Cecilia Francisca",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Velasquez Tuesta Alfonso Felipe",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 4
+      }
+   ],
+   "Salvemos al Perú": [
+      {
+         "Candidato": "Martinez Puma Ignacio Heraclio",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 2
+      },
+      {
+         "Candidato": "Ojeda Cruz Exaltacion",
+         "Elección": "Senador",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Quintanilla Zea Mario Solfio",
+         "Elección": "Senador",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Somos Perú": [
+      {
+         "Candidato": "Espinoza Soto Gustavo Dacio",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 2
+      },
+      {
+         "Candidato": "Garcia Pedrera Sandra Mercedes",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 3
+      },
+      {
+         "Candidato": "Pillaca Sulca Samuel Santiago",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 2
+      },
+      {
+         "Candidato": "Vasquez Anamaria Noel Arthur",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Un Camino Diferente": [
+      {
+         "Candidato": "Pajares Claudet Teodomiro Horacio",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ],
+   "Unidad Nacional": [
+      {
+         "Candidato": "Castillo Ortega Tania Libertad",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Cueva Urquizo Jhon",
+         "Elección": "Senador Regional",
+         "# en Lista": null,
+         "# Cantidad": 1
+      },
+      {
+         "Candidato": "Mamani Aquise Maribel",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 2
+      },
+      {
+         "Candidato": "Motta Casilla Ana María",
+         "Elección": "Senador Nacional",
+         "# en Lista": 4,
+         "# Cantidad": 8
+      },
+      {
+         "Candidato": "Santiago Lozano Juan Carlos",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 2
+      }
+   ],
+   "Verde": [
+      {
+         "Candidato": "Sotomayor Chauhuaylla Sixto Gilber",
+         "Elección": "Diputado",
+         "# en Lista": null,
+         "# Cantidad": 1
+      }
+   ]
+}
