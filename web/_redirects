@@ -1,0 +1,3 @@
+# Proxy JNE candidate photos server-side (bypasses CORS)
+# mpesije uses clean path-based URLs, less Imperva friction than votoinformado
+/foto-proxy/*  https://mpesije.jne.gob.pe/apidocs/:splat.jpg  200!

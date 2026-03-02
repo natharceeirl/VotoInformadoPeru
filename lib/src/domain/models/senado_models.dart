@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-/// Builds the photo URL: proxy on web (avoids CORS), direct on native.
+/// Builds the photo URL: Netlify redirect proxy on web (avoids CORS), direct on native.
 String _jneFotoUrl(String guid) => kIsWeb
-    ? '/.netlify/functions/foto-proxy?guidFoto=$guid'
+    ? '/foto-proxy/$guid'
     : 'https://votoinformado.jne.gob.pe/VotoInformado/Informacion/GetFoto?guidFoto=$guid';
 
 /// Modelo ligero de senadoNacional.json — solo los campos útiles para la app.
