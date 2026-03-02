@@ -51,6 +51,13 @@ node_modules/
 *.xlsx
 *.xls
 
+# Non-asset files accidentally placed in asset folders
+assets/logoPartido/*.exe
+assets/logoPartido/*.pdf
+
+# Flutter SDK (if cloned locally for builds)
+.flutter/
+
 # Python scripts (data processing, not needed in deploy)
 *.py
 *.txt

@@ -1,6 +1,6 @@
 [build]
   publish = "build/web"
-  command = "flutter build web --release"
+  command = "bash build.sh"
 
 # Disable Netlify post-processing so it doesn't inject webpage_content_reporter.js
 # (that script uses ES module 'export' syntax which breaks Flutter web's rendering loop)
