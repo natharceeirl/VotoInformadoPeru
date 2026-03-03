@@ -8,6 +8,7 @@ import 'compare_parties_screen.dart';
 import 'charts_hub_screen.dart';
 import 'credits_screen.dart';
 import 'data_sources_screen.dart';
+import 'recomendacion_screen.dart';
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
@@ -127,6 +128,25 @@ class MainMenuScreen extends StatelessWidget {
                 isHighlighted: true,
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const ChartsHubScreen())),
+              ),
+              const SizedBox(height: 20),
+
+              // ── Section: Recomendación ───────────────────────────────────
+              _SectionHeader(
+                label: '¿POR QUIÉN VOTAR?',
+                icon: Icons.how_to_vote_rounded,
+              ),
+              const SizedBox(height: 12),
+              _MenuCard(
+                title: '¿Por quién votar?',
+                subtitle: 'Candidatos ordenados por perfil de integridad',
+                detail: 'Educación · Sentencias · Puntaje 0–100',
+                icon: Icons.recommend_rounded,
+                color: Colors.green,
+                badge: 'NUEVO',
+                isHighlighted: true,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const RecomendacionScreen())),
               ),
               const SizedBox(height: 20),
 

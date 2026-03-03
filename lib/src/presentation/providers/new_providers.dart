@@ -5,6 +5,7 @@ import '../../domain/models/new_models.dart';
 import '../../domain/models/reinfo_models.dart';
 import '../../domain/models/senado_models.dart';
 import '../../domain/models/regiones_models.dart';
+import '../../domain/models/hoja_vida_models.dart';
 import '../../data/repositories/data_repository.dart';
 import '../widgets/indicator_weights_sheet.dart';
 
@@ -81,6 +82,62 @@ final regionesDataProvider = FutureProvider<RegionesData>((ref) async {
     distritoUnico: parse('SENADORES DISTRITO ÚNICO'),
   );
 });
+
+/// Carga hojas_vida.json — mapa DNI → HojaVida con scoring de integridad.
+final hojasVidaProvider =
+    FutureProvider<Map<String, HojaVida>>((ref) async {
+      final raw = await rootBundle.loadString(
+        'assets/baseDatos/hojas_vida.json',
+      );
+      final map = jsonDecode(raw) as Map<String, dynamic>;
+      final result = <String, HojaVida>{};
+      for (final entry in map.entries) {
+        final j = entry.value as Map<String, dynamic>?;
+        if (j == null || !j.containsKey('nivelEducacion')) continue;
+        try {
+          result[entry.key] = HojaVida.fromJson(entry.key, j);
+        } catch (_) {}
+      }
+      return result;
+    });
+
+/// Candidatos con hoja de vida — une regionesData + hojasVida.
+/// Filtrables por tipo de distrito (ÚNICO / MÚLTIPLE) y departamento.
+final candidatosConHVProvider =
+    FutureProvider<List<CandidatoConHV>>((ref) async {
+      final regiones = await ref.watch(regionesDataProvider.future);
+      final hojas   = await ref.watch(hojasVidaProvider.future);
+
+      final result = <CandidatoConHV>[];
+
+      for (final c in regiones.distritoUnico) {
+        final hv = hojas[c.dni];
+        if (hv == null) continue;
+        result.add(CandidatoConHV(
+          hv:            hv,
+          tipoDistrito:  'ÚNICO',
+          departamento:  c.departamento,
+          posicion:      c.posicion,
+          fotoUrl:       c.fotoUrl,
+          strNombre:     c.strNombre,
+        ));
+      }
+
+      for (final c in regiones.distritoMultiple) {
+        final hv = hojas[c.dni];
+        if (hv == null) continue;
+        result.add(CandidatoConHV(
+          hv:            hv,
+          tipoDistrito:  'MÚLTIPLE',
+          departamento:  c.departamento,
+          posicion:      c.posicion,
+          fotoUrl:       c.fotoUrl,
+          strNombre:     c.strNombre,
+        ));
+      }
+
+      return result;
+    });
 
 /// Carga senadoNacional.json y lo indexa por DNI → SenadoCandidato.
 /// Permite acceder a la foto oficial del JNE y al estado del candidato.
