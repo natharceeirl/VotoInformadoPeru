@@ -9,7 +9,16 @@
       "Bash(dart run flutter_launcher_icons)",
       "Bash(flutter pub deps)",
       "Bash(flutter build web --release)",
-      "Bash(gh --version)"
+      "Bash(gh --version)",
+      "Bash(where python)",
+      "Bash(where python3)",
+      "Bash(where py)",
+      "Bash(py -c \"import requests; print\\(''requests OK''\\)\")",
+      "Bash(py -m pip install requests)",
+      "Bash(py -m pip install requests --quiet)",
+      "Bash(py descargar_hojas_vida.py)",
+      "Bash(py -c \":*)",
+      "Bash(node analyze.js)"
     ]
   }
 }
