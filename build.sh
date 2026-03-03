@@ -2,7 +2,11 @@
 set -e
 
 echo "=== Installing Flutter SDK ==="
-git clone https://github.com/flutter/flutter.git -b stable --depth 1 .flutter
+if [ ! -d ".flutter/bin" ]; then
+  git clone https://github.com/flutter/flutter.git -b stable --depth 1 .flutter
+else
+  echo "Flutter SDK already cached, skipping clone."
+fi
 
 export PATH="$PATH:$(pwd)/.flutter/bin"
 
