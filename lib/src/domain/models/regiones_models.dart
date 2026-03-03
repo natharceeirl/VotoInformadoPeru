@@ -121,6 +121,7 @@ class RegionCandidato {
   final String fechaNacimiento;
   final String estadoCandidato;
   final String strNombre; // UUID.jpg — for photo URL
+  final String cargo;     // e.g. 'PRESIDENTE', 'DIPUTADO' (from strCargo)
 
   const RegionCandidato({
     required this.ubigeo,
@@ -136,6 +137,7 @@ class RegionCandidato {
     required this.fechaNacimiento,
     required this.estadoCandidato,
     required this.strNombre,
+    this.cargo = '',
   });
 
   factory RegionCandidato.fromJson(Map<String, dynamic> j) {
@@ -154,6 +156,7 @@ class RegionCandidato {
       fechaNacimiento: j['strFechaNacimiento'] as String? ?? '',
       estadoCandidato: j['strEstadoCandidato'] as String? ?? '',
       strNombre: j['strNombre'] as String? ?? '',
+      cargo: j['strCargo'] as String? ?? '',
     );
   }
 

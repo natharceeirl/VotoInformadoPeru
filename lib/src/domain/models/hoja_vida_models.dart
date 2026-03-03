@@ -1,5 +1,139 @@
 import 'package:flutter/material.dart';
 
+// ─── Proceso Electoral enum ───────────────────────────────────────────────────
+
+enum ProcesoElectoral {
+  presidentes,
+  diputados,
+  senadores,
+  parlamentoAndino;
+
+  String get displayName {
+    switch (this) {
+      case ProcesoElectoral.presidentes:    return 'Presidente y Vicepresidentes';
+      case ProcesoElectoral.diputados:      return 'Diputados';
+      case ProcesoElectoral.senadores:      return 'Senadores';
+      case ProcesoElectoral.parlamentoAndino: return 'Parlamento Andino';
+    }
+  }
+
+  String get bdFile {
+    switch (this) {
+      case ProcesoElectoral.presidentes:    return 'assets/baseDatos/bd_presidentes_vicepresidentes.json';
+      case ProcesoElectoral.diputados:      return 'assets/baseDatos/bd_diputados.json';
+      case ProcesoElectoral.senadores:      return 'assets/baseDatos/bd_senadoresDistritoUnico.json';
+      case ProcesoElectoral.parlamentoAndino: return 'assets/baseDatos/bd_parlamentoAndino.json';
+    }
+  }
+
+  String get bdFileExtra {
+    // For senadores we also have the multiple district file
+    if (this == ProcesoElectoral.senadores) {
+      return 'assets/baseDatos/bd_senadoresDistritoMultiple.json';
+    }
+    return '';
+  }
+
+  String get bdTopKey {
+    switch (this) {
+      case ProcesoElectoral.presidentes:    return 'PRESIDENCIAL';
+      case ProcesoElectoral.diputados:      return 'DIPUTADOS';
+      case ProcesoElectoral.senadores:      return 'SENADORES DISTRITO ÚNICO';
+      case ProcesoElectoral.parlamentoAndino: return 'PARLAMENTO ANDINO';
+    }
+  }
+
+  String get hvFile {
+    switch (this) {
+      case ProcesoElectoral.presidentes:    return 'assets/baseDatos/hojas_vida_presidentes.json';
+      case ProcesoElectoral.diputados:      return 'assets/baseDatos/hojas_vida_diputados.json';
+      case ProcesoElectoral.senadores:      return 'assets/baseDatos/hojas_vida.json';
+      case ProcesoElectoral.parlamentoAndino: return 'assets/baseDatos/hojas_vida_parlamento_andino.json';
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case ProcesoElectoral.presidentes:    return Icons.star_rounded;
+      case ProcesoElectoral.diputados:      return Icons.account_balance_rounded;
+      case ProcesoElectoral.senadores:      return Icons.gavel_rounded;
+      case ProcesoElectoral.parlamentoAndino: return Icons.public_rounded;
+    }
+  }
+
+  Color get color {
+    switch (this) {
+      case ProcesoElectoral.presidentes:    return const Color(0xFF7B1FA2);
+      case ProcesoElectoral.diputados:      return const Color(0xFF1565C0);
+      case ProcesoElectoral.senadores:      return const Color(0xFF00695C);
+      case ProcesoElectoral.parlamentoAndino: return const Color(0xFFE65100);
+    }
+  }
+
+  String get jnePortalUrl =>
+      'https://web.jne.gob.pe/serviciovotoinformado/';
+}
+
+// ─── Experiencia Laboral ──────────────────────────────────────────────────────
+
+class ExpLaboral {
+  final String cargo;
+  final String institucion;
+  final String fechaInicio;
+  final String fechaFin;
+  final String funcion;
+
+  const ExpLaboral({
+    required this.cargo,
+    required this.institucion,
+    required this.fechaInicio,
+    required this.fechaFin,
+    required this.funcion,
+  });
+
+  factory ExpLaboral.fromJson(Map<String, dynamic> j) => ExpLaboral(
+        cargo:       j['cargo']       as String? ?? '',
+        institucion: j['institucion'] as String? ?? '',
+        fechaInicio: j['fechaInicio'] as String? ?? '',
+        fechaFin:    j['fechaFin']    as String? ?? '',
+        funcion:     j['funcion']     as String? ?? '',
+      );
+
+  String get resumen {
+    final parts = <String>[];
+    if (cargo.isNotEmpty) parts.add(cargo);
+    if (institucion.isNotEmpty) parts.add(institucion);
+    if (fechaInicio.isNotEmpty || fechaFin.isNotEmpty) {
+      parts.add('(${fechaInicio.isNotEmpty ? fechaInicio : '?'} – ${fechaFin.isNotEmpty ? fechaFin : 'actual'})');
+    }
+    return parts.join(' · ');
+  }
+}
+
+// ─── Cargo Político ───────────────────────────────────────────────────────────
+
+class CargoPolitico {
+  final String cargo;
+  final String entidad; // partido or elected entity
+  final String periodo;
+  final String tipo; // 'partidario' | 'popular'
+
+  const CargoPolitico({
+    required this.cargo,
+    required this.entidad,
+    required this.periodo,
+    required this.tipo,
+  });
+
+  factory CargoPolitico.fromJson(Map<String, dynamic> j, String tipo) =>
+      CargoPolitico(
+        cargo:   j['cargo']   as String? ?? '',
+        entidad: j['partido'] as String? ?? j['entidad'] as String? ?? '',
+        periodo: j['periodo'] as String? ?? j['anio'] as String? ?? '',
+        tipo:    tipo,
+      );
+}
+
 // ─── Scoring constants ────────────────────────────────────────────────────────
 
 const int _kMaxEdu   = 40;
@@ -11,6 +145,7 @@ const int _kMaxOblig = 25;
 
 class HojaVida {
   final String dni;
+  final int?   idHojaVida;
   final String nombre;
   final String partido;
   final int    idOrg;
@@ -26,10 +161,15 @@ class HojaVida {
   final double ingresoTotal;
   final int    numInmuebles;
   final double valorInmuebles;
-  final List<String> renuncioA;
+  final List<String>      renuncioA;
+  final List<ExpLaboral>  experienciaLaboral;
+  final List<CargoPolitico> cargosPartidarios;
+  final List<CargoPolitico> cargosEleccionPopular;
+  final String notaAdicional;
 
   const HojaVida({
     required this.dni,
+    this.idHojaVida,
     required this.nombre,
     required this.partido,
     required this.idOrg,
@@ -46,11 +186,32 @@ class HojaVida {
     required this.numInmuebles,
     required this.valorInmuebles,
     required this.renuncioA,
+    this.experienciaLaboral = const [],
+    this.cargosPartidarios  = const [],
+    this.cargosEleccionPopular = const [],
+    this.notaAdicional = '',
   });
 
   factory HojaVida.fromJson(String dni, Map<String, dynamic> j) {
+    List<ExpLaboral> parseExp(dynamic raw) {
+      if (raw is! List) return [];
+      return raw
+          .whereType<Map<String, dynamic>>()
+          .map(ExpLaboral.fromJson)
+          .toList();
+    }
+
+    List<CargoPolitico> parseCargos(dynamic raw, String tipo) {
+      if (raw is! List) return [];
+      return raw
+          .whereType<Map<String, dynamic>>()
+          .map((m) => CargoPolitico.fromJson(m, tipo))
+          .toList();
+    }
+
     return HojaVida(
       dni:    dni,
+      idHojaVida: (j['idHojaVida'] as num?)?.toInt(),
       nombre: j['nombre'] as String? ?? '',
       partido: j['partido'] as String? ?? '',
       idOrg:  (j['idOrg'] as num?)?.toInt() ?? 0,
@@ -59,8 +220,8 @@ class HojaVida {
       esMaestro: j['esMaestro'] as bool? ?? false,
       tieneUniversitaria: j['tieneUniversitaria'] as bool? ?? false,
       tieneTecnica: j['tieneTecnica'] as bool? ?? false,
-      universidades: (j['universidades'] as List? ?? []).cast<String>(),
-      posgrados:     (j['posgrados']     as List? ?? []).cast<String>(),
+      universidades: List<String>.from(j['universidades'] as List? ?? []),
+      posgrados:     List<String>.from(j['posgrados']     as List? ?? []),
       totalSentenciasPenales:
           (j['totalSentenciasPenales'] as num?)?.toInt() ?? 0,
       totalSentenciasObligaciones:
@@ -68,7 +229,11 @@ class HojaVida {
       ingresoTotal:   (j['ingresoTotal']   as num?)?.toDouble() ?? 0,
       numInmuebles:   (j['numInmuebles']   as num?)?.toInt() ?? 0,
       valorInmuebles: (j['valorInmuebles'] as num?)?.toDouble() ?? 0,
-      renuncioA: (j['renuncioA'] as List? ?? []).cast<String>(),
+      renuncioA: List<String>.from(j['renuncioA'] as List? ?? []),
+      experienciaLaboral:    parseExp(j['experienciaLaboral']),
+      cargosPartidarios:     parseCargos(j['cargosPartidarios'], 'partidario'),
+      cargosEleccionPopular: parseCargos(j['cargosEleccionPopular'], 'popular'),
+      notaAdicional: j['notaAdicional'] as String? ?? '',
     );
   }
 
@@ -102,11 +267,20 @@ class HojaVida {
     return 0;
   }
 
-  int get scoreFinal =>
-      scoreEducacion + scoreIntegridadPenal + scoreIntegridadOblig;
+  // Bonus points for experience (max +10 on top, but capped at 100)
+  int get bonusExperiencia {
+    if (experienciaLaboral.isEmpty) return 0;
+    return experienciaLaboral.length.clamp(0, 2) * 3; // max +6
+  }
 
-  // 0–100 normalizado
+  int get scoreFinal =>
+      (scoreEducacion + scoreIntegridadPenal + scoreIntegridadOblig).clamp(0, 100);
+
   double get scoreNormalizado => scoreFinal.toDouble();
+
+  String get jneHvUrl => idHojaVida != null
+      ? 'https://votoinformado.jne.gob.pe/VotoInformado/Informacion/HojaVida?idHojaVida=$idHojaVida'
+      : 'https://web.jne.gob.pe/serviciovotoinformado/';
 
   // ── Labels y colores ───────────────────────────────────────────────────────
 
@@ -171,7 +345,6 @@ class HojaVida {
   String get resumenPerfil {
     final partes = <String>[];
 
-    // Educación
     if (esDoctor && posgrados.isNotEmpty) {
       final spec = posgrados.first.split('—').first.trim();
       partes.add(spec.length > 40 ? 'Doctorado' : spec);
@@ -184,7 +357,6 @@ class HojaVida {
       partes.add(educacionLabel);
     }
 
-    // Integridad
     if (totalSentenciasPenales == 0 && totalSentenciasObligaciones == 0) {
       partes.add('Sin antecedentes judiciales');
     } else {
@@ -192,8 +364,12 @@ class HojaVida {
         partes.add('$totalSentenciasPenales sentencia${totalSentenciasPenales > 1 ? "s" : ""} penal${totalSentenciasPenales > 1 ? "es" : ""}');
       }
       if (totalSentenciasObligaciones > 0) {
-        partes.add('$totalSentenciasObligaciones sentencia${totalSentenciasObligaciones > 1 ? "s" : ""} de obligación');
+        partes.add('$totalSentenciasObligaciones sent. de obligación');
       }
+    }
+
+    if (experienciaLaboral.isNotEmpty) {
+      partes.add('${experienciaLaboral.length} exp. laboral${experienciaLaboral.length > 1 ? "es" : ""}');
     }
 
     return partes.join(' · ');
@@ -204,11 +380,12 @@ class HojaVida {
 
 class CandidatoConHV {
   final HojaVida hv;
-  final String   tipoDistrito; // 'ÚNICO' | 'MÚLTIPLE'
+  final String   tipoDistrito; // 'ÚNICO' | 'MÚLTIPLE' | 'NACIONAL' | ''
   final String   departamento;
   final int      posicion;
   final String?  fotoUrl;
-  final String?  strNombre; // guid.jpg para construir fotoUrl
+  final String?  strNombre;  // guid.jpg
+  final String   cargo;       // 'PRESIDENTE', 'DIPUTADO', etc.
 
   const CandidatoConHV({
     required this.hv,
@@ -217,6 +394,7 @@ class CandidatoConHV {
     required this.posicion,
     required this.fotoUrl,
     required this.strNombre,
+    this.cargo = '',
   });
 }
 

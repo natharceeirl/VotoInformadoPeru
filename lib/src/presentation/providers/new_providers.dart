@@ -139,6 +139,100 @@ final candidatosConHVProvider =
       return result;
     });
 
+// ─── Providers genéricos por proceso electoral (family) ──────────────────────
+
+/// Carga el archivo BD del proceso y devuelve la lista de candidatos.
+final bdCandidatosProcesoProvider =
+    FutureProvider.family<List<RegionCandidato>, ProcesoElectoral>((ref, proceso) async {
+      Future<List<RegionCandidato>> loadFile(String path, String topKey) async {
+        String raw;
+        try {
+          raw = await rootBundle.loadString(path);
+        } catch (_) {
+          return [];
+        }
+        final map = jsonDecode(raw) as Map<String, dynamic>;
+        // Key may have encoding differences — try exact then normalized
+        List? items = map[topKey] as List?;
+        if (items == null) {
+          final normTarget = topKey.toUpperCase()
+              .replaceAll('Ú', 'U').replaceAll('Ó', 'O').replaceAll('É', 'E');
+          for (final k in map.keys) {
+            if (k.toUpperCase().replaceAll('Ú', 'U').replaceAll('Ó', 'O')
+                    .replaceAll('É', 'E') == normTarget) {
+              items = map[k] as List?;
+              break;
+            }
+          }
+        }
+        return (items ?? [])
+            .cast<Map<String, dynamic>>()
+            .map(RegionCandidato.fromJson)
+            .toList();
+      }
+
+      final candidatos = await loadFile(proceso.bdFile, proceso.bdTopKey);
+
+      // Senadores también tienen el archivo de Distrito Múltiple
+      if (proceso == ProcesoElectoral.senadores && proceso.bdFileExtra.isNotEmpty) {
+        final extra = await loadFile(proceso.bdFileExtra, 'SENADORES DISTRITO MÚLTIPLE');
+        return [...candidatos, ...extra];
+      }
+
+      return candidatos;
+    });
+
+/// Carga el archivo hojas_vida del proceso y devuelve DNI → HojaVida.
+final hojasVidaProcesoProvider =
+    FutureProvider.family<Map<String, HojaVida>, ProcesoElectoral>((ref, proceso) async {
+      // Senadores usan el archivo original descargado anteriormente
+      if (proceso == ProcesoElectoral.senadores) {
+        return ref.watch(hojasVidaProvider.future);
+      }
+      String raw;
+      try {
+        raw = await rootBundle.loadString(proceso.hvFile);
+      } catch (_) {
+        return {}; // Datos aún no descargados
+      }
+      final map = jsonDecode(raw) as Map<String, dynamic>;
+      final result = <String, HojaVida>{};
+      for (final entry in map.entries) {
+        final j = entry.value as Map<String, dynamic>?;
+        if (j == null) continue;
+        try {
+          result[entry.key] = HojaVida.fromJson(entry.key, j);
+        } catch (_) {}
+      }
+      return result;
+    });
+
+/// Une BD + HojasVida para un proceso, devuelve lista de CandidatoConHV.
+final candidatosConHVProcesoProvider =
+    FutureProvider.family<List<CandidatoConHV>, ProcesoElectoral>((ref, proceso) async {
+      final bd    = await ref.watch(bdCandidatosProcesoProvider(proceso).future);
+      final hojas = await ref.watch(hojasVidaProcesoProvider(proceso).future);
+
+      final result = <CandidatoConHV>[];
+      for (final c in bd) {
+        final hv = hojas[c.dni] ?? hojas[c.paddedDni];
+        if (hv == null) continue;
+        final tipo = proceso == ProcesoElectoral.senadores
+            ? (c.cargo.contains('MÚLTIPLE') ? 'MÚLTIPLE' : 'ÚNICO')
+            : (c.departamento.isNotEmpty ? c.departamento : 'NACIONAL');
+        result.add(CandidatoConHV(
+          hv:           hv,
+          tipoDistrito: tipo,
+          departamento: c.departamento,
+          posicion:     c.posicion,
+          fotoUrl:      c.fotoUrl,
+          strNombre:    c.strNombre,
+          cargo:        c.cargo,
+        ));
+      }
+      return result;
+    });
+
 /// Carga senadoNacional.json y lo indexa por DNI → SenadoCandidato.
 /// Permite acceder a la foto oficial del JNE y al estado del candidato.
 final senadoMapProvider =

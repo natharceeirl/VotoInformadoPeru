@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'main_menu_screen.dart';
 import 'vote_simulator_screen.dart';
+import 'proceso_menu_screen.dart';
+import 'credits_screen.dart';
 
 class SelectionScreen extends StatelessWidget {
   const SelectionScreen({super.key});
@@ -11,15 +13,15 @@ class SelectionScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF1C1C2E),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(28, 32, 28, 40),
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // ── Logo ──────────────────────────────────────────────────
+              // ── Logo ────────────────────────────────────────────────────
               Center(
                 child: Image.asset(
                   'assets/assets/Logo_Icono_Nombre_Subtitulo.png',
-                  height: 160,
+                  height: 150,
                   errorBuilder: (_, __, ___) => const Icon(
                     Icons.how_to_vote,
                     size: 80,
@@ -27,71 +29,138 @@ class SelectionScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              Text(
-                'Senado Nacional Perú • Elecciones 2026',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.white70,
-                      fontStyle: FontStyle.italic,
-                    ),
+              const SizedBox(height: 6),
+              const Text(
+                'Elecciones Perú 2026',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 36),
+              const SizedBox(height: 4),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.07),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                ),
+                child: const Text(
+                  'Esta aplicación tiene como único objetivo informar a la ciudadanía. '
+                  'No promueve ni representa a ningún partido político. '
+                  'Todos los datos provienen de fuentes públicas oficiales (JNE · ONPE).',
+                  style: TextStyle(
+                    color: Colors.white60,
+                    fontSize: 11,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 16),
 
-              // ── Title ─────────────────────────────────────────────────
-              Text(
-                '¿Qué deseas hacer?',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Elige una opción para comenzar',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white54,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
+              // ── Sección: Procesos Electorales ────────────────────────────
+              _SectionLabel('¿QUÉ PROCESO ELECTORAL TE INTERESA?'),
+              const SizedBox(height: 12),
 
-              // ── Card: Senadores ───────────────────────────────────────
-              _SelectionCard(
+              // Presidente y Vicepresidente
+              _ElectionCard(
+                icon: Icons.star_rounded,
+                title: 'Presidente y Vicepresidentes',
+                subtitle: 'Candidatos a la Presidencia y Vicepresidencias de la República',
+                details: const ['Conoce a los candidatos · Perfil de integridad'],
+                gradient: const [Color(0xFF880E4F), Color(0xFF4A148C)],
+                borderColor: const Color(0xFFF48FB1),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => const ProcesoMenuScreen(
+                    proceso: ProcesoElectoral.presidentes,
+                  ),
+                )),
+              ),
+              const SizedBox(height: 12),
+
+              // Diputados
+              _ElectionCard(
                 icon: Icons.account_balance_rounded,
-                title: 'Senadores 2026',
-                subtitle:
-                    'Explora el perfil de los 963 candidatos al Senado Nacional',
-                details: const [
-                  '35 partidos · Transparencia · Riesgo',
-                  'Educación · Ingresos · Sentencias · REINFO',
-                ],
+                title: 'Diputados',
+                subtitle: 'Candidatos al Congreso de la República — Cámara de Diputados',
+                details: const ['Por departamento · Perfil de integridad'],
                 gradient: const [Color(0xFF1565C0), Color(0xFF0D47A1)],
                 borderColor: const Color(0xFF42A5F5),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => const ProcesoMenuScreen(
+                    proceso: ProcesoElectoral.diputados,
+                  ),
+                )),
+              ),
+              const SizedBox(height: 12),
+
+              // Senadores
+              _ElectionCard(
+                icon: Icons.gavel_rounded,
+                title: 'Senadores 2026',
+                subtitle: 'Candidatos al Senado Nacional — análisis completo de transparencia',
+                details: const [
+                  '35 partidos · Índice de transparencia',
+                  'Educación · Ingresos · Sentencias · REINFO',
+                ],
+                gradient: const [Color(0xFF00695C), Color(0xFF004D40)],
+                borderColor: const Color(0xFF4DB6AC),
+                badge: 'COMPLETO',
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const MainMenuScreen()),
                 ),
               ),
+              const SizedBox(height: 12),
 
+              // Parlamento Andino
+              _ElectionCard(
+                icon: Icons.public_rounded,
+                title: 'Parlamento Andino',
+                subtitle: 'Candidatos al Parlamento Andino — representación regional',
+                details: const ['Conoce a los candidatos · Perfil de integridad'],
+                gradient: const [Color(0xFFE65100), Color(0xFFBF360C)],
+                borderColor: const Color(0xFFFFCC80),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => const ProcesoMenuScreen(
+                    proceso: ProcesoElectoral.parlamentoAndino,
+                  ),
+                )),
+              ),
               const SizedBox(height: 20),
 
-              // ── Card: Simulador de Voto ───────────────────────────────
-              _SelectionCard(
+              // ── Sección: Herramientas ────────────────────────────────────
+              _SectionLabel('HERRAMIENTAS'),
+              const SizedBox(height: 12),
+
+              // Simulador de Voto
+              _ElectionCard(
                 icon: Icons.how_to_vote_rounded,
                 title: 'Simulador de Voto',
-                subtitle:
-                    'Aprende cómo votar correctamente el día de las elecciones',
-                details: const [
-                  'Guía paso a paso · Cédula virtual',
-                  'Practica antes de ir a votar',
-                ],
+                subtitle: 'Aprende a votar correctamente el día de las elecciones',
+                details: const ['Guía paso a paso · Cédula virtual'],
                 gradient: const [Color(0xFF2E7D32), Color(0xFF1B5E20)],
                 borderColor: const Color(0xFF66BB6A),
                 badge: 'PRÓXIMAMENTE',
                 onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (_) => const VoteSimulatorScreen()),
+                  MaterialPageRoute(builder: (_) => const VoteSimulatorScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Créditos
+              _ElectionCard(
+                icon: Icons.info_rounded,
+                title: 'Créditos y Fuentes',
+                subtitle: 'Equipo de desarrollo · Fuentes oficiales de datos',
+                details: const ['NATHARCE: Desarrollo de Software · JNE · ONPE'],
+                gradient: const [Color(0xFF37474F), Color(0xFF263238)],
+                borderColor: const Color(0xFF90A4AE),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const CreditsScreen()),
                 ),
               ),
 
@@ -99,7 +168,7 @@ class SelectionScreen extends StatelessWidget {
               const Divider(color: Colors.white12),
               const SizedBox(height: 12),
               const Text(
-                '#PORESTOSSI — Datos: ONPE · JNE\nNATHARCE: Desarrollo de Software',
+                '#PORESTOSSI — Solo información pública · Datos: ONPE · JNE\nNATHARCE: Desarrollo de Software',
                 style: TextStyle(
                   color: Colors.white30,
                   fontSize: 11,
@@ -115,8 +184,38 @@ class SelectionScreen extends StatelessWidget {
   }
 }
 
-// ─── Selection Card ────────────────────────────────────────────────────────────
-class _SelectionCard extends StatelessWidget {
+// ─── Label de sección ─────────────────────────────────────────────────────────
+
+class _SectionLabel extends StatelessWidget {
+  final String text;
+  const _SectionLabel(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.15))),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white38,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
+          ),
+        ),
+        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.15))),
+      ],
+    );
+  }
+}
+
+// ─── Tarjeta de proceso electoral ─────────────────────────────────────────────
+
+class _ElectionCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
@@ -126,7 +225,7 @@ class _SelectionCard extends StatelessWidget {
   final String? badge;
   final VoidCallback onTap;
 
-  const _SelectionCard({
+  const _ElectionCard({
     required this.icon,
     required this.title,
     required this.subtitle,
@@ -143,152 +242,119 @@ class _SelectionCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: gradient,
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: borderColor.withValues(alpha: 0.5),
+              color: borderColor.withValues(alpha: 0.45),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: gradient[0].withValues(alpha: 0.4),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
+                color: gradient[0].withValues(alpha: 0.35),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Icon(icon, color: Colors.white, size: 28),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              // Icono
+              Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: Colors.white, size: 24),
+              ),
+              const SizedBox(width: 14),
+              // Texto
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                title,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.2,
-                                ),
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        if (badge != null) ...[
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 7, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.18),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              badge!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.6,
                               ),
                             ),
-                            if (badge != null) ...[
-                              const SizedBox(width: 8),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.4)),
-                                ),
-                                child: Text(
-                                  badge!,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 0.8,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
+                          ),
+                        ],
                       ],
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.85),
-                  fontSize: 14,
-                  height: 1.4,
+                    const SizedBox(height: 3),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.78),
+                        fontSize: 12,
+                        height: 1.3,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    ...details.map(
+                      (d) => Row(
+                        children: [
+                          Icon(Icons.check_circle_outline,
+                              size: 12,
+                              color: Colors.white.withValues(alpha: 0.55)),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: Text(
+                              d,
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.65),
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 12),
-              ...details.map(
-                (d) => Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.check_circle_outline,
-                        size: 14,
-                        color: Colors.white.withValues(alpha: 0.6),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        d,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.7),
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.3)),
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Entrar',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Icon(Icons.arrow_forward_ios_rounded,
-                          size: 12, color: Colors.white),
-                    ],
-                  ),
-                ),
+              const SizedBox(width: 8),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 14,
+                color: Colors.white.withValues(alpha: 0.5),
               ),
             ],
           ),

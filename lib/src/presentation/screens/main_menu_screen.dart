@@ -6,9 +6,9 @@ import 'regiones_screen.dart';
 import 'reinfo_alert_screen.dart';
 import 'compare_parties_screen.dart';
 import 'charts_hub_screen.dart';
-import 'credits_screen.dart';
 import 'data_sources_screen.dart';
-import 'recomendacion_screen.dart';
+import 'conoce_candidatos_screen.dart';
+import '../../domain/models/hoja_vida_models.dart';
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
@@ -131,22 +131,26 @@ class MainMenuScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // ── Section: Recomendación ───────────────────────────────────
+              // ── Section: Conoce a tus Candidatos ─────────────────────────
               _SectionHeader(
-                label: '¿POR QUIÉN VOTAR?',
-                icon: Icons.how_to_vote_rounded,
+                label: 'CONOCE A TUS CANDIDATOS',
+                icon: Icons.people_alt_rounded,
               ),
               const SizedBox(height: 12),
               _MenuCard(
-                title: '¿Por quién votar?',
-                subtitle: 'Candidatos ordenados por perfil de integridad',
+                title: 'Conoce a tus Candidatos',
+                subtitle: 'Perfil de integridad de los senadores 2026',
                 detail: 'Educación · Sentencias · Puntaje 0–100',
-                icon: Icons.recommend_rounded,
+                icon: Icons.people_alt_rounded,
                 color: Colors.green,
                 badge: 'NUEVO',
                 isHighlighted: true,
                 onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const RecomendacionScreen())),
+                    MaterialPageRoute(
+                      builder: (_) => const ConoceCandidatosScreen(
+                        proceso: ProcesoElectoral.senadores,
+                      ),
+                    )),
               ),
               const SizedBox(height: 20),
 
@@ -196,17 +200,6 @@ class MainMenuScreen extends StatelessWidget {
                 icon: Icons.info_outline_rounded,
               ),
               const SizedBox(height: 12),
-              _MenuCard(
-                title: 'Créditos',
-                subtitle: 'Equipo de desarrollo',
-                detail: 'Datos públicos: ONPE · JNE',
-                icon: Icons.info_rounded,
-                color: Colors.blueGrey,
-                badge: null,
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const CreditsScreen())),
-              ),
-              const SizedBox(height: 10),
               _MenuCard(
                 title: 'Fuente de los Datos',
                 subtitle: 'Indicadores, fórmulas y fuentes oficiales',
