@@ -175,9 +175,58 @@ class _SingleListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ── Presidentes: filter by cargo (Presidente / 1er VP / 2do VP) ──────────
+    if (proceso == ProcesoElectoral.presidentes) {
+      final cargos = todos.map((c) => c.cargo)
+          .where((c) => c.isNotEmpty).toSet().toList()
+          ..sort();
+
+      // Sort cargos in logical order: Presidente → 1er VP → 2do VP
+      const cargoOrder = [
+        'PRESIDENTE DE LA REPÚBLICA',
+        'PRIMER VICEPRESIDENTE DE LA REPÚBLICA',
+        'SEGUNDO VICEPRESIDENTE DE LA REPÚBLICA',
+      ];
+      cargos.sort((a, b) {
+        final ia = cargoOrder.indexOf(a);
+        final ib = cargoOrder.indexOf(b);
+        if (ia == -1 && ib == -1) return a.compareTo(b);
+        if (ia == -1) return 1;
+        if (ib == -1) return -1;
+        return ia.compareTo(ib);
+      });
+
+      final filtrados = (deptoFilter == null || deptoFilter!.isEmpty
+              ? todos
+              : todos.where((c) => c.cargo == deptoFilter).toList())
+          ..sort((a, b) => b.hv.scoreFinal.compareTo(a.hv.scoreFinal));
+
+      return Column(
+        children: [
+          _ValueFilter(
+            icon: Icons.work_outline_rounded,
+            hint: 'Todos los cargos',
+            values: cargos,
+            selected: deptoFilter,
+            onChanged: onDeptoChanged,
+          ),
+          Expanded(
+            child: _CandidatosList(
+              candidatos: filtrados,
+              headerText: deptoFilter == null
+                  ? 'Plancha presidencial completa — ordenada por perfil de integridad.'
+                  : '${_shortCargo(deptoFilter!)} — ordenado por perfil de integridad.',
+              proceso: proceso,
+            ),
+          ),
+        ],
+      );
+    }
+
+    // ── Otros procesos: filter by departamento ─────────────────────────────
     final hasDepts =
         proceso == ProcesoElectoral.diputados ||
-        (todos.any((c) => c.departamento.isNotEmpty));
+        todos.any((c) => c.departamento.isNotEmpty);
 
     final deptos = todos.map((c) => c.departamento)
         .where((d) => d.isNotEmpty).toSet().toList()..sort();
@@ -212,6 +261,67 @@ class _SingleListView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  static String _shortCargo(String cargo) {
+    if (cargo.contains('SEGUNDO VICE')) return '2do Vicepresidente';
+    if (cargo.contains('PRIMER VICE'))  return '1er Vicepresidente';
+    if (cargo.contains('PRESIDENTE'))   return 'Presidentes';
+    return cargo;
+  }
+}
+
+// ─── Filtro genérico (departamento o cargo) ───────────────────────────────────
+
+class _ValueFilter extends StatelessWidget {
+  final IconData icon;
+  final String hint;
+  final List<String> values;
+  final String? selected;
+  final ValueChanged<String?> onChanged;
+
+  const _ValueFilter({
+    required this.icon,
+    required this.hint,
+    required this.values,
+    required this.selected,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: cs.outline.withValues(alpha: 0.5)),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 18, color: cs.onSurface.withValues(alpha: 0.5)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: DropdownButton<String>(
+                value: selected,
+                isExpanded: true,
+                underline: const SizedBox.shrink(),
+                hint: Text(hint),
+                items: [
+                  DropdownMenuItem<String>(value: null, child: Text(hint)),
+                  ...values.map((v) =>
+                    DropdownMenuItem<String>(value: v, child: Text(v)),
+                  ),
+                ],
+                onChanged: onChanged,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -408,10 +518,21 @@ class _CandidatoCard extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                       maxLines: 2, overflow: TextOverflow.ellipsis),
                     const SizedBox(height: 2),
-                    Text(hv.partido,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                          color: cs.onSurface.withValues(alpha: 0.6)),
-                      maxLines: 1, overflow: TextOverflow.ellipsis),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 16, height: 16,
+                          child: PartyLogo(partyName: hv.partido, size: 16),
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(hv.partido,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                                color: cs.onSurface.withValues(alpha: 0.6)),
+                            maxLines: 1, overflow: TextOverflow.ellipsis),
+                        ),
+                      ],
+                    ),
                     if (c.cargo.isNotEmpty) ...[
                       const SizedBox(height: 1),
                       Text(c.cargo,
@@ -450,16 +571,17 @@ class _CandidatoCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
 
-              // ── Logo + número de lista (derecha) ──────────────────────────
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              // ── Logo + número de lista (derecha, horizontal) ──────────
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: PartyLogo(partyName: hv.partido, size: 40),
+                    width: 36,
+                    height: 36,
+                    child: PartyLogo(partyName: hv.partido, size: 36),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(width: 6),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(

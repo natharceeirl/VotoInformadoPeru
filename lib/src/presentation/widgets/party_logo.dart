@@ -39,9 +39,78 @@ const Map<String, String> _partyLogoFiles = {
   'Verde': 'Verde.png',
 };
 
+/// Maps JNE all-caps party names to the standard names used in [_partyLogoFiles].
+const Map<String, String> _jneToStandard = {
+  'AHORA NACION': 'Ahora Nación',
+  'AHORA NACION - AN': 'Ahora Nación',
+  'ALIANZA PARA EL PROGRESO': 'Alianza para el Progreso',
+  'ALIANZA ELECTORAL VENCEREMOS': 'Venceremos',
+  'VENCEREMOS': 'Venceremos',
+  'APRA': 'APRA',
+  'PARTIDO APRISTA PERUANO': 'APRA',
+  'AVANZA PAIS': 'Avanza País',
+  'AVANZA PAÍS': 'Avanza País',
+  'AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL': 'Avanza País',
+  'BUEN GOBIERNO': 'Buen Gobierno',
+  'PARTIDO DEL BUEN GOBIERNO': 'Buen Gobierno',
+  'COOPERACION POPULAR': 'Cooperación Popular',
+  'PARTIDO POLITICO COOPERACION POPULAR': 'Cooperación Popular',
+  'FE EN EL PERU': 'Fe en el Perú',
+  'FRENTE DE LA ESPERANZA': 'Frente de la Esperanza',
+  'PARTIDO FRENTE DE LA ESPERANZA 2021': 'Frente de la Esperanza',
+  'FREPAP': 'FREPAP',
+  'FUERZA POPULAR': 'Fuerza Popular',
+  'FUERZA Y LIBERTAD': 'Fuerza y Libertad',
+  'INTEGRIDAD DEMOCRATICA': 'Integridad Democrática',
+  'PARTIDO POLITICO INTEGRIDAD DEMOCRATICA': 'Integridad Democrática',
+  'JUNTOS POR EL PERU': 'Juntos por el Perú',
+  'LIBERTAD POPULAR': 'Libertad Popular',
+  'OBRAS': 'Obras',
+  'PARTIDO CIVICO OBRAS': 'Obras',
+  'PAIS PARA TODOS': 'País para Todos',
+  'PARTIDO PAIS PARA TODOS': 'País para Todos',
+  'PARTIDO MORADO': 'Partido Morado',
+  'PERU ACCION': 'Perú Acción',
+  'PARTIDO POLITICO PERU ACCION': 'Perú Acción',
+  'PERU FEDERAL': 'Perú Federal',
+  'PARTIDO DEMOCRATICO FEDERAL': 'Perú Federal',
+  'PERU LIBRE': 'Perú Libre',
+  'PARTIDO POLITICO NACIONAL PERU LIBRE': 'Perú Libre',
+  'PERU PRIMERO': 'Perú Primero',
+  'PARTIDO POLITICO PERU PRIMERO': 'Perú Primero',
+  'PODEMOS PERU': 'Podemos Perú',
+  'PPP': 'PPP',
+  'PRIMERO LA GENTE': 'Primero La Gente',
+  'PRIMERO LA GENTE - COMUNIDAD, ECOLOGIA, LIBERTAD Y PROGRESO': 'Primero La Gente',
+  'PRIN': 'PRIN',
+  'PARTIDO POLITICO PRIN': 'PRIN',
+  'PROGRESEMOS': 'Progresemos',
+  'PTE': 'PTE',
+  'PARTIDO DE LOS TRABAJADORES Y EMPRENDEDORES PTE - PERU': 'PTE',
+  'RENOVACION POPULAR': 'Renovación Popular',
+  'SI CREO': 'Sí Creo',
+  'SÍ CREO': 'Sí Creo',
+  'PARTIDO SICREO': 'Sí Creo',
+  'PARTIDO DEMOCRATICO SOMOS PERU': 'Somos Perú',
+  'SOMOS PERU': 'Somos Perú',
+  'UN CAMINO DIFERENTE': 'Un Camino Diferente',
+  'UNIDAD NACIONAL': 'Unidad Nacional',
+  'UNIDO PERU': 'Unido Perú',
+  'PARTIDO DEMOCRATA UNIDO PERU': 'Unido Perú',
+  'VERDE': 'Verde',
+  'PARTIDO DEMOCRATA VERDE': 'Verde',
+};
+
+/// Normalizes a raw JNE party name to the standard name used in logo assets.
+/// Falls back to the original name if no mapping is found.
+String normalizePartyName(String jneName) =>
+    _jneToStandard[jneName.toUpperCase()] ?? jneName;
+
 /// Returns the asset path for the party logo, or null if not found.
+/// Accepts both standard names and raw JNE uppercase names.
 String? partyLogoPath(String partyName) {
-  final file = _partyLogoFiles[partyName];
+  final normalized = _jneToStandard[partyName.toUpperCase()] ?? partyName;
+  final file = _partyLogoFiles[normalized];
   if (file == null) return null;
   return 'assets/logoPartido/$file';
 }

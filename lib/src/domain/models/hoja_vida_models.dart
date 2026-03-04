@@ -92,11 +92,12 @@ class ExpLaboral {
   });
 
   factory ExpLaboral.fromJson(Map<String, dynamic> j) => ExpLaboral(
-        cargo:       j['cargo']       as String? ?? '',
-        institucion: j['institucion'] as String? ?? '',
-        fechaInicio: j['fechaInicio'] as String? ?? '',
-        fechaFin:    j['fechaFin']    as String? ?? '',
-        funcion:     j['funcion']     as String? ?? '',
+        cargo:       j['cargo']        as String? ?? '',
+        // v3 JSON uses 'centroTrabajo'; old senadores JSON uses 'institucion'
+        institucion: j['centroTrabajo'] as String? ?? j['institucion'] as String? ?? '',
+        fechaInicio: j['desde']        as String? ?? j['fechaInicio'] as String? ?? '',
+        fechaFin:    j['hasta']        as String? ?? j['fechaFin']    as String? ?? '',
+        funcion:     j['comentario']   as String? ?? j['funcion']     as String? ?? '',
       );
 
   String get resumen {
@@ -125,13 +126,24 @@ class CargoPolitico {
     required this.tipo,
   });
 
-  factory CargoPolitico.fromJson(Map<String, dynamic> j, String tipo) =>
-      CargoPolitico(
-        cargo:   j['cargo']   as String? ?? '',
-        entidad: j['partido'] as String? ?? j['entidad'] as String? ?? '',
-        periodo: j['periodo'] as String? ?? j['anio'] as String? ?? '',
-        tipo:    tipo,
-      );
+  factory CargoPolitico.fromJson(Map<String, dynamic> j, String tipo) {
+    // v3 JSON uses 'organizacion'; old senadores JSON uses 'partido'/'entidad'
+    final entidad = j['organizacion'] as String? ??
+                    j['partido']      as String? ??
+                    j['entidad']      as String? ?? '';
+    // v3 JSON uses 'desde'/'hasta'; old uses 'periodo'/'anio'
+    final desde   = j['desde']   as String? ?? '';
+    final hasta   = j['hasta']   as String? ?? '';
+    final periodo = desde.isNotEmpty
+        ? (hasta.isNotEmpty && hasta != desde ? '$desde–$hasta' : desde)
+        : (j['periodo'] as String? ?? j['anio'] as String? ?? '');
+    return CargoPolitico(
+      cargo:   j['cargo'] as String? ?? '',
+      entidad: entidad,
+      periodo: periodo,
+      tipo:    tipo,
+    );
+  }
 }
 
 // ─── Scoring constants ────────────────────────────────────────────────────────
@@ -209,6 +221,59 @@ class HojaVida {
           .toList();
     }
 
+    // v3 JSON: universidades = [{universidad, carrera, concluido}]
+    // old JSON: universidades = [String]
+    List<String> parseEduList(dynamic raw) {
+      if (raw is! List) return [];
+      return raw.map<String>((e) {
+        if (e is String) return e;
+        if (e is Map<String, dynamic>) {
+          final carrera    = e['carrera']    as String? ?? '';
+          final universidad = e['universidad'] as String? ?? '';
+          if (carrera.isNotEmpty && universidad.isNotEmpty) {
+            return '$carrera — $universidad';
+          }
+          return carrera.isNotEmpty ? carrera : universidad;
+        }
+        return e.toString();
+      }).where((s) => s.isNotEmpty).toList();
+    }
+
+    // v3 JSON: posgrados = [{centro, especialidad, esMaestro, esDoctor, anio}]
+    List<String> parsePosgradoList(dynamic raw) {
+      if (raw is! List) return [];
+      return raw.map<String>((e) {
+        if (e is String) return e;
+        if (e is Map<String, dynamic>) {
+          final especialidad = e['especialidad'] as String? ?? '';
+          final centro       = e['centro']       as String? ?? '';
+          final anio         = e['anio']         as String? ?? '';
+          final parts = <String>[];
+          if (especialidad.isNotEmpty) parts.add(especialidad);
+          if (centro.isNotEmpty) parts.add(centro);
+          if (anio.isNotEmpty) parts.add('($anio)');
+          return parts.join(' — ');
+        }
+        return e.toString();
+      }).where((s) => s.isNotEmpty).toList();
+    }
+
+    // v3 JSON: renuncioA = [{orgPolRenunciaOp, anioRenunciaOp}]
+    // old JSON: renuncioA = [String]
+    List<String> parseRenuncioA(dynamic raw) {
+      if (raw is! List) return [];
+      return raw.map<String>((e) {
+        if (e is String) return e;
+        if (e is Map<String, dynamic>) {
+          final org  = e['orgPolRenunciaOp'] as String? ?? '';
+          final anio = e['anioRenunciaOp']   as String? ?? '';
+          if (org.isNotEmpty && anio.isNotEmpty) return '$org ($anio)';
+          return org.isNotEmpty ? org : anio;
+        }
+        return e.toString();
+      }).where((s) => s.isNotEmpty).toList();
+    }
+
     return HojaVida(
       dni:    dni,
       idHojaVida: (j['idHojaVida'] as num?)?.toInt(),
@@ -220,8 +285,8 @@ class HojaVida {
       esMaestro: j['esMaestro'] as bool? ?? false,
       tieneUniversitaria: j['tieneUniversitaria'] as bool? ?? false,
       tieneTecnica: j['tieneTecnica'] as bool? ?? false,
-      universidades: List<String>.from(j['universidades'] as List? ?? []),
-      posgrados:     List<String>.from(j['posgrados']     as List? ?? []),
+      universidades: parseEduList(j['universidades']),
+      posgrados:     parsePosgradoList(j['posgrados']),
       totalSentenciasPenales:
           (j['totalSentenciasPenales'] as num?)?.toInt() ?? 0,
       totalSentenciasObligaciones:
@@ -229,7 +294,7 @@ class HojaVida {
       ingresoTotal:   (j['ingresoTotal']   as num?)?.toDouble() ?? 0,
       numInmuebles:   (j['numInmuebles']   as num?)?.toInt() ?? 0,
       valorInmuebles: (j['valorInmuebles'] as num?)?.toDouble() ?? 0,
-      renuncioA: List<String>.from(j['renuncioA'] as List? ?? []),
+      renuncioA: parseRenuncioA(j['renuncioA']),
       experienciaLaboral:    parseExp(j['experienciaLaboral']),
       cargosPartidarios:     parseCargos(j['cargosPartidarios'], 'partidario'),
       cargosEleccionPopular: parseCargos(j['cargosEleccionPopular'], 'popular'),
