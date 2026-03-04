@@ -9,6 +9,49 @@ import '../../domain/models/hoja_vida_models.dart';
 import '../../data/repositories/data_repository.dart';
 import '../widgets/indicator_weights_sheet.dart';
 
+// ─── Name normalization for pro-crime matching ─────────────────────────────
+
+String _normName(String s) {
+  var r = s.toUpperCase()
+      .replaceAll(',', ' ')
+      .replaceAll('Á', 'A').replaceAll('É', 'E')
+      .replaceAll('Í', 'I').replaceAll('Ó', 'O').replaceAll('Ú', 'U')
+      .replaceAll('Ñ', 'N');
+  while (r.contains('  ')) { r = r.replaceAll('  ', ' '); }
+  return r.trim();
+}
+
+/// Builds map: normalizedFullName → number of pro-crime laws voted "A favor".
+/// Source: assets/baseDatos/proCrimen_datos_votacion.json
+final proCrimenMapProvider =
+    FutureProvider<Map<String, int>>((ref) async {
+      String raw;
+      try {
+        raw = await rootBundle.loadString(
+          'assets/baseDatos/proCrimen_datos_votacion.json');
+      } catch (_) {
+        return {};
+      }
+      final decoded = jsonDecode(raw) as Map<String, dynamic>;
+      final result  = <String, Set<String>>{};
+
+      for (final entry in decoded.entries) {
+        final lawId = entry.key;
+        final votes = (entry.value as List).cast<Map<String, dynamic>>();
+        for (final v in votes) {
+          if (v['VOTO'] == 'A favor') {
+            final full = '${v['APE_PATERNO'] ?? ''} '
+                '${v['APE_MATERNO'] ?? ''} '
+                '${v['NOMBRES'] ?? ''}';
+            final key = _normName(full);
+            (result[key] ??= {}).add(lawId);
+          }
+        }
+      }
+
+      return result.map((k, v) => MapEntry(k, v.length));
+    });
+
 // Repository Provider
 final dataRepositoryProvider = Provider<DataRepository>((ref) {
   return DataRepository();
@@ -208,15 +251,21 @@ final hojasVidaProcesoProvider =
     });
 
 /// Une BD + HojasVida para un proceso, devuelve lista de CandidatoConHV.
+/// Aplica penalización por leyes pro-crimen y ex-congresistas.
 final candidatosConHVProcesoProvider =
     FutureProvider.family<List<CandidatoConHV>, ProcesoElectoral>((ref, proceso) async {
-      final hojas = await ref.watch(hojasVidaProcesoProvider(proceso).future);
+      final hojas     = await ref.watch(hojasVidaProcesoProvider(proceso).future);
+      final proCrimen = await ref.watch(proCrimenMapProvider.future);
       final result = <CandidatoConHV>[];
 
       void addCandidatos(List<RegionCandidato> bd, String tipoDistrito) {
         for (final c in bd) {
-          final hv = hojas[c.dni] ?? hojas[c.paddedDni];
+          HojaVida? hv = hojas[c.dni] ?? hojas[c.paddedDni];
           if (hv == null) continue;
+          // Aplicar penalización pro-crimen por nombre
+          final normNombre = _normName(hv.nombre);
+          final numLeyes   = proCrimen[normNombre] ?? 0;
+          if (numLeyes > 0) hv = hv.copyWithNumLeyes(numLeyes);
           result.add(CandidatoConHV(
             hv:           hv,
             tipoDistrito: tipoDistrito,

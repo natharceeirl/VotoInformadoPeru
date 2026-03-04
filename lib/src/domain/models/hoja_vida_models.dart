@@ -182,6 +182,7 @@ class HojaVida {
   final List<CargoPolitico> cargosPartidarios;
   final List<CargoPolitico> cargosEleccionPopular;
   final String notaAdicional;
+  final int    numLeyesProCrimen; // nº de leyes pro-crimen apoyadas (0 = ninguna)
 
   const HojaVida({
     required this.dni,
@@ -210,6 +211,7 @@ class HojaVida {
     this.cargosPartidarios  = const [],
     this.cargosEleccionPopular = const [],
     this.notaAdicional = '',
+    this.numLeyesProCrimen = 0,
   });
 
   factory HojaVida.fromJson(String dni, Map<String, dynamic> j) {
@@ -314,6 +316,38 @@ class HojaVida {
     );
   }
 
+  // ── Copy with pro-crime count ──────────────────────────────────────────────
+
+  HojaVida copyWithNumLeyes(int n) => HojaVida(
+    dni:    dni,
+    idHojaVida: idHojaVida,
+    nombre: nombre,
+    partido: partido,
+    idOrg:  idOrg,
+    nivelEducacion: nivelEducacion,
+    esDoctor:  esDoctor,
+    esMaestro: esMaestro,
+    tieneUniversitaria: tieneUniversitaria,
+    tieneTecnica: tieneTecnica,
+    universidades: universidades,
+    posgrados:     posgrados,
+    totalSentenciasPenales:      totalSentenciasPenales,
+    totalSentenciasObligaciones: totalSentenciasObligaciones,
+    ingresoTotal:   ingresoTotal,
+    ingresoPublico: ingresoPublico,
+    ingresoPrivado: ingresoPrivado,
+    anioIngresos:   anioIngresos,
+    numInmuebles:   numInmuebles,
+    valorInmuebles: valorInmuebles,
+    numVehiculos:   numVehiculos,
+    renuncioA: renuncioA,
+    experienciaLaboral:    experienciaLaboral,
+    cargosPartidarios:     cargosPartidarios,
+    cargosEleccionPopular: cargosEleccionPopular,
+    notaAdicional: notaAdicional,
+    numLeyesProCrimen: n,
+  );
+
   // ── Scoring ────────────────────────────────────────────────────────────────
 
   int get scoreEducacion {
@@ -344,14 +378,17 @@ class HojaVida {
     return 0;
   }
 
-  // Bonus points for experience (max +10 on top, but capped at 100)
-  int get bonusExperiencia {
-    if (experienciaLaboral.isEmpty) return 0;
-    return experienciaLaboral.length.clamp(0, 2) * 3; // max +6
-  }
+  // ── Penalizaciones ─────────────────────────────────────────────────────────
+
+  /// -5 pts por cada ley pro-crimen apoyada, máximo -20
+  int get penaltyProCrimen => (numLeyesProCrimen * 5).clamp(0, 20);
+
+  /// -5 pts si fue congresista o tiene cargos de elección popular previos
+  int get penaltyExCongresista => cargosEleccionPopular.isNotEmpty ? 5 : 0;
 
   int get scoreFinal =>
-      (scoreEducacion + scoreIntegridadPenal + scoreIntegridadOblig).clamp(0, 100);
+      (scoreEducacion + scoreIntegridadPenal + scoreIntegridadOblig
+       - penaltyProCrimen - penaltyExCongresista).clamp(0, 100);
 
   double get scoreNormalizado => scoreFinal.toDouble();
 
