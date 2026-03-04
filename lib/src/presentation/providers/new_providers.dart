@@ -210,26 +210,63 @@ final hojasVidaProcesoProvider =
 /// Une BD + HojasVida para un proceso, devuelve lista de CandidatoConHV.
 final candidatosConHVProcesoProvider =
     FutureProvider.family<List<CandidatoConHV>, ProcesoElectoral>((ref, proceso) async {
-      final bd    = await ref.watch(bdCandidatosProcesoProvider(proceso).future);
       final hojas = await ref.watch(hojasVidaProcesoProvider(proceso).future);
-
       final result = <CandidatoConHV>[];
-      for (final c in bd) {
-        final hv = hojas[c.dni] ?? hojas[c.paddedDni];
-        if (hv == null) continue;
-        final tipo = proceso == ProcesoElectoral.senadores
-            ? (c.cargo.contains('MÚLTIPLE') ? 'MÚLTIPLE' : 'ÚNICO')
-            : (c.departamento.isNotEmpty ? c.departamento : 'NACIONAL');
-        result.add(CandidatoConHV(
-          hv:           hv,
-          tipoDistrito: tipo,
-          departamento: c.departamento,
-          posicion:     c.posicion,
-          fotoUrl:      c.fotoUrl,
-          strNombre:    c.strNombre,
-          cargo:        c.cargo,
-        ));
+
+      void addCandidatos(List<RegionCandidato> bd, String tipoDistrito) {
+        for (final c in bd) {
+          final hv = hojas[c.dni] ?? hojas[c.paddedDni];
+          if (hv == null) continue;
+          result.add(CandidatoConHV(
+            hv:           hv,
+            tipoDistrito: tipoDistrito,
+            departamento: c.departamento,
+            posicion:     c.posicion,
+            fotoUrl:      c.fotoUrl,
+            strNombre:    c.strNombre,
+            cargo:        c.cargo,
+          ));
+        }
       }
+
+      if (proceso == ProcesoElectoral.senadores) {
+        // Load the two senadores files separately to correctly tag ÚNICO/MÚLTIPLE.
+        // Both files have strCargo="SENADOR" so we can't rely on the cargo field.
+        Future<List<RegionCandidato>> loadSen(String path, String topKey) async {
+          String raw;
+          try {
+            raw = await rootBundle.loadString(path);
+          } catch (_) {
+            return [];
+          }
+          final map = jsonDecode(raw) as Map<String, dynamic>;
+          List? items = map[topKey] as List?;
+          if (items == null) {
+            final norm = topKey.toUpperCase()
+                .replaceAll('Ú', 'U').replaceAll('Ó', 'O').replaceAll('É', 'E');
+            for (final k in map.keys) {
+              if (k.toUpperCase().replaceAll('Ú', 'U').replaceAll('Ó', 'O')
+                      .replaceAll('É', 'E') == norm) {
+                items = map[k] as List?;
+                break;
+              }
+            }
+          }
+          return (items ?? [])
+              .cast<Map<String, dynamic>>()
+              .map(RegionCandidato.fromJson)
+              .toList();
+        }
+
+        final unicos    = await loadSen(proceso.bdFile,      'SENADORES DISTRITO ÚNICO');
+        final multiples = await loadSen(proceso.bdFileExtra, 'SENADORES DISTRITO MÚLTIPLE');
+        addCandidatos(unicos,    'ÚNICO');
+        addCandidatos(multiples, 'MÚLTIPLE');
+      } else {
+        final bd = await ref.watch(bdCandidatosProcesoProvider(proceso).future);
+        addCandidatos(bd, '');
+      }
+
       return result;
     });
 

@@ -196,26 +196,31 @@ class _SingleListView extends StatelessWidget {
         return ia.compareTo(ib);
       });
 
-      final filtrados = (deptoFilter == null || deptoFilter!.isEmpty
+      // Default to first cargo (PRESIDENTE) if none selected
+      final effectiveFilter = (deptoFilter == null || deptoFilter!.isEmpty)
+          ? (cargos.isNotEmpty ? cargos.first : null)
+          : deptoFilter;
+
+      final filtrados = (effectiveFilter == null
               ? todos
-              : todos.where((c) => c.cargo == deptoFilter).toList())
+              : todos.where((c) => c.cargo == effectiveFilter).toList())
           ..sort((a, b) => b.hv.scoreFinal.compareTo(a.hv.scoreFinal));
 
       return Column(
         children: [
           _ValueFilter(
             icon: Icons.work_outline_rounded,
-            hint: 'Todos los cargos',
+            hint: 'Selecciona cargo',
             values: cargos,
-            selected: deptoFilter,
-            onChanged: onDeptoChanged,
+            selected: effectiveFilter,
+            // When user picks a value, propagate upward; never allow null
+            onChanged: (v) => onDeptoChanged(v ?? effectiveFilter),
+            allowAll: false,
           ),
           Expanded(
             child: _CandidatosList(
               candidatos: filtrados,
-              headerText: deptoFilter == null
-                  ? 'Plancha presidencial completa — ordenada por perfil de integridad.'
-                  : '${_shortCargo(deptoFilter!)} — ordenado por perfil de integridad.',
+              headerText: '${_shortCargo(effectiveFilter ?? '')} — ordenado por perfil de integridad.',
               proceso: proceso,
             ),
           ),
@@ -280,6 +285,8 @@ class _ValueFilter extends StatelessWidget {
   final List<String> values;
   final String? selected;
   final ValueChanged<String?> onChanged;
+  /// If false, no "Todos" null option is shown and selection is required.
+  final bool allowAll;
 
   const _ValueFilter({
     required this.icon,
@@ -287,6 +294,7 @@ class _ValueFilter extends StatelessWidget {
     required this.values,
     required this.selected,
     required this.onChanged,
+    this.allowAll = true,
   });
 
   @override
@@ -311,7 +319,8 @@ class _ValueFilter extends StatelessWidget {
                 underline: const SizedBox.shrink(),
                 hint: Text(hint),
                 items: [
-                  DropdownMenuItem<String>(value: null, child: Text(hint)),
+                  if (allowAll)
+                    DropdownMenuItem<String>(value: null, child: Text(hint)),
                   ...values.map((v) =>
                     DropdownMenuItem<String>(value: v, child: Text(v)),
                   ),
@@ -1021,6 +1030,11 @@ void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proce
               const Divider(height: 20),
             ],
 
+            // ── Ingresos declarados ────────────────────────────────────────
+            _SectionTitle('INGRESOS DECLARADOS${hv.anioIngresos.isNotEmpty ? " (${hv.anioIngresos})" : ""}', const Color(0xFF1565C0)),
+            _IngresosBienesCard(hv: hv, cs: cs, theme: theme),
+            const Divider(height: 20),
+
             // ── Score breakdown ────────────────────────────────────────────
             _SectionTitle('DESGLOSE DEL PUNTAJE', proceso.color),
             _ScoreRow('Educación (máx. 40)',
@@ -1190,6 +1204,142 @@ class _ScoreRow extends StatelessWidget {
           Text('$score/$maxScore',
             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold,
                 color: color)),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Ingresos y Bienes Declarados ────────────────────────────────────────────
+
+class _IngresosBienesCard extends StatelessWidget {
+  final HojaVida hv;
+  final ColorScheme cs;
+  final ThemeData theme;
+
+  const _IngresosBienesCard({
+    required this.hv,
+    required this.cs,
+    required this.theme,
+  });
+
+  String _formatMoney(double v) {
+    if (v == 0) return 'S/ 0';
+    if (v >= 1000000) return 'S/ ${(v / 1000000).toStringAsFixed(2)}M';
+    if (v >= 1000)    return 'S/ ${(v / 1000).toStringAsFixed(1)}K';
+    return 'S/ ${v.toStringAsFixed(2)}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1565C0).withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFF1565C0).withValues(alpha: 0.15)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Ingresos ─────────────────────────────────────────────────────
+          Row(
+            children: [
+              const Icon(Icons.attach_money_rounded, size: 14,
+                  color: Color(0xFF1565C0)),
+              const SizedBox(width: 6),
+              Text('Ingreso total declarado',
+                style: theme.textTheme.bodySmall?.copyWith(
+                    color: cs.onSurface.withValues(alpha: 0.55))),
+              const Spacer(),
+              Text(_formatMoney(hv.ingresoTotal),
+                style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF1565C0))),
+            ],
+          ),
+          if (hv.ingresoPublico > 0 || hv.ingresoPrivado > 0) ...[
+            const SizedBox(height: 4),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Column(
+                children: [
+                  if (hv.ingresoPublico > 0)
+                    _subRow('Sector público', _formatMoney(hv.ingresoPublico),
+                        theme, cs),
+                  if (hv.ingresoPrivado > 0)
+                    _subRow('Sector privado', _formatMoney(hv.ingresoPrivado),
+                        theme, cs),
+                ],
+              ),
+            ),
+          ],
+          const Divider(height: 14),
+          // ── Bienes ───────────────────────────────────────────────────────
+          Row(
+            children: [
+              const Icon(Icons.home_rounded, size: 14,
+                  color: Color(0xFF00695C)),
+              const SizedBox(width: 6),
+              Text('Inmuebles declarados',
+                style: theme.textTheme.bodySmall?.copyWith(
+                    color: cs.onSurface.withValues(alpha: 0.55))),
+              const Spacer(),
+              Text('${hv.numInmuebles} inmueble${hv.numInmuebles != 1 ? "s" : ""}',
+                style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF00695C))),
+            ],
+          ),
+          if (hv.valorInmuebles > 0) ...[
+            const SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: _subRow('Valor total', _formatMoney(hv.valorInmuebles),
+                  theme, cs),
+            ),
+          ],
+          if (hv.numVehiculos > 0) ...[
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                const Icon(Icons.directions_car_rounded, size: 14,
+                    color: Color(0xFF6A1B9A)),
+                const SizedBox(width: 6),
+                Text('Vehículos declarados',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                      color: cs.onSurface.withValues(alpha: 0.55))),
+                const Spacer(),
+                Text('${hv.numVehiculos} vehículo${hv.numVehiculos != 1 ? "s" : ""}',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF6A1B9A))),
+              ],
+            ),
+          ],
+          if (hv.ingresoTotal == 0 && hv.numInmuebles == 0 &&
+              hv.numVehiculos == 0)
+            Text('No se declararon ingresos ni bienes.',
+              style: theme.textTheme.bodySmall?.copyWith(
+                  color: cs.onSurface.withValues(alpha: 0.45),
+                  fontStyle: FontStyle.italic)),
+        ],
+      ),
+    );
+  }
+
+  Widget _subRow(String label, String value, ThemeData theme, ColorScheme cs) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Row(
+        children: [
+          Text('$label:',
+            style: theme.textTheme.bodySmall?.copyWith(
+                color: cs.onSurface.withValues(alpha: 0.45), fontSize: 10)),
+          const Spacer(),
+          Text(value,
+            style: theme.textTheme.bodySmall?.copyWith(
+                color: cs.onSurface.withValues(alpha: 0.65), fontSize: 10)),
         ],
       ),
     );

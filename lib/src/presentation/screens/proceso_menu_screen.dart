@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../domain/models/hoja_vida_models.dart';
 import 'conoce_candidatos_screen.dart';
+import 'estadisticas_partido_screen.dart';
 
 // Re-export ProcesoElectoral so selection_screen.dart only needs to import this file
 export '../../domain/models/hoja_vida_models.dart' show ProcesoElectoral;
@@ -73,12 +74,16 @@ class ProcesoMenuScreen extends StatelessWidget {
               _MenuOption(
                 icon: Icons.bar_chart_rounded,
                 title: 'Estadísticas por Partido',
-                subtitle: 'Próximamente disponible',
+                subtitle: 'Ranking · Puntaje promedio · Antecedentes',
                 detail: 'Comparación de partidos en este proceso electoral',
                 color: Colors.blueGrey,
-                isHighlighted: false,
-                onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Próximamente disponible')),
+                isHighlighted: true,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        EstadisticasPartidoScreen(proceso: proceso),
+                  ),
                 ),
               ),
 

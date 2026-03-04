@@ -171,8 +171,12 @@ class HojaVida {
   final int    totalSentenciasPenales;
   final int    totalSentenciasObligaciones;
   final double ingresoTotal;
+  final double ingresoPublico;
+  final double ingresoPrivado;
+  final String anioIngresos;
   final int    numInmuebles;
   final double valorInmuebles;
+  final int    numVehiculos;
   final List<String>      renuncioA;
   final List<ExpLaboral>  experienciaLaboral;
   final List<CargoPolitico> cargosPartidarios;
@@ -195,8 +199,12 @@ class HojaVida {
     required this.totalSentenciasPenales,
     required this.totalSentenciasObligaciones,
     required this.ingresoTotal,
+    this.ingresoPublico = 0,
+    this.ingresoPrivado = 0,
+    this.anioIngresos = '',
     required this.numInmuebles,
     required this.valorInmuebles,
+    this.numVehiculos = 0,
     required this.renuncioA,
     this.experienciaLaboral = const [],
     this.cargosPartidarios  = const [],
@@ -292,8 +300,12 @@ class HojaVida {
       totalSentenciasObligaciones:
           (j['totalSentenciasObligaciones'] as num?)?.toInt() ?? 0,
       ingresoTotal:   (j['ingresoTotal']   as num?)?.toDouble() ?? 0,
+      ingresoPublico: (j['ingresoPublico'] as num?)?.toDouble() ?? 0,
+      ingresoPrivado: (j['ingresoPrivado'] as num?)?.toDouble() ?? 0,
+      anioIngresos:   j['anioIngresos']    as String? ?? '',
       numInmuebles:   (j['numInmuebles']   as num?)?.toInt() ?? 0,
       valorInmuebles: (j['valorInmuebles'] as num?)?.toDouble() ?? 0,
+      numVehiculos:   (j['numVehiculos']   as num?)?.toInt() ?? 0,
       renuncioA: parseRenuncioA(j['renuncioA']),
       experienciaLaboral:    parseExp(j['experienciaLaboral']),
       cargosPartidarios:     parseCargos(j['cargosPartidarios'], 'partidario'),
