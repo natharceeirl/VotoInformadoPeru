@@ -18,7 +18,8 @@
       "Bash(py -m pip install requests --quiet)",
       "Bash(py descargar_hojas_vida.py)",
       "Bash(py -c \":*)",
-      "Bash(node analyze.js)"
+      "Bash(node analyze.js)",
+      "Bash(py inspect_bd.py)"
     ]
   }
 }

@@ -29,7 +29,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(28, 24, 28, 40),
@@ -45,14 +45,18 @@ class SplashScreen extends StatelessWidget {
                   height: 180,
                   errorBuilder: (_, __, ___) => Column(
                     children: [
-                      const Icon(Icons.how_to_vote, size: 100, color: Colors.white),
+                      Icon(Icons.how_to_vote,
+                          size: 100, color: AppTheme.primaryColor),
                       const SizedBox(height: 12),
                       Text(
                         '#PORESTOSSI',
-                        style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .displaySmall
+                            ?.copyWith(
+                              color: AppTheme.primaryColor,
+                              fontWeight: FontWeight.w900,
+                            ),
                       ),
                     ],
                   ),
@@ -60,11 +64,11 @@ class SplashScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'Senado Nacional Perú • Elecciones 2026',
+                'Perú • Elecciones 2026',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white70,
-                  fontStyle: FontStyle.italic,
-                ),
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
                 textAlign: TextAlign.center,
               ),
 
@@ -75,28 +79,33 @@ class SplashScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.25),
-                  ),
+                  border: Border.all(color: const Color(0xFFDDE4FF)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     _SplashSection(
                       icon: Icons.waving_hand_rounded,
-                      iconColor: Colors.amber,
+                      iconColor: Color(0xFFFF8F00),
                       title: 'Bienvenido',
                       body: 'Esta herramienta permite conocer el perfil de '
-                          'transparencia de los 35 partidos políticos y sus +963 '
-                          'candidatos al Senado Nacional del Perú para las '
-                          'Elecciones 2026 del Perú.',
+                          'transparencia de los candidatos a Presidente, '
+                          'Diputados, Senadores y Parlamento Andino del Perú '
+                          'para las Elecciones 2026.',
                     ),
                     SizedBox(height: 20),
                     _SplashSection(
                       icon: Icons.people_rounded,
-                      iconColor: Colors.lightBlue,
+                      iconColor: Color(0xFF1565C0),
                       title: '¿Quiénes somos?',
                       body: 'Somos una iniciativa ciudadana multidisciplinaria '
                           'independiente que construye indicadores a partir de '
@@ -106,7 +115,7 @@ class SplashScreen extends StatelessWidget {
                     SizedBox(height: 20),
                     _SplashSection(
                       icon: Icons.lightbulb_rounded,
-                      iconColor: Colors.yellow,
+                      iconColor: Color(0xFFF9A825),
                       title: '¿Por qué lo hacemos?',
                       body: 'Porque el voto informado es la mejor herramienta '
                           'contra la corrupción. Los ciudadanos merecemos conocer '
@@ -117,16 +126,16 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // ── Disclaimer ────────────────────────────────────────────────
-              const Text(
+              Text(
                 '⚠ Herramienta informativa basada en datos públicos. No '
                 'representa acusación formal ni obligatoriedad de voto. '
-                '⚠ Herramienta no financiada por ningún partido político. '
-                'Esta aplicación no representa a ninguna entidad gubernamental ni está afiliada a ninguna institución pública. La información proporcionada se obtiene de fuentes oficiales disponibles públicamente.',
+                'No financiada por ningún partido político ni afiliada a '
+                'ninguna institución pública.',
                 style: TextStyle(
-                  color: Colors.white54,
+                  color: Colors.grey.shade500,
                   fontSize: 11,
                   fontStyle: FontStyle.italic,
                 ),
@@ -149,12 +158,12 @@ class SplashScreen extends StatelessWidget {
                         letterSpacing: 1.2),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: AppTheme.primaryColor,
+                    backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    elevation: 3,
+                    elevation: 2,
                   ),
                   onPressed: () => Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (_) => const SelectionScreen()),
@@ -193,8 +202,8 @@ class _SplashSection extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               title,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Colors.grey.shade900,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -204,7 +213,7 @@ class _SplashSection extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           body,
-          style: const TextStyle(color: Colors.white70, height: 1.5),
+          style: TextStyle(color: Colors.grey.shade700, height: 1.5),
         ),
       ],
     );

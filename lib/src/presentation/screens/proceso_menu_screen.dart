@@ -17,27 +17,41 @@ class ProcesoMenuScreen extends StatelessWidget {
     final color = proceso.color;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        backgroundColor: color,
-        foregroundColor: Colors.white,
-        title: Text(proceso.displayName),
-        centerTitle: true,
+        backgroundColor: Colors.white,
+        foregroundColor: color,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
+        shadowColor: Colors.black12,
+        title: Text(
+          proceso.displayName,
+          style: TextStyle(
+            color: Colors.grey.shade800,
+            fontWeight: FontWeight.w600,
+            fontSize: 17,
+          ),
+        ),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.grey.shade700),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Divider(height: 1, color: Colors.grey.shade200),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // ── Encabezado ─────────────────────────────────────────────────
               _ProcessHeader(proceso: proceso),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // ── Disclaimer ────────────────────────────────────────────────
               _DisclaimerBox(),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // ── Opciones ──────────────────────────────────────────────────
               _MenuOption(
@@ -55,7 +69,6 @@ class ProcesoMenuScreen extends StatelessWidget {
                 ),
               ),
 
-              // Placeholder para futuras secciones
               const SizedBox(height: 10),
               _MenuOption(
                 icon: Icons.bar_chart_rounded,
@@ -70,11 +83,15 @@ class ProcesoMenuScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 32),
-              const Divider(color: Colors.white12),
+              Divider(color: Colors.grey.shade200),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 '#PORESTOSSI — Solo información pública\nDatos: JNE · ONPE · NATHARCE',
-                style: TextStyle(color: Colors.white30, fontSize: 11, height: 1.6),
+                style: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 11,
+                  height: 1.6,
+                ),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -97,13 +114,9 @@ class _ProcessHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [color, color.withValues(alpha: 0.7)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,18 +127,18 @@ class _ProcessHeader extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
+                  color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(proceso.icon, color: Colors.white, size: 26),
+                child: Icon(proceso.icon, color: color, size: 26),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Text(
                   proceso.displayName,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+                  style: TextStyle(
+                    color: Colors.grey.shade900,
+                    fontSize: 19,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -136,16 +149,17 @@ class _ProcessHeader extends StatelessWidget {
           Text(
             'Elecciones Perú 2026',
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.85),
+              color: color,
               fontSize: 13,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             _description,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.65),
-              fontSize: 12,
+              color: Colors.grey.shade600,
+              fontSize: 13,
               height: 1.4,
             ),
           ),
@@ -176,17 +190,17 @@ class _DisclaimerBox extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.06),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: Colors.grey.shade200),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(Icons.info_outline_rounded,
-              size: 18, color: Colors.white.withValues(alpha: 0.5)),
+              size: 18, color: Colors.grey.shade400),
           const SizedBox(width: 10),
-          const Expanded(
+          Expanded(
             child: Text(
               'Esta aplicación tiene como único objetivo informar a la ciudadanía. '
               'No representa, promueve ni tiene afiliación con ningún partido político. '
@@ -194,7 +208,7 @@ class _DisclaimerBox extends StatelessWidget {
               'La información es de carácter orientativo y no constituye una '
               'recomendación de voto ni una acusación formal.',
               style: TextStyle(
-                color: Colors.white54,
+                color: Colors.grey.shade600,
                 fontSize: 11,
                 height: 1.5,
               ),
@@ -238,15 +252,24 @@ class _MenuOption extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: isHighlighted
-                ? color.withValues(alpha: 0.15)
-                : Colors.white.withValues(alpha: 0.05),
+                ? Colors.white
+                : const Color(0xFFF9FAFB),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: isHighlighted
-                  ? color.withValues(alpha: 0.5)
-                  : Colors.white.withValues(alpha: 0.1),
+                  ? color.withValues(alpha: 0.35)
+                  : Colors.grey.shade200,
               width: isHighlighted ? 1.5 : 1.0,
             ),
+            boxShadow: isHighlighted
+                ? [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.08),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    )
+                  ]
+                : null,
           ),
           child: Row(
             children: [
@@ -254,10 +277,14 @@ class _MenuOption extends StatelessWidget {
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                  color: color.withValues(alpha: isHighlighted ? 0.25 : 0.1),
+                  color: color.withValues(alpha: isHighlighted ? 0.12 : 0.07),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: color, size: 24),
+                child: Icon(
+                  icon,
+                  color: isHighlighted ? color : Colors.grey.shade400,
+                  size: 24,
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -267,7 +294,9 @@ class _MenuOption extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        color: isHighlighted ? Colors.white : Colors.white70,
+                        color: isHighlighted
+                            ? Colors.grey.shade900
+                            : Colors.grey.shade500,
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),
@@ -276,7 +305,9 @@ class _MenuOption extends StatelessWidget {
                     Text(
                       subtitle,
                       style: TextStyle(
-                        color: color.withValues(alpha: isHighlighted ? 0.9 : 0.5),
+                        color: isHighlighted
+                            ? color.withValues(alpha: 0.85)
+                            : Colors.grey.shade400,
                         fontSize: 12,
                       ),
                     ),
@@ -284,7 +315,7 @@ class _MenuOption extends StatelessWidget {
                     Text(
                       detail,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.4),
+                        color: Colors.grey.shade500,
                         fontSize: 11,
                       ),
                     ),
@@ -294,7 +325,7 @@ class _MenuOption extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 14,
-                color: color.withValues(alpha: isHighlighted ? 0.7 : 0.3),
+                color: isHighlighted ? color.withValues(alpha: 0.5) : Colors.grey.shade300,
               ),
             ],
           ),

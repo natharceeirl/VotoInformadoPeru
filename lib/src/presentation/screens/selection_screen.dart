@@ -10,7 +10,7 @@ class SelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
@@ -25,15 +25,15 @@ class SelectionScreen extends StatelessWidget {
                   errorBuilder: (_, __, ___) => const Icon(
                     Icons.how_to_vote,
                     size: 80,
-                    color: Colors.white,
+                    color: Color(0xFF1E3A8A),
                   ),
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
+              Text(
                 'Elecciones Perú 2026',
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: Colors.grey.shade600,
                   fontSize: 15,
                   fontStyle: FontStyle.italic,
                 ),
@@ -44,16 +44,16 @@ class SelectionScreen extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.07),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                  border: Border.all(color: Colors.grey.shade200),
                 ),
-                child: const Text(
+                child: Text(
                   'Esta aplicación tiene como único objetivo informar a la ciudadanía. '
                   'No promueve ni representa a ningún partido político. '
                   'Todos los datos provienen de fuentes públicas oficiales (JNE · ONPE).',
                   style: TextStyle(
-                    color: Colors.white60,
+                    color: Colors.grey.shade600,
                     fontSize: 11,
                     height: 1.5,
                   ),
@@ -72,15 +72,14 @@ class SelectionScreen extends StatelessWidget {
                 title: 'Presidente y Vicepresidentes',
                 subtitle: 'Candidatos a la Presidencia y Vicepresidencias de la República',
                 details: const ['Conoce a los candidatos · Perfil de integridad'],
-                gradient: const [Color(0xFF880E4F), Color(0xFF4A148C)],
-                borderColor: const Color(0xFFF48FB1),
+                accentColor: const Color(0xFF7B1FA2),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => const ProcesoMenuScreen(
                     proceso: ProcesoElectoral.presidentes,
                   ),
                 )),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
               // Diputados
               _ElectionCard(
@@ -88,15 +87,14 @@ class SelectionScreen extends StatelessWidget {
                 title: 'Diputados',
                 subtitle: 'Candidatos al Congreso de la República — Cámara de Diputados',
                 details: const ['Por departamento · Perfil de integridad'],
-                gradient: const [Color(0xFF1565C0), Color(0xFF0D47A1)],
-                borderColor: const Color(0xFF42A5F5),
+                accentColor: const Color(0xFF1565C0),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => const ProcesoMenuScreen(
                     proceso: ProcesoElectoral.diputados,
                   ),
                 )),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
               // Senadores
               _ElectionCard(
@@ -107,14 +105,13 @@ class SelectionScreen extends StatelessWidget {
                   '35 partidos · Índice de transparencia',
                   'Educación · Ingresos · Sentencias · REINFO',
                 ],
-                gradient: const [Color(0xFF00695C), Color(0xFF004D40)],
-                borderColor: const Color(0xFF4DB6AC),
+                accentColor: const Color(0xFF00695C),
                 badge: 'COMPLETO',
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const MainMenuScreen()),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
               // Parlamento Andino
               _ElectionCard(
@@ -122,8 +119,7 @@ class SelectionScreen extends StatelessWidget {
                 title: 'Parlamento Andino',
                 subtitle: 'Candidatos al Parlamento Andino — representación regional',
                 details: const ['Conoce a los candidatos · Perfil de integridad'],
-                gradient: const [Color(0xFFE65100), Color(0xFFBF360C)],
-                borderColor: const Color(0xFFFFCC80),
+                accentColor: const Color(0xFFBF360C),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => const ProcesoMenuScreen(
                     proceso: ProcesoElectoral.parlamentoAndino,
@@ -142,14 +138,13 @@ class SelectionScreen extends StatelessWidget {
                 title: 'Simulador de Voto',
                 subtitle: 'Aprende a votar correctamente el día de las elecciones',
                 details: const ['Guía paso a paso · Cédula virtual'],
-                gradient: const [Color(0xFF2E7D32), Color(0xFF1B5E20)],
-                borderColor: const Color(0xFF66BB6A),
+                accentColor: const Color(0xFF2E7D32),
                 badge: 'PRÓXIMAMENTE',
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const VoteSimulatorScreen()),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
               // Créditos
               _ElectionCard(
@@ -157,20 +152,19 @@ class SelectionScreen extends StatelessWidget {
                 title: 'Créditos y Fuentes',
                 subtitle: 'Equipo de desarrollo · Fuentes oficiales de datos',
                 details: const ['NATHARCE: Desarrollo de Software · JNE · ONPE'],
-                gradient: const [Color(0xFF37474F), Color(0xFF263238)],
-                borderColor: const Color(0xFF90A4AE),
+                accentColor: const Color(0xFF546E7A),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const CreditsScreen()),
                 ),
               ),
 
               const SizedBox(height: 32),
-              const Divider(color: Colors.white12),
+              Divider(color: Colors.grey.shade200),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 '#PORESTOSSI — Solo información pública · Datos: ONPE · JNE\nNATHARCE: Desarrollo de Software',
                 style: TextStyle(
-                  color: Colors.white30,
+                  color: Colors.grey.shade400,
                   fontSize: 11,
                   height: 1.6,
                 ),
@@ -194,34 +188,33 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.15))),
+        Expanded(child: Divider(color: Colors.grey.shade300)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             text,
-            style: const TextStyle(
-              color: Colors.white38,
+            style: TextStyle(
+              color: Colors.grey.shade500,
               fontSize: 10,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.2,
             ),
           ),
         ),
-        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.15))),
+        Expanded(child: Divider(color: Colors.grey.shade300)),
       ],
     );
   }
 }
 
-// ─── Tarjeta de proceso electoral ─────────────────────────────────────────────
+// ─── Tarjeta de proceso electoral (tema claro) ────────────────────────────────
 
 class _ElectionCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
   final List<String> details;
-  final List<Color> gradient;
-  final Color borderColor;
+  final Color accentColor;
   final String? badge;
   final VoidCallback onTap;
 
@@ -230,8 +223,7 @@ class _ElectionCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.details,
-    required this.gradient,
-    required this.borderColor,
+    required this.accentColor,
     required this.onTap,
     this.badge,
   });
@@ -242,26 +234,22 @@ class _ElectionCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: gradient,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(16),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: borderColor.withValues(alpha: 0.45),
+              color: accentColor.withValues(alpha: 0.25),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: gradient[0].withValues(alpha: 0.35),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
               ),
             ],
           ),
@@ -273,10 +261,10 @@ class _ElectionCard extends StatelessWidget {
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.14),
+                  color: accentColor.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: Colors.white, size: 24),
+                child: Icon(icon, color: accentColor, size: 24),
               ),
               const SizedBox(width: 14),
               // Texto
@@ -289,8 +277,8 @@ class _ElectionCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             title,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Colors.grey.shade900,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -302,13 +290,13 @@ class _ElectionCard extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 7, vertical: 2),
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.18),
+                              color: accentColor.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
                               badge!,
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: accentColor,
                                 fontSize: 9,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.6,
@@ -322,24 +310,23 @@ class _ElectionCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.78),
+                        color: Colors.grey.shade600,
                         fontSize: 12,
                         height: 1.3,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 5),
                     ...details.map(
                       (d) => Row(
                         children: [
                           Icon(Icons.check_circle_outline,
-                              size: 12,
-                              color: Colors.white.withValues(alpha: 0.55)),
+                              size: 12, color: accentColor.withValues(alpha: 0.6)),
                           const SizedBox(width: 5),
                           Expanded(
                             child: Text(
                               d,
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.65),
+                                color: Colors.grey.shade500,
                                 fontSize: 11,
                               ),
                             ),
@@ -354,7 +341,7 @@ class _ElectionCard extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 14,
-                color: Colors.white.withValues(alpha: 0.5),
+                color: Colors.grey.shade400,
               ),
             ],
           ),
