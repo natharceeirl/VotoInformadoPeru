@@ -52,6 +52,57 @@ final proCrimenMapProvider =
       return result.map((k, v) => MapEntry(k, v.length));
     });
 
+/// Map: normalizedPartyName → count of distinct pro-crime laws the
+/// parliamentary group voted "A favor" (at least one member).
+/// Used for party-level indicator in statistics screen.
+final proCrimenPartidoProvider =
+    FutureProvider<Map<String, int>>((ref) async {
+      String raw;
+      try {
+        raw = await rootBundle.loadString(
+          'assets/baseDatos/proCrimen_datos_votacion.json');
+      } catch (_) {
+        return {};
+      }
+      final decoded = jsonDecode(raw) as Map<String, dynamic>;
+      // partido_norm → set of lawIds with at least one "A favor" vote
+      final result = <String, Set<String>>{};
+
+      for (final entry in decoded.entries) {
+        final lawId = entry.key;
+        final votes = (entry.value as List).cast<Map<String, dynamic>>();
+        for (final v in votes) {
+          if (v['VOTO'] == 'A favor') {
+            final grupo = _normName(v['GRUPO_PARLAMENTARIO'] as String? ?? '');
+            if (grupo.isNotEmpty) {
+              (result[grupo] ??= {}).add(lawId);
+            }
+          }
+        }
+      }
+      return result.map((k, v) => MapEntry(k, v.length));
+    });
+
+/// Map: normalizedPartyName → investigaciones/controversias text.
+/// Source: assets/baseDatos/presidentes_investigaciones_acusaciones.json
+final investigacionesPresidentesProvider =
+    FutureProvider<Map<String, String>>((ref) async {
+      String raw;
+      try {
+        raw = await rootBundle.loadString(
+          'assets/baseDatos/presidentes_investigaciones_acusaciones.json');
+      } catch (_) {
+        return {};
+      }
+      final decoded = jsonDecode(raw) as Map<String, dynamic>;
+      return {
+        for (final e in decoded.entries)
+          _normName(e.key):
+              (e.value as Map<String, dynamic>)['investigaciones_controversiasConocidas']
+                  as String? ?? '',
+      };
+    });
+
 // Repository Provider
 final dataRepositoryProvider = Provider<DataRepository>((ref) {
   return DataRepository();
@@ -254,18 +305,28 @@ final hojasVidaProcesoProvider =
 /// Aplica penalización por leyes pro-crimen y ex-congresistas.
 final candidatosConHVProcesoProvider =
     FutureProvider.family<List<CandidatoConHV>, ProcesoElectoral>((ref, proceso) async {
-      final hojas     = await ref.watch(hojasVidaProcesoProvider(proceso).future);
-      final proCrimen = await ref.watch(proCrimenMapProvider.future);
+      final hojas          = await ref.watch(hojasVidaProcesoProvider(proceso).future);
+      final proCrimen      = await ref.watch(proCrimenMapProvider.future);
+      final investigaciones = proceso == ProcesoElectoral.presidentes
+          ? await ref.watch(investigacionesPresidentesProvider.future)
+          : <String, String>{};
       final result = <CandidatoConHV>[];
 
       void addCandidatos(List<RegionCandidato> bd, String tipoDistrito) {
         for (final c in bd) {
           HojaVida? hv = hojas[c.dni] ?? hojas[c.paddedDni];
           if (hv == null) continue;
-          // Aplicar penalización pro-crimen por nombre
+          // Penalización pro-crimen (por nombre del candidato)
           final normNombre = _normName(hv.nombre);
           final numLeyes   = proCrimen[normNombre] ?? 0;
-          if (numLeyes > 0) hv = hv.copyWithNumLeyes(numLeyes);
+          // Investigaciones del presidenciable (por partido)
+          final inv = investigaciones[_normName(hv.partido)] ?? '';
+          if (numLeyes > 0 || inv.isNotEmpty) {
+            hv = hv.copyWith(
+              numLeyesProCrimen:        numLeyes > 0 ? numLeyes : null,
+              investigacionesConocidas: inv.isNotEmpty ? inv : null,
+            );
+          }
           result.add(CandidatoConHV(
             hv:           hv,
             tipoDistrito: tipoDistrito,

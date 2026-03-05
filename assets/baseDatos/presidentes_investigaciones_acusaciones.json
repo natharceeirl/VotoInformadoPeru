@@ -1,0 +1,80 @@
+{
+   "FUERZA POPULAR": {
+      "strApellidoPaterno": "FUJIMORI",
+      "strApellidoMaterno": "HIGUCHI",
+      "strNombres": "KEIKO SOFIA",
+      "investigaciones_controversiasConocidas": "Investigación por lavado de activos en caso Odebrecht; prisión preventiva durante el proceso."
+   },
+   "RENOVACION POPULAR": {
+      "strApellidoPaterno": "LOPEZ ALIAGA",
+      "strApellidoMaterno": "CAZORLA",
+      "strNombres": "RAFAEL BERNARDO",
+      "investigaciones_controversiasConocidas": "Cuestionamientos por deudas tributarias con SUNAT y denuncias por propaganda electoral anticipada."
+   },
+   "ALIANZA PARA EL PROGRESO": {
+      "strApellidoPaterno": "ACUÑA",
+      "strApellidoMaterno": "PERALTA",
+      "strNombres": "CESAR",
+      "investigaciones_controversiasConocidas": "Acusaciones de plagio en tesis doctoral; investigaciones por presunto uso de recursos públicos."
+   },
+   "PODEMOS PERU": {
+      "strApellidoPaterno": "LUNA",
+      "strApellidoMaterno": "GALVEZ",
+      "strNombres": "JOSE LEON",
+      "investigaciones_controversiasConocidas": "Investigación por aportes ilegales de OAS y Odebrecht a campañas."
+   },
+   "PARTIDO DEMOCRATA VERDE": {
+      "strApellidoPaterno": "GONZALES",
+      "strApellidoMaterno": "CASTILLO",
+      "strNombres": "ALEX",
+      "investigaciones_controversiasConocidas": "Investigaciones administrativas vinculadas a su gestión municipal."
+   },
+   "PARTIDO POLITICO INTEGRIDAD DEMOCRATICA": {
+      "strApellidoPaterno": "GROZO",
+      "strApellidoMaterno": "COSTA",
+      "strNombres": "WOLFGANG MARIO",
+      "investigaciones_controversiasConocidas": "Sin investigaciones graves conocidas; polémicas por posturas políticas."
+   },
+   "FUERZA Y LIBERTAD": {
+      "strApellidoPaterno": "MOLINELLI",
+      "strApellidoMaterno": "ARISTONDO",
+      "strNombres": "FIORELLA GIANNINA",
+      "investigaciones_controversiasConocidas": "Investigaciones fiscales por presuntas irregularidades en EsSalud."
+   },
+   "PARTIDO FRENTE DE LA ESPERANZA 2021": {
+      "strApellidoPaterno": "OLIVERA",
+      "strApellidoMaterno": "VEGA",
+      "strNombres": "LUIS FERNANDO",
+      "investigaciones_controversiasConocidas": "Controversias políticas históricas y denuncias mediáticas cruzadas."
+   },
+   "FE EN EL PERU": {
+      "strApellidoPaterno": "PAZ DE LA BARRA",
+      "strApellidoMaterno": "FREIGEIRO",
+      "strNombres": "ALVARO GONZALO",
+      "investigaciones_controversiasConocidas": "Denuncias administrativas durante su gestión como alcalde."
+   },
+   "AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL": {
+      "strApellidoPaterno": "WILLIAMS",
+      "strApellidoMaterno": "ZAPATA",
+      "strNombres": "JOSE DANIEL",
+      "investigaciones_controversiasConocidas": "Debate político sobre operaciones militares durante conflicto interno."
+   },
+   "PARTIDO POLITICO COOPERACION POPULAR": {
+      "strApellidoPaterno": "LESCANO",
+      "strApellidoMaterno": "ANCIETA",
+      "strNombres": "YONHY",
+      "investigaciones_controversiasConocidas": "Investigación por presunto acoso sexual (caso archivado)."
+   },
+   "PARTIDO DEL BUEN GOBIERNO": {
+      "strApellidoPaterno": "NIETO",
+      "strApellidoMaterno": "MONTESINOS",
+      "strNombres": "JORGE",
+      "investigaciones_controversiasConocidas": "Cuestionamientos políticos por gestión como ministro."
+   },
+   "LIBERTAD POPULAR": {
+      "strApellidoPaterno": "BELAUNDE",
+      "strApellidoMaterno": "LLOSA",
+      "strNombres": "RAFAEL JORGE",
+      "investigaciones_controversiasConocidas": "Críticas políticas por vínculos empresariales; sin procesos judiciales conocidos."
+   }
+}

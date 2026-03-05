@@ -182,7 +182,8 @@ class HojaVida {
   final List<CargoPolitico> cargosPartidarios;
   final List<CargoPolitico> cargosEleccionPopular;
   final String notaAdicional;
-  final int    numLeyesProCrimen; // nº de leyes pro-crimen apoyadas (0 = ninguna)
+  final int    numLeyesProCrimen;         // nº de leyes pro-crimen apoyadas (0 = ninguna)
+  final String investigacionesConocidas;  // texto de investigaciones/controversias conocidas
 
   const HojaVida({
     required this.dni,
@@ -212,6 +213,7 @@ class HojaVida {
     this.cargosEleccionPopular = const [],
     this.notaAdicional = '',
     this.numLeyesProCrimen = 0,
+    this.investigacionesConocidas = '',
   });
 
   factory HojaVida.fromJson(String dni, Map<String, dynamic> j) {
@@ -318,7 +320,10 @@ class HojaVida {
 
   // ── Copy with pro-crime count ──────────────────────────────────────────────
 
-  HojaVida copyWithNumLeyes(int n) => HojaVida(
+  HojaVida copyWith({
+    int?    numLeyesProCrimen,
+    String? investigacionesConocidas,
+  }) => HojaVida(
     dni:    dni,
     idHojaVida: idHojaVida,
     nombre: nombre,
@@ -345,7 +350,8 @@ class HojaVida {
     cargosPartidarios:     cargosPartidarios,
     cargosEleccionPopular: cargosEleccionPopular,
     notaAdicional: notaAdicional,
-    numLeyesProCrimen: n,
+    numLeyesProCrimen:        numLeyesProCrimen        ?? this.numLeyesProCrimen,
+    investigacionesConocidas: investigacionesConocidas ?? this.investigacionesConocidas,
   );
 
   // ── Scoring ────────────────────────────────────────────────────────────────
@@ -386,9 +392,13 @@ class HojaVida {
   /// -5 pts si fue congresista o tiene cargos de elección popular previos
   int get penaltyExCongresista => cargosEleccionPopular.isNotEmpty ? 5 : 0;
 
+  /// -10 pts si tiene investigaciones o controversias conocidas graves
+  int get penaltyInvestigaciones => investigacionesConocidas.isNotEmpty ? 10 : 0;
+
   int get scoreFinal =>
       (scoreEducacion + scoreIntegridadPenal + scoreIntegridadOblig
-       - penaltyProCrimen - penaltyExCongresista).clamp(0, 100);
+       - penaltyProCrimen - penaltyExCongresista - penaltyInvestigaciones)
+      .clamp(0, 100);
 
   double get scoreNormalizado => scoreFinal.toDouble();
 

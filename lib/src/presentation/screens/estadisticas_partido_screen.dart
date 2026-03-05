@@ -31,11 +31,13 @@ class EstadisticasPartidoScreen extends ConsumerWidget {
         error:   (e, _) => Center(child: Text('Error: $e')),
         data:    (candidatos) {
           if (candidatos.isEmpty) return _emptyState(context, proceso);
-          return proceso == ProcesoElectoral.presidentes
-              ? _PlanchaView(candidatos: candidatos, color: color,
-                             proceso: proceso)
-              : _PartidoView(candidatos: candidatos, color: color,
-                             proceso: proceso);
+          if (proceso == ProcesoElectoral.presidentes) {
+            final pcMap = ref.watch(proCrimenPartidoProvider).asData?.value ?? {};
+            return _PlanchaView(candidatos: candidatos, color: color,
+                                proceso: proceso, proCrimenPartido: pcMap);
+          }
+          return _PartidoView(candidatos: candidatos, color: color,
+                              proceso: proceso);
         },
       ),
     );
@@ -72,11 +74,13 @@ class _PlanchaView extends StatelessWidget {
   final List<CandidatoConHV> candidatos;
   final Color color;
   final ProcesoElectoral proceso;
+  final Map<String, int> proCrimenPartido; // party_norm → leyes count
 
   const _PlanchaView({
     required this.candidatos,
     required this.color,
     required this.proceso,
+    required this.proCrimenPartido,
   });
 
   @override
@@ -124,7 +128,8 @@ class _PlanchaView extends StatelessWidget {
           const SizedBox(height: 8),
           ...planchas.asMap().entries.map((e) =>
             _PlanchaCard(rank: e.key + 1, stat: e.value, color: color,
-                         proceso: proceso)),
+                         proceso: proceso,
+                         proCrimenPartido: proCrimenPartido)),
         ],
       ),
     );
@@ -160,10 +165,12 @@ class _PlanchaCard extends StatelessWidget {
   final _PlanchaStat stat;
   final Color color;
   final ProcesoElectoral proceso;
+  final Map<String, int> proCrimenPartido;
 
   const _PlanchaCard({
     required this.rank, required this.stat,
     required this.color, required this.proceso,
+    required this.proCrimenPartido,
   });
 
   static const _cargoOrder = [
@@ -185,61 +192,86 @@ class _PlanchaCard extends StatelessWidget {
         return ia == -1 ? 1 : ib == -1 ? -1 : ia.compareTo(ib);
       });
 
+    // Leyes pro-crimen a nivel de partido parlamentario (GRUPO_PARLAMENTARIO)
+    final normPartido  = _normName(stat.partido);
+    final pcPartidoCount = proCrimenPartido[normPartido] ?? 0;
+    // Investigaciones: tomadas del primer miembro que tenga texto
+    final invText = stat.miembros
+        .map((c) => c.hv.investigacionesConocidas)
+        .firstWhere((s) => s.isNotEmpty, orElse: () => '');
+
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: scoreColor.withValues(alpha: 0.3)),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header: rank + partido + score
-            Row(
-              children: [
-                _RankCircle(rank: rank),
-                const SizedBox(width: 10),
-                SizedBox(width: 32, height: 32,
-                  child: PartyLogo(partyName: stat.partido, size: 32)),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(stat.partido,
-                    style: const TextStyle(
-                      fontSize: 13, fontWeight: FontWeight.bold),
-                    maxLines: 2, overflow: TextOverflow.ellipsis),
-                ),
-                _ScoreBadge(score: score, scoreColor: scoreColor, scoreBg: scoreBg),
-              ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Header tappable ──────────────────────────────────────────────
+          InkWell(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+            onTap: () => _showPlanchaDetalle(context, stat, proceso,
+                pcPartidoCount, invText),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+              child: Row(
+                children: [
+                  _RankCircle(rank: rank),
+                  const SizedBox(width: 10),
+                  SizedBox(width: 32, height: 32,
+                    child: PartyLogo(partyName: stat.partido, size: 32)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(stat.partido,
+                          style: const TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.bold),
+                          maxLines: 2, overflow: TextOverflow.ellipsis),
+                        const SizedBox(height: 4),
+                        Wrap(
+                          spacing: 5, runSpacing: 4,
+                          children: [
+                            if (stat.todosSinSentencia)
+                              _StatChip(Icons.verified_rounded,
+                                  'Sin antecedentes', const Color(0xFF2E7D32)),
+                            if (stat.algunoConSentencia)
+                              _StatChip(Icons.gavel_rounded,
+                                  'Con antecedentes', const Color(0xFFC62828)),
+                            if (stat.totalLeyesProCrimen > 0 || pcPartidoCount > 0)
+                              _StatChip(Icons.dangerous_rounded,
+                                  '${stat.totalLeyesProCrimen + pcPartidoCount} pro-crimen',
+                                  Colors.deepOrange),
+                            if (invText.isNotEmpty)
+                              _StatChip(Icons.report_rounded,
+                                  'Con denuncias', Colors.red.shade700),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  _ScoreBadge(score: score, scoreColor: scoreColor, scoreBg: scoreBg),
+                  const SizedBox(width: 4),
+                  Icon(Icons.info_outline_rounded,
+                      size: 16, color: Colors.grey.shade400),
+                ],
+              ),
             ),
-            const SizedBox(height: 8),
+          ),
 
-            // Chips
-            Wrap(
-              spacing: 5, runSpacing: 4,
-              children: [
-                if (stat.todosSinSentencia)
-                  _StatChip(Icons.verified_rounded, 'Sin antecedentes',
-                      const Color(0xFF2E7D32)),
-                if (stat.algunoConSentencia)
-                  _StatChip(Icons.gavel_rounded, 'Con antecedentes',
-                      const Color(0xFFC62828)),
-                if (stat.totalLeyesProCrimen > 0)
-                  _StatChip(Icons.dangerous_rounded,
-                      '${stat.totalLeyesProCrimen} ley(es) pro-crimen',
-                      Colors.deepOrange),
-                _StatChip(Icons.people_rounded,
-                    '${stat.miembros.length} candidatos', Colors.blueGrey),
-              ],
+          // ── Miembros (tappables) ─────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+            child: Column(
+              children: miembrosOrdenados.map((c) =>
+                _MiembroRow(c: c, proceso: proceso)).toList(),
             ),
-            const SizedBox(height: 10),
-
-            // Miembros (tappables)
-            ...miembrosOrdenados.map((c) =>
-              _MiembroRow(c: c, proceso: proceso)),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -917,6 +949,171 @@ void _showCandidatoDetalle(BuildContext context, CandidatoConHV c,
             // ── JNE link ────────────────────────────────────────────────────
             _JneButton(hv: hv),
             const SizedBox(height: 12),
+
+            // Nota legal
+            Text(
+              'Puntaje calculado con datos públicos del JNE. '
+              'Información orientativa — no constituye acusación formal.',
+              style: TextStyle(fontSize: 10, color: Colors.grey.shade400,
+                  fontStyle: FontStyle.italic),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+// ─── Name normalization (mirrors new_providers.dart) ─────────────────────────
+
+String _normName(String s) {
+  var r = s.toUpperCase()
+      .replaceAll(',', ' ')
+      .replaceAll('Á', 'A').replaceAll('É', 'E')
+      .replaceAll('Í', 'I').replaceAll('Ó', 'O').replaceAll('Ú', 'U')
+      .replaceAll('Ñ', 'N');
+  while (r.contains('  ')) { r = r.replaceAll('  ', ' '); }
+  return r.trim();
+}
+
+// ─── Party detail bottom sheet (Presidentes) ─────────────────────────────────
+
+void _showPlanchaDetalle(
+  BuildContext context,
+  _PlanchaStat stat,
+  ProcesoElectoral proceso,
+  int pcPartidoCount,
+  String invText,
+) {
+  final score      = stat.scorePromedio;
+  final scoreColor = _scoreColor(score);
+  final scoreBg    = _scoreBg(score);
+
+  const cargoOrder = [
+    'PRESIDENTE DE LA REPÚBLICA',
+    'PRIMER VICEPRESIDENTE DE LA REPÚBLICA',
+    'SEGUNDO VICEPRESIDENTE DE LA REPÚBLICA',
+  ];
+  final miembros = [...stat.miembros]
+    ..sort((a, b) {
+      final ia = cargoOrder.indexOf(a.cargo);
+      final ib = cargoOrder.indexOf(b.cargo);
+      return ia == -1 ? 1 : ib == -1 ? -1 : ia.compareTo(ib);
+    });
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (_) => DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.75,
+      minChildSize: 0.4,
+      maxChildSize: 0.95,
+      builder: (_, ctrl) => SingleChildScrollView(
+        controller: ctrl,
+        padding: const EdgeInsets.fromLTRB(18, 8, 18, 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Handle
+            Center(
+              child: Container(
+                width: 36, height: 4,
+                margin: const EdgeInsets.only(bottom: 14),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+
+            // ── Header partido ───────────────────────────────────────────
+            Row(
+              children: [
+                SizedBox(width: 48, height: 48,
+                  child: PartyLogo(partyName: stat.partido, size: 48)),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(stat.partido,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold)),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: scoreBg,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: scoreColor, width: 1.5),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(score.toStringAsFixed(1),
+                        style: TextStyle(fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: scoreColor, height: 1)),
+                      Text('prom. plancha',
+                        style: TextStyle(fontSize: 8,
+                            color: scoreColor,
+                            fontWeight: FontWeight.w600)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 20),
+
+            // ── Alertas ──────────────────────────────────────────────────
+            if (invText.isNotEmpty || stat.totalLeyesProCrimen > 0 ||
+                pcPartidoCount > 0) ...[
+              _SheetSection('ALERTAS DE INTEGRIDAD', Colors.red.shade700),
+              if (invText.isNotEmpty) ...[
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.red.shade200),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.report_rounded, size: 14,
+                          color: Colors.red.shade700),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(invText,
+                          style: TextStyle(fontSize: 12,
+                              color: Colors.red.shade800)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+              if (stat.totalLeyesProCrimen > 0)
+                _DetailRow(Icons.dangerous_rounded,
+                  'Miembro(s) de la plancha apoyó '
+                  '${stat.totalLeyesProCrimen} ley(es) pro-crimen',
+                  Colors.deepOrange),
+              if (pcPartidoCount > 0)
+                _DetailRow(Icons.dangerous_rounded,
+                  'El bloque parlamentario del partido apoyó '
+                  '$pcPartidoCount ley(es) pro-crimen',
+                  Colors.orange.shade800),
+              const Divider(height: 20),
+            ],
+
+            // ── Miembros de la plancha ────────────────────────────────────
+            _SheetSection('PLANCHA PRESIDENCIAL', proceso.color),
+            ...miembros.map((c) =>
+              _MiembroRow(c: c, proceso: proceso)),
+            const Divider(height: 20),
 
             // Nota legal
             Text(

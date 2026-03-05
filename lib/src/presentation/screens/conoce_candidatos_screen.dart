@@ -999,6 +999,34 @@ void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proce
               const Divider(height: 20),
             ],
 
+            // ── Investigaciones y Controversias ───────────────────────────
+            if (hv.investigacionesConocidas.isNotEmpty) ...[
+              _SectionTitle('INVESTIGACIONES Y CONTROVERSIAS',
+                  Colors.red.shade700),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.red.shade200),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.report_rounded, size: 14,
+                        color: Colors.red.shade700),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(hv.investigacionesConocidas,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                            color: Colors.red.shade800)),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 20),
+            ],
+
             // ── Cargos Partidarios ─────────────────────────────────────────
             if (hv.cargosPartidarios.isNotEmpty) ...[
               _SectionTitle('CARGOS PARTIDARIOS', Colors.deepPurple),
@@ -1047,6 +1075,15 @@ void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proce
                 hv.scoreIntegridadOblig, 25,
                 hv.scoreIntegridadOblig >= 20
                     ? const Color(0xFF2E7D32) : Colors.orange),
+            if (hv.penaltyProCrimen > 0)
+              _ScoreRow('Leyes pro-crimen (penalización)',
+                  -hv.penaltyProCrimen, 0, Colors.deepOrange),
+            if (hv.penaltyExCongresista > 0)
+              _ScoreRow('Ex-congresista (penalización)',
+                  -hv.penaltyExCongresista, 0, Colors.orange),
+            if (hv.penaltyInvestigaciones > 0)
+              _ScoreRow('Investigaciones/controversias (penalización)',
+                  -hv.penaltyInvestigaciones, 0, Colors.red.shade700),
             const SizedBox(height: 6),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
