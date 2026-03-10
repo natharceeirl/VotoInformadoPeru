@@ -37,6 +37,8 @@ const Map<String, String> _partyLogoFiles = {
   'Unido Perú': 'Unido_Peru.png',
   'Venceremos': 'Venceremos.png',
   'Verde': 'Verde.png',
+  'Salvemos al Perú': 'Salvemos_al_Peru.png',
+  'Perú Moderno': 'Peru_Moderno.png',
 };
 
 /// Maps JNE all-caps party names to the standard names used in [_partyLogoFiles].
@@ -99,6 +101,11 @@ const Map<String, String> _jneToStandard = {
   'PARTIDO DEMOCRATA UNIDO PERU': 'Unido Perú',
   'VERDE': 'Verde',
   'PARTIDO DEMOCRATA VERDE': 'Verde',
+  'SALVEMOS AL PERU': 'Salvemos al Perú',
+  'PERU MODERNO': 'Perú Moderno',
+  'PARTIDO POLITICO PERU MODERNO': 'Perú Moderno',
+  'PARTIDO PATRIOTICO DEL PERU': 'PPP',
+  'PARTIDO PATRIÓTICO DEL PERÚ': 'PPP',
 };
 
 /// Normalizes a raw JNE party name to the standard name used in logo assets.

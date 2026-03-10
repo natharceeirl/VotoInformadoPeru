@@ -3,6 +3,103 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/hoja_vida_models.dart';
 import '../providers/new_providers.dart';
+import '../widgets/party_logo.dart';
+
+// ── Private helper widgets ───────────────────────────────────────────────────
+
+class _CandidatePhotoCell extends StatelessWidget {
+  final CandidatoConHV c;
+  const _CandidatePhotoCell({required this.c});
+
+  String _cargoLabel(String cargo) {
+    final upper = cargo.toUpperCase();
+    if (upper.contains('PRESIDENTE')) return 'PRES';
+    if (upper.contains('PRIMER') || upper.contains('1')) return '1°VP';
+    if (upper.contains('SEGUNDO') || upper.contains('2')) return '2°VP';
+    return cargo.length > 4 ? cargo.substring(0, 4) : cargo;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 16,
+            backgroundColor: Colors.grey.shade200,
+            backgroundImage:
+                (c.fotoUrl != null && c.fotoUrl!.isNotEmpty)
+                    ? NetworkImage(c.fotoUrl!)
+                    : null,
+            child: (c.fotoUrl == null || c.fotoUrl!.isEmpty)
+                ? Text(
+                    c.hv.nombre.isNotEmpty
+                        ? c.hv.nombre[0].toUpperCase()
+                        : '?',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  )
+                : null,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            _cargoLabel(c.cargo),
+            style: TextStyle(
+              fontSize: 7,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PrefBox extends StatelessWidget {
+  final TextEditingController ctrl;
+  final Color stepColor;
+  const _PrefBox({required this.ctrl, required this.stepColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 42,
+      height: 42,
+      margin: const EdgeInsets.only(right: 4),
+      decoration: BoxDecoration(
+        border: Border.all(color: stepColor, width: 1.5),
+        color: Colors.white,
+      ),
+      child: TextField(
+        controller: ctrl,
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        maxLength: 3,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: stepColor,
+        ),
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+          counterText: '',
+          contentPadding: EdgeInsets.zero,
+          isDense: true,
+        ),
+      ),
+    );
+  }
+}
+
+// ── Main screen ───────────────────────────────────────────────────────────────
 
 class VoteSimulatorScreen extends ConsumerStatefulWidget {
   const VoteSimulatorScreen({super.key});
@@ -212,7 +309,6 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
     }
   }
 
-  bool _stepTienePreferencial(int step) => step >= 2;
   int _stepNumPreferencial(int step) {
     switch (step) {
       case 2:
@@ -409,22 +505,6 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
     final proceso = _procesoForStep(step);
     final candidatosAsync = ref.watch(candidatosConHVProcesoProvider(proceso));
 
-    // For senadores, filter by tipoDistrito
-    List<String> partidos = [];
-    candidatosAsync.whenData((candidatos) {
-      List filtered = candidatos;
-      if (step == 2) {
-        filtered = candidatos.where((c) => c.tipoDistrito == 'ÚNICO').toList();
-      } else if (step == 3) {
-        filtered = candidatos.where((c) => c.tipoDistrito == 'MÚLTIPLE').toList();
-      }
-      partidos = filtered
-          .map((c) => (c as dynamic).hv.partido as String)
-          .toSet()
-          .toList()
-        ..sort();
-    });
-
     return Column(
       children: [
         // Progress bar
@@ -444,7 +524,7 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
                 _buildStepHeader(step, stepColor),
                 const SizedBox(height: 16),
                 // Ballot card
-                _buildBallotCard(step, stepColor, candidatosAsync, partidos),
+                _buildBallotCard(step, stepColor, candidatosAsync),
                 const SizedBox(height: 24),
               ],
             ),
@@ -500,7 +580,6 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
     int step,
     Color stepColor,
     AsyncValue<List<CandidatoConHV>> candidatosAsync,
-    List<String> partidos,
   ) {
     return Container(
       decoration: BoxDecoration(
@@ -572,7 +651,7 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
               ),
             ),
           ),
-          // Party grid
+          // Party list — layout varies per step
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
             child: candidatosAsync.when(
@@ -588,19 +667,39 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
                   style: TextStyle(color: Colors.red.shade700),
                 ),
               ),
-              data: (_) => _buildPartyGrid(step, stepColor, partidos),
+              data: (candidatos) {
+                if (step == 1) {
+                  return _buildPresidentialList(stepColor, candidatos);
+                } else {
+                  final numPrefs = _stepNumPreferencial(step);
+                  return _buildPartyListWithPref(
+                      step, stepColor, candidatos, numPrefs);
+                }
+              },
             ),
           ),
-          // Preferential fields
-          if (_stepTienePreferencial(step) &&
-              _getSelectedPartido(step) != null)
-            _buildPreferentialFields(step, stepColor),
         ],
       ),
     );
   }
 
-  Widget _buildPartyGrid(int step, Color stepColor, List<String> partidos) {
+  // ── Presidential list (step 1) ─────────────────────────────────────────────
+
+  Widget _buildPresidentialList(
+    Color stepColor,
+    List<CandidatoConHV> candidatos,
+  ) {
+    // Group by partido, preserving order of first appearance, then sort
+    final Map<String, List<CandidatoConHV>> byPartido = {};
+    for (final c in candidatos) {
+      byPartido.putIfAbsent(c.hv.partido, () => []).add(c);
+    }
+    // Sort each group by posicion
+    for (final key in byPartido.keys) {
+      byPartido[key]!.sort((a, b) => a.posicion.compareTo(b.posicion));
+    }
+    final partidos = byPartido.keys.toList()..sort();
+
     if (partidos.isEmpty) {
       return Center(
         child: Padding(
@@ -612,177 +711,296 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
         ),
       );
     }
-    return GridView.builder(
+
+    return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 2.2,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-      ),
       itemCount: partidos.length,
       itemBuilder: (context, index) {
         final partido = partidos[index];
-        final isSelected = _getSelectedPartido(step) == partido;
+        final candidates = byPartido[partido]!;
+        final isSelected = _getSelectedPartido(1) == partido;
+
         return GestureDetector(
-          onTap: () {
-            _setSelectedPartido(step, isSelected ? null : partido);
-          },
-          child: isSelected
-              ? Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: stepColor, width: 2),
-                        borderRadius: BorderRadius.circular(8),
-                        color: stepColor.withValues(alpha: 0.05),
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(6),
-                          child: Text(
-                            partido,
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: stepColor,
+          onTap: () => _setSelectedPartido(1, isSelected ? null : partido),
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 2),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: isSelected ? stepColor : Colors.grey.shade300,
+              ),
+              color: isSelected
+                  ? stepColor.withValues(alpha: 0.04)
+                  : Colors.white,
+            ),
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // SELECTOR: full-height red X box
+                  SizedBox(
+                    width: 52,
+                    child: isSelected
+                        ? Container(
+                            color: Colors.red.shade800,
+                            child: Center(
+                              child: Text(
+                                '✗',
+                                style: TextStyle(
+                                  fontSize: 36,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                right: BorderSide(
+                                    color: Colors.grey.shade300),
+                              ),
+                            ),
+                            child: Center(
+                              child: Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey.shade400,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: Center(
-                        child: Text(
-                          '✗',
-                          style: TextStyle(
-                            fontSize: 48,
-                            color: Colors.red.shade800,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade300, width: 1),
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.grey.shade50,
                   ),
-                  child: Center(
+                  // PARTY LOGO
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 6, vertical: 4),
+                    child: PartyLogo(partyName: partido, size: 40),
+                  ),
+                  // PARTY NAME
+                  Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: Text(
-                        partido,
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.grey.shade800,
-                        ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            partido,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
+                  // CANDIDATE PHOTOS (up to 3)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 4, horizontal: 4),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (final c in candidates.take(3))
+                          _CandidatePhotoCell(c: c),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );
   }
 
-  Widget _buildPreferentialFields(int step, Color stepColor) {
-    final numPref = _stepNumPreferencial(step);
+  // ── Party list with preferential boxes (steps 2-5) ────────────────────────
 
-    List<Widget> fields = [];
-
+  Widget _buildPartyListWithPref(
+    int step,
+    Color stepColor,
+    List<CandidatoConHV> candidatos,
+    int numPrefs,
+  ) {
+    // Filter by tipoDistrito for senadores
+    List<CandidatoConHV> filtered = candidatos;
     if (step == 2) {
-      fields.add(_prefField('Voto preferencial N°1', _pref1UnicoCtrl, stepColor));
-      if (numPref >= 2) {
-        fields.add(const SizedBox(height: 10));
-        fields.add(_prefField('Voto preferencial N°2', _pref2UnicoCtrl, stepColor));
-      }
+      filtered =
+          candidatos.where((c) => c.tipoDistrito == 'ÚNICO').toList();
     } else if (step == 3) {
-      fields.add(_prefField('Voto preferencial N°1', _prefMultipleCtrl, stepColor));
-    } else if (step == 4) {
-      fields.add(_prefField('Voto preferencial N°1', _pref1DipCtrl, stepColor));
-      if (numPref >= 2) {
-        fields.add(const SizedBox(height: 10));
-        fields.add(_prefField('Voto preferencial N°2', _pref2DipCtrl, stepColor));
-      }
-    } else if (step == 5) {
-      fields.add(_prefField('Voto preferencial N°1', _prefAndinoCtrl, stepColor));
+      filtered =
+          candidatos.where((c) => c.tipoDistrito == 'MÚLTIPLE').toList();
     }
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-      child: Card(
-        color: stepColor.withValues(alpha: 0.04),
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(color: stepColor.withValues(alpha: 0.2)),
-        ),
+    final partidos = filtered
+        .map((c) => c.hv.partido)
+        .toSet()
+        .toList()
+      ..sort();
+
+    if (partidos.isEmpty) {
+      return Center(
         child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Voto preferencial (opcional)',
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: stepColor,
-                    ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Escribe el número de posición del candidato en la lista.',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.6),
-                    ),
-              ),
-              const SizedBox(height: 10),
-              ...fields,
-            ],
+          padding: const EdgeInsets.all(24),
+          child: Text(
+            'No hay partidos disponibles',
+            style: TextStyle(color: Colors.grey.shade600),
           ),
         ),
-      ),
+      );
+    }
+
+    // Resolve pref controllers for this step
+    TextEditingController ctrl1;
+    TextEditingController? ctrl2;
+    switch (step) {
+      case 2:
+        ctrl1 = _pref1UnicoCtrl;
+        ctrl2 = _pref2UnicoCtrl;
+        break;
+      case 3:
+        ctrl1 = _prefMultipleCtrl;
+        ctrl2 = null;
+        break;
+      case 4:
+        ctrl1 = _pref1DipCtrl;
+        ctrl2 = _pref2DipCtrl;
+        break;
+      case 5:
+      default:
+        ctrl1 = _prefAndinoCtrl;
+        ctrl2 = null;
+        break;
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: partidos.length,
+      itemBuilder: (context, index) {
+        final partido = partidos[index];
+        final isSelected = _getSelectedPartido(step) == partido;
+
+        return GestureDetector(
+          onTap: () => _setSelectedPartido(step, isSelected ? null : partido),
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 2),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: isSelected ? stepColor : Colors.grey.shade300,
+              ),
+              color: isSelected
+                  ? stepColor.withValues(alpha: 0.04)
+                  : Colors.white,
+            ),
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // SELECTOR: full-height red X box
+                  SizedBox(
+                    width: 52,
+                    child: isSelected
+                        ? Container(
+                            color: Colors.red.shade800,
+                            child: Center(
+                              child: Text(
+                                '✗',
+                                style: TextStyle(
+                                  fontSize: 36,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                right: BorderSide(
+                                    color: Colors.grey.shade300),
+                              ),
+                            ),
+                            child: Center(
+                              child: Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey.shade400,
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                  ),
+                  // PARTY LOGO
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 6, vertical: 4),
+                    child: PartyLogo(partyName: partido, size: 36),
+                  ),
+                  // PARTY NAME
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            partido,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // PREF BOXES (only shown for selected row)
+                  if (isSelected) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 2),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _PrefBox(ctrl: ctrl1, stepColor: stepColor),
+                          if (numPrefs >= 2 && ctrl2 != null)
+                            _PrefBox(ctrl: ctrl2, stepColor: stepColor),
+                        ],
+                      ),
+                    ),
+                  ] else ...[
+                    SizedBox(
+                      width: 42.0 * numPrefs +
+                          (numPrefs > 1 ? 4.0 : 0.0) +
+                          8.0,
+                    ),
+                  ],
+                  const SizedBox(width: 8),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _prefField(
-      String label, TextEditingController ctrl, Color stepColor) {
-    return TextField(
-      controller: ctrl,
-      keyboardType: TextInputType.number,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      maxLength: 3,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(color: stepColor, fontSize: 13),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(color: stepColor, width: 2),
-        ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        counterText: '',
-        isDense: true,
-      ),
-    );
-  }
+  // ── Nav bar ────────────────────────────────────────────────────────────────
 
   Widget _buildNavBar(int step, Color stepColor) {
     final isLast = step == 5;
