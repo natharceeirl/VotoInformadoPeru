@@ -389,15 +389,40 @@ class HojaVida {
   /// -5 pts por cada ley pro-crimen apoyada, máximo -20
   int get penaltyProCrimen => (numLeyesProCrimen * 5).clamp(0, 20);
 
-  /// -5 pts si fue congresista o tiene cargos de elección popular previos
-  int get penaltyExCongresista => cargosEleccionPopular.isNotEmpty ? 5 : 0;
+  // Texto unificado de todos los cargos para búsqueda de keywords
+  String get _allCargosText {
+    final parts = [
+      ...cargosEleccionPopular.map((c) => '${c.cargo} ${c.entidad}'),
+      ...cargosPartidarios.map((c) => '${c.cargo} ${c.entidad}'),
+      ...experienciaLaboral.map((e) => '${e.cargo} ${e.institucion}'),
+    ];
+    return parts.join(' ').toUpperCase();
+  }
+
+  /// Penalización por cargos públicos de riesgo previos:
+  /// Congresista/Parlamentario (−5), Alcalde/Regidor (−3),
+  /// Ministro/a (−3), Gobernador (−3), Asesor (−2). Máximo −15.
+  int get penaltyCargosPublicos {
+    final t = _allCargosText;
+    var p = 0;
+    if (t.contains('CONGRES') || t.contains('PARLAMENT') ||
+        t.contains('SENADOR') || t.contains('DIPUTADO')) { p += 5; }
+    if (t.contains('ALCALDE') || t.contains('ALCALDESA') ||
+        t.contains('REGIDOR')) { p += 3; }
+    if (t.contains('MINISTRO') || t.contains('MINISTRA') ||
+        t.contains('VICEMINISTRO')) { p += 3; }
+    if (t.contains('GOBERNADOR') || t.contains('GOBERNADORA') ||
+        t.contains('PRESIDENTE REGIONAL')) { p += 3; }
+    if (t.contains('ASESOR') || t.contains('ASESORA')) { p += 2; }
+    return p.clamp(0, 15);
+  }
 
   /// -10 pts si tiene investigaciones o controversias conocidas graves
   int get penaltyInvestigaciones => investigacionesConocidas.isNotEmpty ? 10 : 0;
 
   int get scoreFinal =>
       (scoreEducacion + scoreIntegridadPenal + scoreIntegridadOblig
-       - penaltyProCrimen - penaltyExCongresista - penaltyInvestigaciones)
+       - penaltyProCrimen - penaltyCargosPublicos - penaltyInvestigaciones)
       .clamp(0, 100);
 
   double get scoreNormalizado => scoreFinal.toDouble();

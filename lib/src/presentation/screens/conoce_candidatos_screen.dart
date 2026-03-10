@@ -23,6 +23,8 @@ class _ConoceCandidatosScreenState
     with SingleTickerProviderStateMixin {
   late TabController _tabCtrl;
   String? _deptoFilter;
+  String _searchText = '';
+  final TextEditingController _searchCtrl = TextEditingController();
 
   bool get _hasTabs =>
       widget.proceso == ProcesoElectoral.senadores;
@@ -37,14 +39,161 @@ class _ConoceCandidatosScreenState
   @override
   void dispose() {
     _tabCtrl.dispose();
+    _searchCtrl.dispose();
     super.dispose();
+  }
+
+  List<CandidatoConHV> _applyFilters(
+    List<CandidatoConHV> todos,
+    List<String> porEstosNo,
+    bool excluir,
+  ) {
+    var result = todos;
+    if (_searchText.isNotEmpty) {
+      final q = _searchText.toUpperCase();
+      result = result.where((c) =>
+        c.hv.nombre.toUpperCase().contains(q) ||
+        c.hv.partido.toUpperCase().contains(q),
+      ).toList();
+    }
+    if (excluir && porEstosNo.isNotEmpty) {
+      result = result.where((c) {
+        var r = c.hv.partido.toUpperCase()
+            .replaceAll(',', ' ')
+            .replaceAll('Á', 'A').replaceAll('É', 'E')
+            .replaceAll('Í', 'I').replaceAll('Ó', 'O').replaceAll('Ú', 'U')
+            .replaceAll('Ñ', 'N');
+        while (r.contains('  ')) { r = r.replaceAll('  ', ' '); }
+        r = r.trim();
+        return !porEstosNo.contains(r);
+      }).toList();
+    }
+    return result;
+  }
+
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 6, 10, 0),
+      child: TextField(
+        controller: _searchCtrl,
+        onChanged: (v) => setState(() => _searchText = v),
+        decoration: InputDecoration(
+          hintText: 'Buscar por nombre, apellido o partido...',
+          hintStyle: const TextStyle(fontSize: 13),
+          prefixIcon: const Icon(Icons.search_rounded, size: 18),
+          suffixIcon: _searchText.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear_rounded, size: 18),
+                  onPressed: () {
+                    _searchCtrl.clear();
+                    setState(() => _searchText = '');
+                  },
+                )
+              : null,
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterBanner(List<String> porEstosNo) {
+    final excluir = ref.watch(excluirPartidosRiesgoProvider);
+    return InkWell(
+      onTap: () => _showPorEstosNoDialog(context),
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(10, 6, 10, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: excluir
+              ? const Color(0xFFB71C1C).withValues(alpha: 0.08)
+              : Colors.orange.withValues(alpha: 0.07),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: excluir
+                ? const Color(0xFFB71C1C).withValues(alpha: 0.3)
+                : Colors.orange.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              excluir ? Icons.block_rounded : Icons.warning_amber_rounded,
+              size: 16,
+              color: excluir ? const Color(0xFFB71C1C) : Colors.orange,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                excluir
+                    ? 'Filtro activo: ocultando ${porEstosNo.length} partidos con riesgo de corrupción'
+                    : 'Hay ${porEstosNo.length} partidos con riesgo de corrupción — toca para filtrar',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: excluir
+                      ? const Color(0xFFB71C1C)
+                      : Colors.orange.shade800,
+                ),
+              ),
+            ),
+            Switch(
+              value: excluir,
+              onChanged: (_) =>
+                  ref.read(excluirPartidosRiesgoProvider.notifier).toggle(),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              activeThumbColor: const Color(0xFFB71C1C),
+              activeTrackColor: const Color(0xFFB71C1C).withValues(alpha: 0.4),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showPorEstosNoDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Row(children: [
+          Icon(Icons.warning_amber_rounded, color: Colors.orange),
+          SizedBox(width: 8),
+          Text('#PORÉSTOSNÓ', style: TextStyle(fontSize: 16)),
+        ]),
+        content: const Text(
+          'Estos partidos tienen investigaciones activas por corrupción '
+          'o han sido vinculados a casos graves documentados.\n\n'
+          'Al activar el filtro, sus candidatos serán ocultados de la lista. '
+          'Puedes desactivarlo en cualquier momento.\n\n'
+          'Esta información proviene de fuentes periodísticas y judiciales públicas '
+          'y es orientativa — no constituye acusación formal.',
+          style: TextStyle(fontSize: 13, height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Entendido'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final proceso = widget.proceso;
-    final color   = proceso.color;
-    final async   = ref.watch(candidatosConHVProcesoProvider(proceso));
+    final proceso     = widget.proceso;
+    final color       = proceso.color;
+    final async       = ref.watch(candidatosConHVProcesoProvider(proceso));
+    final porEstosNo  = ref.watch(porEstosNoProvider).asData?.value ?? [];
+    final excluir     = ref.watch(excluirPartidosRiesgoProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -78,20 +227,29 @@ class _ConoceCandidatosScreenState
           if (todos.isEmpty) {
             return _NoDataWidget(proceso: proceso);
           }
-          return _hasTabs
-              ? _SenadoresView(
-                  todos:         todos,
-                  tabCtrl:       _tabCtrl,
-                  deptoFilter:   _deptoFilter,
-                  onDeptoChanged: (d) => setState(() => _deptoFilter = d),
-                  proceso:       proceso,
-                )
-              : _SingleListView(
-                  todos:       todos,
-                  proceso:     proceso,
-                  deptoFilter: _deptoFilter,
-                  onDeptoChanged: (d) => setState(() => _deptoFilter = d),
-                );
+          final filtrados = _applyFilters(todos, porEstosNo, excluir);
+          return Column(
+            children: [
+              _buildSearchBar(),
+              if (porEstosNo.isNotEmpty) _buildFilterBanner(porEstosNo),
+              Expanded(
+                child: _hasTabs
+                    ? _SenadoresView(
+                        todos:          filtrados,
+                        tabCtrl:        _tabCtrl,
+                        deptoFilter:    _deptoFilter,
+                        onDeptoChanged: (d) => setState(() => _deptoFilter = d),
+                        proceso:        proceso,
+                      )
+                    : _SingleListView(
+                        todos:          filtrados,
+                        proceso:        proceso,
+                        deptoFilter:    _deptoFilter,
+                        onDeptoChanged: (d) => setState(() => _deptoFilter = d),
+                      ),
+              ),
+            ],
+          );
         },
       ),
     );
@@ -1078,9 +1236,9 @@ void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proce
             if (hv.penaltyProCrimen > 0)
               _ScoreRow('Leyes pro-crimen (penalización)',
                   -hv.penaltyProCrimen, 0, Colors.deepOrange),
-            if (hv.penaltyExCongresista > 0)
-              _ScoreRow('Ex-congresista (penalización)',
-                  -hv.penaltyExCongresista, 0, Colors.orange),
+            if (hv.penaltyCargosPublicos > 0)
+              _ScoreRow('Cargos públicos previos (penalización)',
+                  -hv.penaltyCargosPublicos, 0, Colors.orange),
             if (hv.penaltyInvestigaciones > 0)
               _ScoreRow('Investigaciones/controversias (penalización)',
                   -hv.penaltyInvestigaciones, 0, Colors.red.shade700),

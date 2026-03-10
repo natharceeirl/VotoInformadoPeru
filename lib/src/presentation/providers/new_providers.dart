@@ -103,6 +103,47 @@ final investigacionesPresidentesProvider =
       };
     });
 
+/// Nombres normalizados de partidos con riesgo de corrupción.
+/// Fuente: assets/baseDatos/por_estos_no.json
+final porEstosNoProvider = FutureProvider<List<String>>((ref) async {
+  String raw;
+  try {
+    raw = await rootBundle.loadString('assets/baseDatos/por_estos_no.json');
+  } catch (_) {
+    return [];
+  }
+  final json     = jsonDecode(raw) as Map<String, dynamic>;
+  final partidos = (json['partidos'] as List).cast<Map<String, dynamic>>();
+  return partidos
+      .map((p) => _normName(p['nombre'] as String? ?? ''))
+      .where((s) => s.isNotEmpty)
+      .toList();
+});
+
+/// Detalle completo de los partidos "por estos no".
+final porEstosNoDetalleProvider =
+    FutureProvider<List<Map<String, dynamic>>>((ref) async {
+      String raw;
+      try {
+        raw = await rootBundle.loadString('assets/baseDatos/por_estos_no.json');
+      } catch (_) {
+        return [];
+      }
+      final json = jsonDecode(raw) as Map<String, dynamic>;
+      return (json['partidos'] as List).cast<Map<String, dynamic>>();
+    });
+
+/// Toggle global: true = excluir partidos de alto riesgo de corrupción.
+final excluirPartidosRiesgoProvider =
+    NotifierProvider<ExcluirPartidosRiesgoNotifier, bool>(
+        ExcluirPartidosRiesgoNotifier.new);
+
+class ExcluirPartidosRiesgoNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+  void toggle() => state = !state;
+}
+
 // Repository Provider
 final dataRepositoryProvider = Provider<DataRepository>((ref) {
   return DataRepository();

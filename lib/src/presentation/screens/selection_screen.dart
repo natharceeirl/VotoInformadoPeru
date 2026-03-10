@@ -3,6 +3,7 @@ import 'main_menu_screen.dart';
 import 'vote_simulator_screen.dart';
 import 'proceso_menu_screen.dart';
 import 'credits_screen.dart';
+import 'resumen_general_screen.dart';
 
 class SelectionScreen extends StatelessWidget {
   const SelectionScreen({super.key});
@@ -139,9 +140,26 @@ class SelectionScreen extends StatelessWidget {
                 subtitle: 'Aprende a votar correctamente el día de las elecciones',
                 details: const ['Guía paso a paso · Cédula virtual'],
                 accentColor: const Color(0xFF2E7D32),
-                badge: 'PRÓXIMAMENTE',
+                badge: 'INTERACTIVO',
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const VoteSimulatorScreen()),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              // Resumen General
+              _ElectionCard(
+                icon: Icons.summarize_rounded,
+                title: 'Resumen General',
+                subtitle:
+                    'Vista consolidada de los candidatos con mejor perfil de integridad',
+                details: const [
+                  'Todos los procesos · Top candidatos · Filtro por riesgo'
+                ],
+                accentColor: const Color(0xFF37474F),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (_) => const ResumenGeneralScreen()),
                 ),
               ),
               const SizedBox(height: 10),

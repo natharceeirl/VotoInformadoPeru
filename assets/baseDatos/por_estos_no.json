@@ -1,0 +1,174 @@
+{
+  "pais": "Perú",
+  "dataset": "partidos_politicos_riesgo_corrupcion",
+  "version": "1.0",
+  "partidos": [
+    {
+      "id": "FP",
+      "nombre": "Fuerza Popular",
+      "anio_fundacion": 2010,
+      "ideologia": "Derecha / Fujimorismo",
+      "lideres_clave": [
+        "Keiko Fujimori",
+        "Alberto Fujimori"
+      ],
+      "casos_corrupcion": [
+        {
+          "nombre_caso": "Financiamiento ilegal de campañas",
+          "tipo_delito": "Lavado de activos",
+          "anio_inicio": 2016,
+          "estado": "Proceso judicial en curso"
+        },
+        {
+          "nombre_caso": "Caso Odebrecht",
+          "tipo_delito": "Financiamiento ilícito",
+          "anio_inicio": 2017,
+          "estado": "Investigación fiscal"
+        }
+      ],
+      "indice_riesgo_corrupcion": 0.85,
+      "nivel_riesgo": "alto"
+    },
+    {
+      "id": "RP",
+      "nombre": "Renovación Popular",
+      "anio_fundacion": 2020,
+      "ideologia": "Derecha conservadora",
+      "lideres_clave": [
+        "Rafael López Aliaga"
+      ],
+      "casos_corrupcion": [
+        {
+          "nombre_caso": "Investigaciones patrimoniales",
+          "tipo_delito": "Posible evasión fiscal / offshore",
+          "anio_inicio": 2021,
+          "estado": "Cuestionamientos periodísticos"
+        }
+      ],
+      "indice_riesgo_corrupcion": 0.45,
+      "nivel_riesgo": "medio"
+    },
+    {
+      "id": "PL",
+      "nombre": "Perú Libre",
+      "anio_fundacion": 2007,
+      "ideologia": "Izquierda / Marxismo-leninismo",
+      "lideres_clave": [
+        "Vladimir Cerrón",
+        "Pedro Castillo"
+      ],
+      "casos_corrupcion": [
+        {
+          "nombre_caso": "Corrupción en gobierno regional de Junín",
+          "tipo_delito": "Negociación incompatible",
+          "anio_inicio": 2019,
+          "estado": "Condena judicial"
+        },
+        {
+          "nombre_caso": "Aeródromo Wanka",
+          "tipo_delito": "Colusión agravada",
+          "anio_inicio": 2021,
+          "estado": "Proceso judicial"
+        }
+      ],
+      "indice_riesgo_corrupcion": 0.9,
+      "nivel_riesgo": "alto"
+    },
+    {
+      "id": "AP",
+      "nombre": "Avanza País",
+      "anio_fundacion": 2000,
+      "ideologia": "Derecha liberal",
+      "lideres_clave": [
+        "Hernando de Soto"
+      ],
+      "casos_corrupcion": [
+        {
+          "nombre_caso": "Investigaciones a candidatos regionales",
+          "tipo_delito": "Corrupción regional",
+          "anio_inicio": 2022,
+          "estado": "Investigaciones fiscales"
+        }
+      ],
+      "indice_riesgo_corrupcion": 0.4,
+      "nivel_riesgo": "medio"
+    },
+    {
+      "id": "SP",
+      "nombre": "Somos Perú",
+      "anio_fundacion": 1998,
+      "ideologia": "Centro",
+      "lideres_clave": [
+        "Alberto Andrade"
+      ],
+      "casos_corrupcion": [
+        {
+          "nombre_caso": "Investigaciones a autoridades locales",
+          "tipo_delito": "Corrupción municipal",
+          "anio_inicio": 2018,
+          "estado": "Investigaciones en diferentes regiones"
+        }
+      ],
+      "indice_riesgo_corrupcion": 0.5,
+      "nivel_riesgo": "medio"
+    },
+    {
+      "id": "PP",
+      "nombre": "Podemos Perú",
+      "anio_fundacion": 2018,
+      "ideologia": "Centro / Populismo",
+      "lideres_clave": [
+        "José Luna Gálvez"
+      ],
+      "casos_corrupcion": [
+        {
+          "nombre_caso": "Los Gángsters de la Política",
+          "tipo_delito": "Organización criminal y tráfico de influencias",
+          "anio_inicio": 2020,
+          "estado": "Investigación fiscal"
+        }
+      ],
+      "indice_riesgo_corrupcion": 0.75,
+      "nivel_riesgo": "alto"
+    },
+    {
+      "id": "APP",
+      "nombre": "Alianza para el Progreso",
+      "anio_fundacion": 2001,
+      "ideologia": "Centro derecha",
+      "lideres_clave": [
+        "César Acuña"
+      ],
+      "casos_corrupcion": [
+        {
+          "nombre_caso": "Investigaciones a gobiernos regionales",
+          "tipo_delito": "Corrupción administrativa",
+          "anio_inicio": 2017,
+          "estado": "Diversas investigaciones"
+        }
+      ],
+      "indice_riesgo_corrupcion": 0.65,
+      "nivel_riesgo": "medio"
+    },
+    {
+      "id": "APRA",
+      "nombre": "Partido Aprista Peruano",
+      "anio_fundacion": 1924,
+      "ideologia": "Socialdemocracia histórica",
+      "lideres_clave": [
+        "Víctor Raúl Haya de la Torre",
+        "Alan García"
+      ],
+      "casos_corrupcion": [
+        {
+          "nombre_caso": "Caso Odebrecht",
+          "tipo_delito": "Sobornos y financiamiento ilegal",
+          "anio_inicio": 2017,
+          "estado": "Investigaciones a exfuncionarios"
+        }
+      ],
+      "indice_riesgo_corrupcion": 0.7,
+      "nivel_riesgo": "alto"
+    }
+  ]
+}

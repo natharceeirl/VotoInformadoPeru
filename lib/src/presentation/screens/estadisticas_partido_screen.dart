@@ -8,37 +8,159 @@ import '../widgets/party_logo.dart';
 
 // ─── Pantalla: Estadísticas por Partido ──────────────────────────────────────
 
-class EstadisticasPartidoScreen extends ConsumerWidget {
+class EstadisticasPartidoScreen extends ConsumerStatefulWidget {
   final ProcesoElectoral proceso;
   const EstadisticasPartidoScreen({super.key, required this.proceso});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final color = proceso.color;
-    final async = ref.watch(candidatosConHVProcesoProvider(proceso));
+  ConsumerState<EstadisticasPartidoScreen> createState() =>
+      _EstadisticasPartidoScreenState();
+}
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        title: const Text('Estadísticas por Partido'),
-        centerTitle: true,
-        backgroundColor: color,
-        foregroundColor: Colors.white,
-        elevation: 0,
+class _EstadisticasPartidoScreenState
+    extends ConsumerState<EstadisticasPartidoScreen> {
+  String _searchText = '';
+  final TextEditingController _searchCtrl = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  List<CandidatoConHV> _applyFilters(
+    List<CandidatoConHV> candidatos,
+    List<String> porEstosNo,
+    bool excluir,
+  ) {
+    var result = candidatos;
+    if (_searchText.isNotEmpty) {
+      final q = _searchText.toUpperCase();
+      result = result.where((c) =>
+        c.hv.nombre.toUpperCase().contains(q) ||
+        c.hv.partido.toUpperCase().contains(q),
+      ).toList();
+    }
+    if (excluir && porEstosNo.isNotEmpty) {
+      result = result.where((c) =>
+        !porEstosNo.contains(_normName(c.hv.partido)),
+      ).toList();
+    }
+    return result;
+  }
+
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+      child: TextField(
+        controller: _searchCtrl,
+        onChanged: (v) => setState(() => _searchText = v),
+        decoration: InputDecoration(
+          hintText: 'Buscar por nombre, apellido o partido...',
+          hintStyle: const TextStyle(fontSize: 13),
+          prefixIcon: const Icon(Icons.search_rounded, size: 18),
+          suffixIcon: _searchText.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear_rounded, size: 18),
+                  onPressed: () {
+                    _searchCtrl.clear();
+                    setState(() => _searchText = '');
+                  },
+                )
+              : null,
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+        ),
       ),
-      body: async.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error:   (e, _) => Center(child: Text('Error: $e')),
-        data:    (candidatos) {
-          if (candidatos.isEmpty) return _emptyState(context, proceso);
-          if (proceso == ProcesoElectoral.presidentes) {
-            final pcMap = ref.watch(proCrimenPartidoProvider).asData?.value ?? {};
-            return _PlanchaView(candidatos: candidatos, color: color,
-                                proceso: proceso, proCrimenPartido: pcMap);
-          }
-          return _PartidoView(candidatos: candidatos, color: color,
-                              proceso: proceso);
-        },
+    );
+  }
+
+  Widget _buildFilterBanner(List<String> porEstosNo) {
+    final excluir = ref.watch(excluirPartidosRiesgoProvider);
+    return InkWell(
+      onTap: () => _showPorEstosNoDialog(context),
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(10, 6, 10, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: excluir
+              ? const Color(0xFFB71C1C).withValues(alpha: 0.08)
+              : Colors.orange.withValues(alpha: 0.07),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: excluir
+                ? const Color(0xFFB71C1C).withValues(alpha: 0.3)
+                : Colors.orange.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              excluir ? Icons.block_rounded : Icons.warning_amber_rounded,
+              size: 16,
+              color: excluir ? const Color(0xFFB71C1C) : Colors.orange,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                excluir
+                    ? 'Filtro activo: ocultando ${porEstosNo.length} partidos con riesgo de corrupción'
+                    : 'Hay ${porEstosNo.length} partidos con riesgo de corrupción — toca para filtrar',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: excluir
+                      ? const Color(0xFFB71C1C)
+                      : Colors.orange.shade800,
+                ),
+              ),
+            ),
+            Switch(
+              value: excluir,
+              onChanged: (_) =>
+                  ref.read(excluirPartidosRiesgoProvider.notifier).toggle(),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              activeThumbColor: const Color(0xFFB71C1C),
+              activeTrackColor: const Color(0xFFB71C1C).withValues(alpha: 0.4),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showPorEstosNoDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Row(children: [
+          Icon(Icons.warning_amber_rounded, color: Colors.orange),
+          SizedBox(width: 8),
+          Text('#PORÉSTOSNÓ', style: TextStyle(fontSize: 16)),
+        ]),
+        content: const Text(
+          'Estos partidos tienen investigaciones activas por corrupción '
+          'o han sido vinculados a casos graves documentados.\n\n'
+          'Al activar el filtro, sus candidatos serán ocultados de la lista. '
+          'Puedes desactivarlo en cualquier momento.\n\n'
+          'Esta información proviene de fuentes periodísticas y judiciales públicas '
+          'y es orientativa — no constituye acusación formal.',
+          style: TextStyle(fontSize: 13, height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Entendido'),
+          ),
+        ],
       ),
     );
   }
@@ -63,6 +185,55 @@ class EstadisticasPartidoScreen extends ConsumerWidget {
               textAlign: TextAlign.center),
           ],
         ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final proceso    = widget.proceso;
+    final color      = proceso.color;
+    final async      = ref.watch(candidatosConHVProcesoProvider(proceso));
+    final porEstosNo = ref.watch(porEstosNoProvider).asData?.value ?? [];
+    final excluir    = ref.watch(excluirPartidosRiesgoProvider);
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F7FA),
+      appBar: AppBar(
+        title: const Text('Estadísticas por Partido'),
+        centerTitle: true,
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: async.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error:   (e, _) => Center(child: Text('Error: $e')),
+        data:    (candidatos) {
+          if (candidatos.isEmpty) return _emptyState(context, proceso);
+          final filtrados = _applyFilters(candidatos, porEstosNo, excluir);
+          return Column(
+            children: [
+              _buildSearchBar(),
+              if (porEstosNo.isNotEmpty) _buildFilterBanner(porEstosNo),
+              Expanded(
+                child: proceso == ProcesoElectoral.presidentes
+                    ? _PlanchaView(
+                        candidatos: filtrados,
+                        color: color,
+                        proceso: proceso,
+                        proCrimenPartido:
+                            ref.watch(proCrimenPartidoProvider).asData?.value ?? {},
+                      )
+                    : _PartidoView(
+                        candidatos: filtrados,
+                        color: color,
+                        proceso: proceso,
+                      ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -875,8 +1046,8 @@ void _showCandidatoDetalle(BuildContext context, CandidatoConHV c,
             const Divider(height: 20),
 
             // ── Alertas adicionales ──────────────────────────────────────────
-            if (hv.numLeyesProCrimen > 0 ||
-                hv.cargosEleccionPopular.isNotEmpty) ...[
+            if (hv.numLeyesProCrimen > 0 || hv.penaltyCargosPublicos > 0 ||
+                hv.investigacionesConocidas.isNotEmpty) ...[
               _SheetSection('ALERTAS DE INTEGRIDAD', Colors.deepOrange),
               if (hv.numLeyesProCrimen > 0)
                 _DetailRow(
@@ -885,12 +1056,19 @@ void _showCandidatoDetalle(BuildContext context, CandidatoConHV c,
                   '(−${hv.penaltyProCrimen} pts)',
                   Colors.deepOrange,
                 ),
-              if (hv.cargosEleccionPopular.isNotEmpty)
+              if (hv.penaltyCargosPublicos > 0)
                 _DetailRow(
-                  Icons.how_to_vote_rounded,
-                  'Fue congresista o candidato previamente '
-                  '(−${hv.penaltyExCongresista} pts)',
+                  Icons.work_history_rounded,
+                  'Cargos públicos previos detectados '
+                  '(−${hv.penaltyCargosPublicos} pts)',
                   Colors.orange,
+                ),
+              if (hv.investigacionesConocidas.isNotEmpty)
+                _DetailRow(
+                  Icons.report_rounded,
+                  'Investigaciones/controversias conocidas '
+                  '(−${hv.penaltyInvestigaciones} pts)',
+                  Colors.red.shade700,
                 ),
               const Divider(height: 20),
             ],
@@ -921,9 +1099,12 @@ void _showCandidatoDetalle(BuildContext context, CandidatoConHV c,
             if (hv.penaltyProCrimen > 0)
               _ScoreRow('Leyes pro-crimen (penalización)',
                   -hv.penaltyProCrimen, 0, Colors.deepOrange),
-            if (hv.penaltyExCongresista > 0)
-              _ScoreRow('Ex-congresista (penalización)',
-                  -hv.penaltyExCongresista, 0, Colors.orange),
+            if (hv.penaltyCargosPublicos > 0)
+              _ScoreRow('Cargos públicos previos (penalización)',
+                  -hv.penaltyCargosPublicos, 0, Colors.orange),
+            if (hv.penaltyInvestigaciones > 0)
+              _ScoreRow('Investigaciones/controversias (penalización)',
+                  -hv.penaltyInvestigaciones, 0, Colors.red.shade700),
             const SizedBox(height: 6),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
