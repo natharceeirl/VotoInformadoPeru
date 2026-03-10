@@ -100,7 +100,7 @@ class SelectionScreen extends StatelessWidget {
               // Senadores
               _ElectionCard(
                 icon: Icons.gavel_rounded,
-                title: 'Senadores 2026',
+                title: 'Senadores',
                 subtitle: 'Candidatos al Senado Nacional — análisis completo de transparencia',
                 details: const [
                   '35 partidos · Índice de transparencia',

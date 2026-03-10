@@ -173,6 +173,36 @@ final reinfoCandidatesRawProvider = FutureProvider<List<ReinfoCandidate>>((
   return ref.read(dataRepositoryProvider).loadReinfoCandidatesRaw();
 });
 
+/// Carga universidadesPeru.json y devuelve sets de nombres normalizados.
+final universidadesProvider =
+    FutureProvider<({Set<String> cuestionadas, Set<String> elite})>((ref) async {
+  String raw;
+  try {
+    raw = await rootBundle.loadString('assets/baseDatos/universidadesPeru.json');
+  } catch (_) {
+    return (cuestionadas: <String>{}, elite: <String>{});
+  }
+  final json = jsonDecode(raw) as Map<String, dynamic>;
+  final cuestionadas = <String>{};
+  final elite = <String>{};
+  for (final u in (json['universities'] as List? ?? [])) {
+    final m = u as Map<String, dynamic>;
+    final status = m['licensing_status'] as String? ?? '';
+    if (status == 'license_denied' || status == 'closure_in_process') {
+      cuestionadas.add(_normName(m['name'] as String? ?? ''));
+    }
+  }
+  for (final u in (json['politically_connected_universities'] as List? ?? [])) {
+    final m = u as Map<String, dynamic>;
+    cuestionadas.add(_normName(m['name'] as String? ?? ''));
+  }
+  for (final u in (json['elite_reference_universities'] as List? ?? [])) {
+    final m = u as Map<String, dynamic>;
+    elite.add(_normName(m['name'] as String? ?? ''));
+  }
+  return (cuestionadas: cuestionadas, elite: elite);
+});
+
 final allCandidatesProvider = FutureProvider<List<CandidateDetailed>>((
   ref,
 ) async {
@@ -343,7 +373,7 @@ final hojasVidaProcesoProvider =
     });
 
 /// Une BD + HojasVida para un proceso, devuelve lista de CandidatoConHV.
-/// Aplica penalización por leyes pro-crimen y ex-congresistas.
+/// Aplica penalización por leyes pro-crimen, investigaciones, REINFO y universidades.
 final candidatosConHVProcesoProvider =
     FutureProvider.family<List<CandidatoConHV>, ProcesoElectoral>((ref, proceso) async {
       final hojas          = await ref.watch(hojasVidaProcesoProvider(proceso).future);
@@ -351,6 +381,8 @@ final candidatosConHVProcesoProvider =
       final investigaciones = proceso == ProcesoElectoral.presidentes
           ? await ref.watch(investigacionesPresidentesProvider.future)
           : <String, String>{};
+      final reinfoCandidatos = await ref.watch(reinfoCandidatesRawProvider.future);
+      final universidades    = await ref.watch(universidadesProvider.future);
       final result = <CandidatoConHV>[];
 
       void addCandidatos(List<RegionCandidato> bd, String tipoDistrito) {
@@ -362,10 +394,47 @@ final candidatosConHVProcesoProvider =
           final numLeyes   = proCrimen[normNombre] ?? 0;
           // Investigaciones del presidenciable (por partido)
           final inv = investigaciones[_normName(hv.partido)] ?? '';
-          if (numLeyes > 0 || inv.isNotEmpty) {
+          // REINFO check
+          final reinfoMatch = reinfoCandidatos
+              .where((r) => _normName(r.candidato) == normNombre)
+              .toList();
+          final esReinfo    = reinfoMatch.isNotEmpty;
+          final cantMineras = esReinfo
+              ? reinfoMatch.map((r) => r.cantidadMineras).reduce((a, b) => a > b ? a : b)
+              : 0;
+          // University check
+          bool uniCuestionada = false;
+          bool uniElite = false;
+          for (final uniStr in hv.universidades) {
+            final parts = uniStr.split('—');
+            final uniName = _normName(parts.length > 1 ? parts.last : parts.first);
+            if (universidades.cuestionadas.any((q) => uniName.contains(q) || q.contains(uniName))) {
+              uniCuestionada = true;
+            }
+            if (universidades.elite.any((e) => uniName.contains(e) || e.contains(uniName))) {
+              uniElite = true;
+            }
+          }
+          for (final pgStr in hv.posgrados) {
+            final parts = pgStr.split('—');
+            for (final part in parts) {
+              final uniName = _normName(part.trim());
+              if (universidades.cuestionadas.any((q) => uniName.contains(q) || q.contains(uniName))) {
+                uniCuestionada = true;
+              }
+              if (universidades.elite.any((e) => uniName.contains(e) || e.contains(uniName))) {
+                uniElite = true;
+              }
+            }
+          }
+          if (numLeyes > 0 || inv.isNotEmpty || esReinfo || uniCuestionada || uniElite) {
             hv = hv.copyWith(
-              numLeyesProCrimen:        numLeyes > 0 ? numLeyes : null,
-              investigacionesConocidas: inv.isNotEmpty ? inv : null,
+              numLeyesProCrimen:        numLeyes > 0   ? numLeyes   : null,
+              investigacionesConocidas: inv.isNotEmpty  ? inv        : null,
+              esReinfo:               esReinfo          ? true       : null,
+              cantidadMineras:        esReinfo          ? cantMineras : null,
+              universidadCuestionada: uniCuestionada    ? true       : null,
+              universidadElite:       uniElite          ? true       : null,
             );
           }
           result.add(CandidatoConHV(

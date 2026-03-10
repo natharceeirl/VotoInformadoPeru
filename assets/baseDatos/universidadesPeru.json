@@ -1,0 +1,170 @@
+{
+  "dataset": "peru_universidades_politica_y_calidad",
+  "last_update": "2026",
+  "categories": {
+    "licensing_status": [
+      "licensed",
+      "license_denied",
+      "closure_in_process"
+    ],
+    "risk_type": [
+      "quality_deficiencies",
+      "corruption_investigation",
+      "political_connection",
+      "administrative_irregularities",
+      "financial_irregularities"
+    ]
+  },
+  "universities": [
+    {
+      "name": "Universidad Alas Peruanas",
+      "type": "private",
+      "city": "Lima",
+      "licensing_status": "license_denied",
+      "risk_profile": [
+        "quality_deficiencies",
+        "corruption_investigation",
+        "administrative_irregularities"
+      ],
+      "political_links": [],
+      "notes": "Investigaciones fiscales por presunto lavado de activos y numerosas sanciones administrativas."
+    },
+    {
+      "name": "Universidad Privada Telesup",
+      "type": "private",
+      "city": "Lima",
+      "licensing_status": "license_denied",
+      "risk_profile": [
+        "quality_deficiencies",
+        "political_connection"
+      ],
+      "political_links": [
+        {
+          "actor": "José Luna Gálvez",
+          "role": "fundador",
+          "position": "congresista y líder del partido Podemos Perú"
+        }
+      ],
+      "notes": "Caso mediático por edificio sin uso académico real y disputas políticas durante el proceso de licenciamiento."
+    },
+    {
+      "name": "Universidad Inca Garcilaso de la Vega",
+      "type": "private",
+      "city": "Lima",
+      "licensing_status": "license_denied",
+      "risk_profile": [
+        "financial_irregularities",
+        "administrative_irregularities"
+      ],
+      "notes": "Investigaciones sobre gestión financiera y remuneraciones de autoridades."
+    },
+    {
+      "name": "Universidad Andina Néstor Cáceres Velásquez",
+      "type": "private",
+      "city": "Juliaca",
+      "licensing_status": "license_denied",
+      "risk_profile": [
+        "quality_deficiencies",
+        "administrative_irregularities"
+      ],
+      "notes": "SUNEDU identificó problemas estructurales en docentes, investigación y gestión institucional."
+    },
+    {
+      "name": "Universidad Privada de Pucallpa",
+      "type": "private",
+      "city": "Pucallpa",
+      "licensing_status": "closure_in_process",
+      "risk_profile": [
+        "quality_deficiencies"
+      ],
+      "notes": "Deficiencias en infraestructura académica y planificación institucional."
+    },
+    {
+      "name": "Universidad Peruana de Ciencias e Informática",
+      "type": "private",
+      "city": "Lima",
+      "licensing_status": "closure_in_process",
+      "risk_profile": [
+        "quality_deficiencies",
+        "administrative_irregularities"
+      ]
+    },
+    {
+      "name": "Universidad Científica del Perú",
+      "type": "private",
+      "city": "Iquitos",
+      "licensing_status": "license_denied",
+      "risk_profile": [
+        "quality_deficiencies"
+      ]
+    }
+  ],
+  "politically_connected_universities": [
+    {
+      "name": "Universidad César Vallejo",
+      "type": "private",
+      "city": "Trujillo",
+      "political_links": [
+        {
+          "actor": "César Acuña",
+          "role": "fundador",
+          "position": "gobernador regional de La Libertad y líder del partido Alianza para el Progreso"
+        }
+      ],
+      "controversies": [
+        "cuestionamientos sobre tesis y estándares académicos",
+        "uso político de redes educativas privadas"
+      ]
+    },
+    {
+      "name": "Universidad San Juan Bautista",
+      "type": "private",
+      "city": "Lima",
+      "political_links": [],
+      "controversies": [
+        "investigaciones por irregularidades administrativas"
+      ]
+    }
+  ],
+  "elite_reference_universities": [
+    {
+      "name": "Pontificia Universidad Católica del Perú",
+      "type": "private",
+      "city": "Lima",
+      "reputation": "top"
+    },
+    {
+      "name": "Universidad Peruana Cayetano Heredia",
+      "type": "private",
+      "city": "Lima",
+      "reputation": "top"
+    },
+    {
+      "name": "Universidad del Pacífico",
+      "type": "private",
+      "city": "Lima",
+      "reputation": "top"
+    },
+    {
+      "name": "Universidad Nacional Mayor de San Marcos",
+      "type": "public",
+      "city": "Lima",
+      "reputation": "top"
+    },
+    {
+      "name": "Universidad Nacional de Ingeniería",
+      "type": "public",
+      "city": "Lima",
+      "reputation": "top"
+    }
+  ],
+  "analysis_notes": {
+    "political_context": "Durante las décadas 1990-2010 hubo una expansión masiva de universidades privadas en Perú, muchas vinculadas a redes empresariales y políticas.",
+    "regulatory_turning_point": "La creación de SUNEDU en 2014 introdujo un sistema de licenciamiento que provocó el cierre o denegación de licencia a decenas de universidades.",
+    "electoral_relevance": [
+      "propietarios de universidades que se convierten en políticos",
+      "redes de estudiantes y egresados usadas como bases electorales",
+      "controversias sobre títulos académicos de candidatos"
+    ]
+  }
+}

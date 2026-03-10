@@ -39,7 +39,7 @@ class CreditsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: const Text(
-                'Por Estos Sí: Senado Nacional',
+                'Por Estos Sí',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -198,8 +198,9 @@ class CreditsScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Text(
                   'Por Estos Sí es una iniciativa de transparencia electoral que analiza '
-                  '35 partidos políticos y más de 963 candidatos al Senado Nacional del Perú '
-                  'para las elecciones 2026. Se evaluaron sentencias judiciales, preparación académica, '
+                  'todos los partidos políticos y sus candidatos '
+                  'para las elecciones generales del 2026 en Perú. '
+                  'Se evaluaron sentencias judiciales, preparación académica,'
                   'vínculos con minería informal (REINFO) y otros indicadores de integridad pública.',
                   style: Theme.of(context)
                       .textTheme

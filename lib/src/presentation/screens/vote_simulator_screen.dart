@@ -13,9 +13,9 @@ class _CandidatePhotoCell extends StatelessWidget {
 
   String _cargoLabel(String cargo) {
     final upper = cargo.toUpperCase();
-    if (upper.contains('PRESIDENTE')) return 'PRES';
     if (upper.contains('PRIMER') || upper.contains('1')) return '1°VP';
     if (upper.contains('SEGUNDO') || upper.contains('2')) return '2°VP';
+    if (upper.contains('PRESIDENTE')) return 'PRES';
     return cargo.length > 4 ? cargo.substring(0, 4) : cargo;
   }
 

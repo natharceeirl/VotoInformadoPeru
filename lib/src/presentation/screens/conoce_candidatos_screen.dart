@@ -22,16 +22,20 @@ class _ConoceCandidatosScreenState
     extends ConsumerState<ConoceCandidatosScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabCtrl;
-  String? _deptoFilter;
-  String _searchText = '';
-  final TextEditingController _searchCtrl = TextEditingController();
+  String _nameFilter = '';
+  late TextEditingController _nameCtrl;
+  String? _partidoFilter;
+  String? _regionFilter;
+  bool _bannerExpanded = false;
 
-  bool get _hasTabs =>
-      widget.proceso == ProcesoElectoral.senadores;
+  bool get _hasTabs => widget.proceso == ProcesoElectoral.senadores;
+  bool get _hasActiveFilter =>
+      _nameFilter.isNotEmpty || _partidoFilter != null || _regionFilter != null;
 
   @override
   void initState() {
     super.initState();
+    _nameCtrl = TextEditingController();
     _tabCtrl = TabController(length: _hasTabs ? 2 : 1, vsync: this);
     _tabCtrl.addListener(() => setState(() {}));
   }
@@ -39,8 +43,17 @@ class _ConoceCandidatosScreenState
   @override
   void dispose() {
     _tabCtrl.dispose();
-    _searchCtrl.dispose();
+    _nameCtrl.dispose();
     super.dispose();
+  }
+
+  String _normPartido(String s) {
+    var r = s.toUpperCase().replaceAll(',', ' ')
+        .replaceAll('Á', 'A').replaceAll('É', 'E')
+        .replaceAll('Í', 'I').replaceAll('Ó', 'O').replaceAll('Ú', 'U')
+        .replaceAll('Ñ', 'N');
+    while (r.contains('  ')) { r = r.replaceAll('  ', ' '); }
+    return r.trim();
   }
 
   List<CandidatoConHV> _applyFilters(
@@ -49,67 +62,174 @@ class _ConoceCandidatosScreenState
     bool excluir,
   ) {
     var result = todos;
-    if (_searchText.isNotEmpty) {
-      final q = _searchText.toUpperCase();
-      result = result.where((c) =>
-        c.hv.nombre.toUpperCase().contains(q) ||
-        c.hv.partido.toUpperCase().contains(q),
-      ).toList();
+    if (_nameFilter.isNotEmpty) {
+      final q = _nameFilter.toUpperCase();
+      result = result.where((c) => c.hv.nombre.toUpperCase().contains(q)).toList();
+    }
+    if (_partidoFilter != null) {
+      result = result.where((c) => c.hv.partido == _partidoFilter).toList();
+    }
+    if (_regionFilter != null && widget.proceso != ProcesoElectoral.presidentes) {
+      result = result.where((c) => c.departamento == _regionFilter).toList();
     }
     if (excluir && porEstosNo.isNotEmpty) {
       result = result.where((c) {
-        var r = c.hv.partido.toUpperCase()
-            .replaceAll(',', ' ')
-            .replaceAll('Á', 'A').replaceAll('É', 'E')
-            .replaceAll('Í', 'I').replaceAll('Ó', 'O').replaceAll('Ú', 'U')
-            .replaceAll('Ñ', 'N');
-        while (r.contains('  ')) { r = r.replaceAll('  ', ' '); }
-        r = r.trim();
-        return !porEstosNo.contains(r);
+        final r = _normPartido(c.hv.partido);
+        return !porEstosNo.any((n) => r == n || r.contains(n));
       }).toList();
     }
     return result;
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildFilters(List<CandidatoConHV> todos) {
+    final proceso = widget.proceso;
+    final bool showRegion = proceso != ProcesoElectoral.presidentes && !_hasTabs;
+    final partidos = todos.map((c) => c.hv.partido).toSet().toList()..sort();
+    final deptos = todos
+        .map((c) => c.departamento)
+        .where((d) => d.isNotEmpty)
+        .toSet()
+        .toList()
+      ..sort();
+    final cs = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 6, 10, 0),
-      child: TextField(
-        controller: _searchCtrl,
-        onChanged: (v) => setState(() => _searchText = v),
-        decoration: InputDecoration(
-          hintText: 'Buscar por nombre, apellido o partido...',
-          hintStyle: const TextStyle(fontSize: 13),
-          prefixIcon: const Icon(Icons.search_rounded, size: 18),
-          suffixIcon: _searchText.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear_rounded, size: 18),
-                  onPressed: () {
-                    _searchCtrl.clear();
-                    setState(() => _searchText = '');
-                  },
-                )
-              : null,
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextField(
+            controller: _nameCtrl,
+            onChanged: (v) => setState(() => _nameFilter = v),
+            decoration: InputDecoration(
+              hintText: 'Buscar por nombre o apellido...',
+              hintStyle: const TextStyle(fontSize: 13),
+              prefixIcon: const Icon(Icons.person_search_rounded, size: 18),
+              suffixIcon: _nameFilter.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear_rounded, size: 18),
+                      onPressed: () {
+                        _nameCtrl.clear();
+                        setState(() => _nameFilter = '');
+                      },
+                    )
+                  : null,
+              filled: true, fillColor: Colors.white,
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.grey.shade300)),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.grey.shade300)),
+            ),
           ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 44,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: cs.outline.withValues(alpha: 0.4)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButton<String>(
+                    value: _partidoFilter,
+                    isExpanded: true,
+                    underline: const SizedBox.shrink(),
+                    hint: const Text('Partido...', style: TextStyle(fontSize: 12)),
+                    items: [
+                      const DropdownMenuItem<String>(
+                        value: null,
+                        child: Text('Todos los partidos', style: TextStyle(fontSize: 12)),
+                      ),
+                      ...partidos.map((p) => DropdownMenuItem<String>(
+                            value: p,
+                            child: Row(children: [
+                              PartyLogo(partyName: p, size: 20),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(p,
+                                    style: const TextStyle(fontSize: 11),
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ]),
+                          )),
+                    ],
+                    onChanged: (v) => setState(() => _partidoFilter = v),
+                  ),
+                ),
+              ),
+              if (showRegion && deptos.isNotEmpty) ...[
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Container(
+                    height: 44,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: cs.outline.withValues(alpha: 0.4)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButton<String>(
+                      value: _regionFilter,
+                      isExpanded: true,
+                      underline: const SizedBox.shrink(),
+                      hint: const Text('Región...', style: TextStyle(fontSize: 12)),
+                      items: [
+                        const DropdownMenuItem<String>(
+                          value: null,
+                          child: Text('Todas las regiones', style: TextStyle(fontSize: 12)),
+                        ),
+                        ...deptos.map((d) => DropdownMenuItem<String>(
+                              value: d,
+                              child: Text(d,
+                                  style: const TextStyle(fontSize: 12),
+                                  overflow: TextOverflow.ellipsis),
+                            )),
+                      ],
+                      onChanged: (v) => setState(() => _regionFilter = v),
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
-        ),
+          if (_hasActiveFilter) ...[
+            const SizedBox(height: 4),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: () {
+                  _nameCtrl.clear();
+                  setState(() {
+                    _nameFilter = '';
+                    _partidoFilter = null;
+                    _regionFilter = null;
+                  });
+                },
+                icon: const Icon(Icons.filter_alt_off_rounded, size: 14),
+                label: const Text('Limpiar filtros', style: TextStyle(fontSize: 12)),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
 
-  Widget _buildFilterBanner(List<String> porEstosNo) {
+  Widget _buildFilterBanner(List<String> porEstosNo, List<Map<String, dynamic>> detalle) {
     final excluir = ref.watch(excluirPartidosRiesgoProvider);
     return InkWell(
-      onTap: () => _showPorEstosNoDialog(context),
+      onTap: () => _showPorEstosNoDialog(context, detalle),
       child: Container(
         margin: const EdgeInsets.fromLTRB(10, 6, 10, 0),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -124,64 +244,144 @@ class _ConoceCandidatosScreenState
                 : Colors.orange.withValues(alpha: 0.3),
           ),
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              excluir ? Icons.block_rounded : Icons.warning_amber_rounded,
-              size: 16,
-              color: excluir ? const Color(0xFFB71C1C) : Colors.orange,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                excluir
-                    ? 'Filtro activo: ocultando ${porEstosNo.length} partidos con riesgo de corrupción'
-                    : 'Hay ${porEstosNo.length} partidos con riesgo de corrupción — toca para filtrar',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: excluir
-                      ? const Color(0xFFB71C1C)
-                      : Colors.orange.shade800,
+            Row(
+              children: [
+                Icon(
+                  excluir ? Icons.block_rounded : Icons.warning_amber_rounded,
+                  size: 16,
+                  color: excluir ? const Color(0xFFB71C1C) : Colors.orange,
                 ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    excluir
+                        ? '#PORESTOSNO: ocultando ${porEstosNo.length} partidos con riesgo'
+                        : 'Hay ${porEstosNo.length} partidos con riesgo — toca para filtrar',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: excluir ? const Color(0xFFB71C1C) : Colors.orange.shade800,
+                    ),
+                  ),
+                ),
+                if (excluir && detalle.isNotEmpty)
+                  GestureDetector(
+                    onTap: () => setState(() => _bannerExpanded = !_bannerExpanded),
+                    child: Icon(
+                      _bannerExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                      size: 18, color: const Color(0xFFB71C1C),
+                    ),
+                  ),
+                Switch(
+                  value: excluir,
+                  onChanged: (_) {
+                    ref.read(excluirPartidosRiesgoProvider.notifier).toggle();
+                    if (!excluir) setState(() => _bannerExpanded = false);
+                  },
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  activeThumbColor: const Color(0xFFB71C1C),
+                  activeTrackColor: const Color(0xFFB71C1C).withValues(alpha: 0.4),
+                ),
+              ],
+            ),
+            if (excluir && _bannerExpanded && detalle.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6, runSpacing: 6,
+                children: detalle.map((p) {
+                  final nombre = (p['nombre'] as String? ?? '').toUpperCase();
+                  final nivel = (p['nivel_riesgo'] as String? ?? '').toLowerCase();
+                  final color = nivel == 'alto' ? Colors.red.shade600 : Colors.orange.shade700;
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: color.withValues(alpha: 0.4)),
+                    ),
+                    child: Text(nombre,
+                        style: TextStyle(fontSize: 10, color: color, fontWeight: FontWeight.w600)),
+                  );
+                }).toList(),
               ),
-            ),
-            Switch(
-              value: excluir,
-              onChanged: (_) =>
-                  ref.read(excluirPartidosRiesgoProvider.notifier).toggle(),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              activeThumbColor: const Color(0xFFB71C1C),
-              activeTrackColor: const Color(0xFFB71C1C).withValues(alpha: 0.4),
-            ),
+            ],
           ],
         ),
       ),
     );
   }
 
-  void _showPorEstosNoDialog(BuildContext context) {
+  void _showPorEstosNoDialog(BuildContext ctx, List<Map<String, dynamic>> detalle) {
     showDialog(
-      context: context,
+      context: ctx,
       builder: (_) => AlertDialog(
         title: const Row(children: [
           Icon(Icons.warning_amber_rounded, color: Colors.orange),
           SizedBox(width: 8),
-          Text('#PORÉSTOSNÓ', style: TextStyle(fontSize: 16)),
+          Text('#PORESTOSNO', style: TextStyle(fontSize: 16)),
         ]),
-        content: const Text(
-          'Estos partidos tienen investigaciones activas por corrupción '
-          'o han sido vinculados a casos graves documentados.\n\n'
-          'Al activar el filtro, sus candidatos serán ocultados de la lista. '
-          'Puedes desactivarlo en cualquier momento.\n\n'
-          'Esta información proviene de fuentes periodísticas y judiciales públicas '
-          'y es orientativa — no constituye acusación formal.',
-          style: TextStyle(fontSize: 13, height: 1.5),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Partidos con antecedentes documentados de corrupción según '
+                'registros públicos e investigaciones judiciales.\n',
+                style: TextStyle(fontSize: 12, height: 1.5),
+              ),
+              if (detalle.isNotEmpty) ...[
+                const Divider(),
+                ...detalle.map((p) {
+                  final nombre = (p['nombre'] as String? ?? '').toUpperCase();
+                  final nivel = (p['nivel_riesgo'] as String? ?? '').toUpperCase();
+                  final indice = (p['indice_riesgo_corrupcion'] as num?)?.toDouble() ?? 0.0;
+                  final isAlto = nivel == 'ALTO';
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.circle, size: 6,
+                            color: isAlto ? Colors.red.shade700 : Colors.orange.shade700),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: RichText(
+                            text: TextSpan(
+                              style: const TextStyle(fontSize: 12, color: Colors.black87),
+                              children: [
+                                TextSpan(text: nombre,
+                                    style: const TextStyle(fontWeight: FontWeight.w600)),
+                                TextSpan(
+                                  text: ' — $nivel (${indice.toStringAsFixed(2)})',
+                                  style: TextStyle(
+                                    color: isAlto ? Colors.red.shade700 : Colors.orange.shade700,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+                const Divider(),
+              ],
+              Text(
+                'Al activar el filtro, sus candidatos serán ocultados. '
+                'Información orientativa — no constituye acusación formal.',
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Entendido'),
-          ),
+              onPressed: () => Navigator.pop(ctx), child: const Text('Entendido')),
         ],
       ),
     );

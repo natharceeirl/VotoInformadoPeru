@@ -184,6 +184,10 @@ class HojaVida {
   final String notaAdicional;
   final int    numLeyesProCrimen;         // nº de leyes pro-crimen apoyadas (0 = ninguna)
   final String investigacionesConocidas;  // texto de investigaciones/controversias conocidas
+  final bool   esReinfo;                  // candidato aparece en base de datos REINFO
+  final int    cantidadMineras;           // número de licencias mineras (0 = ninguna)
+  final bool   universidadCuestionada;    // estudió en una universidad con licencia denegada o cuestionada
+  final bool   universidadElite;          // estudió en una universidad de élite reconocida
 
   const HojaVida({
     required this.dni,
@@ -214,6 +218,10 @@ class HojaVida {
     this.notaAdicional = '',
     this.numLeyesProCrimen = 0,
     this.investigacionesConocidas = '',
+    this.esReinfo = false,
+    this.cantidadMineras = 0,
+    this.universidadCuestionada = false,
+    this.universidadElite = false,
   });
 
   factory HojaVida.fromJson(String dni, Map<String, dynamic> j) {
@@ -323,6 +331,10 @@ class HojaVida {
   HojaVida copyWith({
     int?    numLeyesProCrimen,
     String? investigacionesConocidas,
+    bool?   esReinfo,
+    int?    cantidadMineras,
+    bool?   universidadCuestionada,
+    bool?   universidadElite,
   }) => HojaVida(
     dni:    dni,
     idHojaVida: idHojaVida,
@@ -352,6 +364,10 @@ class HojaVida {
     notaAdicional: notaAdicional,
     numLeyesProCrimen:        numLeyesProCrimen        ?? this.numLeyesProCrimen,
     investigacionesConocidas: investigacionesConocidas ?? this.investigacionesConocidas,
+    esReinfo:               esReinfo               ?? this.esReinfo,
+    cantidadMineras:        cantidadMineras        ?? this.cantidadMineras,
+    universidadCuestionada: universidadCuestionada ?? this.universidadCuestionada,
+    universidadElite:       universidadElite       ?? this.universidadElite,
   );
 
   // ── Scoring ────────────────────────────────────────────────────────────────
@@ -420,9 +436,23 @@ class HojaVida {
   /// -10 pts si tiene investigaciones o controversias conocidas graves
   int get penaltyInvestigaciones => investigacionesConocidas.isNotEmpty ? 10 : 0;
 
+  /// -10 pts si está en REINFO, -5 pts adicionales si tiene 5+ mineras. Máximo -15.
+  int get penaltyReinfo {
+    if (!esReinfo) return 0;
+    return cantidadMineras >= 5 ? 15 : 10;
+  }
+
+  /// +5 pts si estudió en una universidad de élite reconocida
+  int get bonusUniversidadElite => universidadElite ? 5 : 0;
+
+  /// -5 pts si estudió en una universidad con licencia denegada o cuestionada
+  int get penaltyUniversidadCuestionada => universidadCuestionada ? 5 : 0;
+
   int get scoreFinal =>
       (scoreEducacion + scoreIntegridadPenal + scoreIntegridadOblig
-       - penaltyProCrimen - penaltyCargosPublicos - penaltyInvestigaciones)
+       + bonusUniversidadElite
+       - penaltyProCrimen - penaltyCargosPublicos - penaltyInvestigaciones
+       - penaltyReinfo - penaltyUniversidadCuestionada)
       .clamp(0, 100);
 
   double get scoreNormalizado => scoreFinal.toDouble();
@@ -521,7 +551,11 @@ class HojaVida {
       partes.add('${experienciaLaboral.length} exp. laboral${experienciaLaboral.length > 1 ? "es" : ""}');
     }
 
-    return partes.join(' · ');
+    if (esReinfo) partes.add('⚠ Vinculado a minería informal (REINFO)');
+    if (universidadCuestionada) partes.add('⚠ Univ. con licencia denegada');
+    if (universidadElite) partes.add('✓ Univ. de élite');
+
+    return partes.isNotEmpty ? partes.join(' · ') : 'Sin observaciones destacadas';
   }
 }
 
