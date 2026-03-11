@@ -21,7 +21,8 @@
       "Bash(node analyze.js)",
       "Bash(py inspect_bd.py)",
       "Bash(grep -v \"^$\")",
-      "Bash(dart analyze:*)"
+      "Bash(dart analyze:*)",
+      "Bash(flutter build:*)"
     ]
   }
 }

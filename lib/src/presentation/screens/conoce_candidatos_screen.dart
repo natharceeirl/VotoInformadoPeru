@@ -26,6 +26,7 @@ class _ConoceCandidatosScreenState
   late TextEditingController _nameCtrl;
   String? _partidoFilter;
   String? _regionFilter;
+  String? _deptoFilter;
   bool _bannerExpanded = false;
 
   bool get _hasTabs => widget.proceso == ProcesoElectoral.senadores;
@@ -393,6 +394,7 @@ class _ConoceCandidatosScreenState
     final color       = proceso.color;
     final async       = ref.watch(candidatosConHVProcesoProvider(proceso));
     final porEstosNo  = ref.watch(porEstosNoProvider).asData?.value ?? [];
+    final detalle     = ref.watch(porEstosNoDetalleProvider).asData?.value ?? [];
     final excluir     = ref.watch(excluirPartidosRiesgoProvider);
 
     return Scaffold(
@@ -430,8 +432,8 @@ class _ConoceCandidatosScreenState
           final filtrados = _applyFilters(todos, porEstosNo, excluir);
           return Column(
             children: [
-              _buildSearchBar(),
-              if (porEstosNo.isNotEmpty) _buildFilterBanner(porEstosNo),
+              _buildFilters(todos),
+              if (porEstosNo.isNotEmpty) _buildFilterBanner(porEstosNo, detalle),
               Expanded(
                 child: _hasTabs
                     ? _SenadoresView(
