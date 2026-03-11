@@ -177,9 +177,6 @@ class VoteSimulatorScreen extends ConsumerStatefulWidget {
 }
 
 class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
-  // Section expansion state
-  final List<bool> _expanded = [true, false, false, false, false];
-
   // Section 1 — Presidente: which party row is marked (index into loaded list)
   int? _presSelectedIndex;
   bool _presShowAll = false;
@@ -227,10 +224,6 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
         }
       }
     }
-  }
-
-  void _toggleSection(int index) {
-    setState(() => _expanded[index] = !_expanded[index]);
   }
 
   // ── Build helpers ────────────────────────────────────────────────────────────
@@ -292,7 +285,6 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
 
   Widget _buildSection1() {
     final color = ProcesoElectoral.presidentes.color;
-    final isExp = _expanded[0];
 
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
@@ -305,10 +297,10 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
             sectionNumber: 1,
             title: 'Sección 1 — Presidente y Vicepresidentes',
             color: color,
-            isExpanded: isExp,
-            onTap: () => _toggleSection(0),
+            isExpanded: true,
+            onTap: () {},
           ),
-          if (isExp) _buildSection1Body(color),
+          _buildSection1Body(color),
         ],
       ),
     );
@@ -529,15 +521,13 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
 
   Widget _buildPartySection({
     required int sectionDisplayNumber,
-    required int sectionIndex, // 0-based index into _prefControllers (0=sec2, 1=sec3, 2=sec4, 3=sec5)
+    required int sectionIndex,
     required String title,
     required String instruction,
     required int boxCount,
     required Color color,
-    required int expandedIndex,
+    required int expandedIndex, // kept for API compatibility, no longer used
   }) {
-    final isExp = _expanded[expandedIndex];
-
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       elevation: 2,
@@ -549,16 +539,15 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
             sectionNumber: sectionDisplayNumber,
             title: title,
             color: color,
-            isExpanded: isExp,
-            onTap: () => _toggleSection(expandedIndex),
+            isExpanded: true,
+            onTap: () {},
           ),
-          if (isExp)
-            _buildPartyRows(
-              sectionIndex: sectionIndex,
-              instruction: instruction,
-              boxCount: boxCount,
-              color: color,
-            ),
+          _buildPartyRows(
+            sectionIndex: sectionIndex,
+            instruction: instruction,
+            boxCount: boxCount,
+            color: color,
+          ),
         ],
       ),
     );
@@ -688,24 +677,47 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
 
             const SizedBox(height: 16),
 
-            // ── Cédula image ─────────────────────────────────────────────────
+            // ── Cédula image (reference) ──────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF3E0),
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                      border: Border.all(color: const Color(0xFFFFB300)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.info_outline, size: 14, color: Color(0xFFF57F17)),
+                        SizedBox(width: 6),
+                        Flexible(
+                          child: Text(
+                            'Imagen de referencia — la cédula real puede variar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 11, color: Color(0xFF5D4037)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: const Color(0xFF1E3A5F), width: 2),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(8)),
                       color: Colors.white,
                     ),
+                    constraints: const BoxConstraints(maxHeight: 260),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(6)),
                       child: Image.asset(
                         'assets/assets/CedulaVotacion.png',
                         width: double.infinity,
-                        fit: BoxFit.fitWidth,
+                        fit: BoxFit.contain,
                         errorBuilder: (_, __, ___) => Container(
                           height: 160,
                           color: Colors.grey.shade100,
@@ -725,7 +737,7 @@ class _VoteSimulatorScreenState extends ConsumerState<VoteSimulatorScreen> {
                   ),
                   const SizedBox(height: 6),
                   const Text(
-                    'Tu cédula tendrá 5 secciones',
+                    'Tu cédula tendrá 5 secciones independientes',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12.5,

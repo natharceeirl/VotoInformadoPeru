@@ -59,52 +59,39 @@ class ProcesoMenuScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // ── Opciones en grilla 2 columnas ────────────────────────────────
-              Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 420),
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 1.1,
-                    children: [
-                      _OptionCard(
-                        icon: Icons.people_alt_rounded,
-                        title: 'Conoce a los Candidatos',
-                        subtitle: 'Perfil de integridad · Educación · Antecedentes',
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                ConoceCandidatosScreen(proceso: proceso),
-                          ),
-                        ),
-                      ),
-                      _OptionCard(
-                        icon: Icons.bar_chart_rounded,
-                        title: 'Estadísticas por Partido',
-                        subtitle: 'Ranking · Puntaje promedio · Comparación',
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                EstadisticasPartidoScreen(proceso: proceso),
-                          ),
-                        ),
-                      ),
-                      _OptionCard(
-                        icon: Icons.open_in_new_rounded,
-                        title: 'Ver en el JNE',
-                        subtitle: 'Portal oficial de Voto Informado del JNE',
-                        isExternal: true,
-                        onTap: _launchJne,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              LayoutBuilder(builder: (ctx, cons) {
+                return GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: cons.maxWidth > 500 ? 1.0 : 0.95,
+                  children: [
+                    _OptionCard(
+                      icon: Icons.people_alt_rounded,
+                      title: 'Conoce a los Candidatos',
+                      subtitle: 'Perfil de integridad · Educación · Antecedentes',
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => ConoceCandidatosScreen(proceso: proceso))),
+                    ),
+                    _OptionCard(
+                      icon: Icons.bar_chart,
+                      title: 'Estadísticas por Partido',
+                      subtitle: 'Ranking · Puntaje promedio · Comparación',
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => EstadisticasPartidoScreen(proceso: proceso))),
+                    ),
+                    _OptionCard(
+                      icon: Icons.open_in_new,
+                      title: 'Ver en el JNE',
+                      subtitle: 'Portal oficial de Voto Informado del JNE',
+                      isExternal: true,
+                      onTap: _launchJne,
+                    ),
+                  ],
+                );
+              }),
               const SizedBox(height: 24),
 
               // ── Disclaimer ───────────────────────────────────────────────────
@@ -172,8 +159,8 @@ class _ProcessHeader extends StatelessWidget {
         children: [
           // PNG image
           Container(
-            width: 80,
-            height: 80,
+            width: 96,
+            height: 96,
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(14),
@@ -182,8 +169,8 @@ class _ProcessHeader extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
               child: Image.asset(
                 proceso.imagePath,
-                width: 80,
-                height: 80,
+                width: 96,
+                height: 96,
                 fit: BoxFit.contain,
                 errorBuilder: (_, __, ___) => Icon(
                   proceso.icon,

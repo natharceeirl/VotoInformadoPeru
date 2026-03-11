@@ -392,8 +392,12 @@ final candidatosConHVProcesoProvider =
           // Penalización pro-crimen (por nombre del candidato)
           final normNombre = _normName(hv.nombre);
           final numLeyes   = proCrimen[normNombre] ?? 0;
-          // Investigaciones del presidenciable (por partido)
-          final inv = investigaciones[_normName(hv.partido)] ?? '';
+          // Investigaciones: solo aplican al PRESIDENTE, no a vicepresidentes
+          final esPresidente = c.cargo.toUpperCase().contains('PRESIDENTE DE LA REP') &&
+              !c.cargo.toUpperCase().contains('VICE');
+          final inv = (esPresidente && investigaciones.isNotEmpty)
+              ? investigaciones[_normName(hv.partido)] ?? ''
+              : '';
           // REINFO check
           final reinfoMatch = reinfoCandidatos
               .where((r) => _normName(r.candidato) == normNombre)

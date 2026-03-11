@@ -469,8 +469,8 @@ class HojaVida {
   double get scoreNormalizado => scoreFinal.toDouble();
 
   String get jneHvUrl => idHojaVida != null
-      ? 'https://votoinformado.jne.gob.pe/VotoInformado/Informacion/HojaVida?idHojaVida=$idHojaVida'
-      : 'https://web.jne.gob.pe/serviciovotoinformado/';
+      ? 'https://votoinformado.jne.gob.pe/hoja-vida/$idOrg/$idHojaVida'
+      : 'https://votoinformado.jne.gob.pe/';
 
   // ── Labels y colores ───────────────────────────────────────────────────────
 

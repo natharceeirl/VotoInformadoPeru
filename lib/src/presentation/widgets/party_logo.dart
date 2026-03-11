@@ -110,16 +110,43 @@ const Map<String, String> _jneToStandard = {
   'PARTIDO PATRIÓTICO DEL PERÚ': 'PPP',
 };
 
+/// Strips accents from a string for case-insensitive, accent-insensitive matching.
+String _stripAccents(String s) => s
+    .replaceAll('Á', 'A').replaceAll('É', 'E').replaceAll('Í', 'I')
+    .replaceAll('Ó', 'O').replaceAll('Ú', 'U').replaceAll('Ü', 'U')
+    .replaceAll('Ñ', 'N')
+    .replaceAll('á', 'a').replaceAll('é', 'e').replaceAll('í', 'i')
+    .replaceAll('ó', 'o').replaceAll('ú', 'u').replaceAll('ü', 'u')
+    .replaceAll('ñ', 'n');
+
 /// Normalizes a raw JNE party name to the standard name used in logo assets.
 /// Falls back to the original name if no mapping is found.
-String normalizePartyName(String jneName) =>
-    _jneToStandard[jneName.toUpperCase()] ?? jneName;
+String normalizePartyName(String jneName) {
+  final upper = jneName.toUpperCase();
+  if (_jneToStandard.containsKey(upper)) return _jneToStandard[upper]!;
+  final stripped = _stripAccents(upper);
+  for (final entry in _jneToStandard.entries) {
+    if (_stripAccents(entry.key) == stripped) return entry.value;
+  }
+  return jneName;
+}
 
 /// Returns the asset path for the party logo, or null if not found.
 /// Accepts both standard names and raw JNE uppercase names.
 String? partyLogoPath(String partyName) {
-  final normalized = _jneToStandard[partyName.toUpperCase()] ?? partyName;
-  final file = _partyLogoFiles[normalized];
+  final normalized = normalizePartyName(partyName);
+  // Try direct lookup in logo files map first
+  var file = _partyLogoFiles[normalized];
+  if (file == null) {
+    // Try accent-insensitive match in logo files
+    final stripped = _stripAccents(normalized.toUpperCase());
+    for (final entry in _partyLogoFiles.entries) {
+      if (_stripAccents(entry.key.toUpperCase()) == stripped) {
+        file = entry.value;
+        break;
+      }
+    }
+  }
   if (file == null) return null;
   return 'assets/logoPartido/$file';
 }

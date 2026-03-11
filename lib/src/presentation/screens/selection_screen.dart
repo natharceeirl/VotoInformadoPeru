@@ -72,102 +72,74 @@ class SelectionScreen extends StatelessWidget {
               const SizedBox(height: 12),
 
               // 2-column grid for electoral process cards
-              Center(
-               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 420),
-                child: GridView.count(
-                crossAxisCount: 2,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 1.1,
-                children: [
-                  _ElectionCard(
-                    icon: Image.asset(
-                      'assets/assets/Presidente.png',
-                      width: 56,
-                      height: 56,
-                      errorBuilder: (_, __, ___) => const Icon(
-                        Icons.star_rounded,
-                        size: 56,
-                        color: Colors.white70,
+              LayoutBuilder(builder: (ctx, cons) {
+                final imgSize = cons.maxWidth > 500 ? 80.0 : 64.0;
+                return GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: cons.maxWidth > 500 ? 1.0 : 0.9,
+                  children: [
+                    _ElectionCard(
+                      icon: Image.asset(
+                        'assets/assets/Presidente.png',
+                        width: imgSize, height: imgSize,
+                        errorBuilder: (_, __, ___) => Icon(Icons.star, size: imgSize, color: Colors.white70),
+                      ),
+                      title: 'Presidente y Vicepresidentes',
+                      subtitle: 'Candidatos a la Presidencia y Vicepresidencias',
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.presidentes),
+                      )),
+                    ),
+                    _ElectionCard(
+                      icon: Image.asset(
+                        'assets/assets/Diputados.png',
+                        width: imgSize, height: imgSize,
+                        errorBuilder: (_, __, ___) => Icon(Icons.account_balance, size: imgSize, color: Colors.white70),
+                      ),
+                      title: 'Diputados',
+                      subtitle: 'Cámara de Diputados del Congreso de la República',
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.diputados),
+                      )),
+                    ),
+                    _ElectionCard(
+                      icon: Image.asset(
+                        'assets/assets/Senadores.png',
+                        width: imgSize, height: imgSize,
+                        errorBuilder: (_, __, ___) => Icon(Icons.gavel, size: imgSize, color: Colors.white70),
+                      ),
+                      title: 'Senadores',
+                      subtitle: 'Senado Nacional — análisis completo de transparencia',
+                      badge: 'COMPLETO',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const MainMenuScreen()),
                       ),
                     ),
-                    title: 'Presidente y Vicepresidentes',
-                    subtitle: 'Candidatos a la Presidencia y Vicepresidencias',
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const ProcesoMenuScreen(
-                        proceso: ProcesoElectoral.presidentes,
+                    _ElectionCard(
+                      icon: Image.asset(
+                        'assets/assets/ParlamentoAndino.png',
+                        width: imgSize, height: imgSize,
+                        errorBuilder: (_, __, ___) => Icon(Icons.public, size: imgSize, color: Colors.white70),
                       ),
-                    )),
-                  ),
-                  _ElectionCard(
-                    icon: Image.asset(
-                      'assets/assets/Diputados.png',
-                      width: 56,
-                      height: 56,
-                      errorBuilder: (_, __, ___) => const Icon(
-                        Icons.account_balance_rounded,
-                        size: 56,
-                        color: Colors.white70,
-                      ),
+                      title: 'Parlamento Andino',
+                      subtitle: 'Representación regional de Perú ante el Parlamento Andino',
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.parlamentoAndino),
+                      )),
                     ),
-                    title: 'Diputados',
-                    subtitle: 'Cámara de Diputados del Congreso de la República',
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const ProcesoMenuScreen(
-                        proceso: ProcesoElectoral.diputados,
-                      ),
-                    )),
-                  ),
-                  _ElectionCard(
-                    icon: Image.asset(
-                      'assets/assets/Senadores.png',
-                      width: 56,
-                      height: 56,
-                      errorBuilder: (_, __, ___) => const Icon(
-                        Icons.gavel_rounded,
-                        size: 56,
-                        color: Colors.white70,
-                      ),
-                    ),
-                    title: 'Senadores',
-                    subtitle: 'Senado Nacional — análisis completo de transparencia',
-                    badge: 'COMPLETO',
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const MainMenuScreen()),
-                    ),
-                  ),
-                  _ElectionCard(
-                    icon: Image.asset(
-                      'assets/assets/ParlamentoAndino.png',
-                      width: 56,
-                      height: 56,
-                      errorBuilder: (_, __, ___) => const Icon(
-                        Icons.public_rounded,
-                        size: 56,
-                        color: Colors.white70,
-                      ),
-                    ),
-                    title: 'Parlamento Andino',
-                    subtitle: 'Representación regional de Perú ante el Parlamento Andino',
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const ProcesoMenuScreen(
-                        proceso: ProcesoElectoral.parlamentoAndino,
-                      ),
-                    )),
-                  ),
-                ],
-              ),
-               ),
-              ),
+                  ],
+                );
+              }),
               const SizedBox(height: 28),
 
               // ── Sección: Herramientas ─────────────────────────────────────────
               _SectionHeader(
                 label: 'HERRAMIENTAS',
-                icon: Icons.handyman_rounded,
+                icon: Icons.construction,
               ),
               const SizedBox(height: 12),
 
@@ -189,7 +161,7 @@ class SelectionScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _ToolCard(
-                      icon: Icons.analytics_rounded,
+                      icon: Icons.assessment,
                       title: 'Resumen General',
                       subtitle: 'Top candidatos por integridad',
                       onTap: () => Navigator.of(context).push(

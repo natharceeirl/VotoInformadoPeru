@@ -15,7 +15,10 @@ class CreditsScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
+        child: Center(
+         child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 680),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // ── Logo ────────────────────────────────────────────────────────
@@ -103,7 +106,7 @@ class CreditsScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // ── Equipo ───────────────────────────────────────────────────────
-            _SectionTitle('Equipo'),
+            _SectionTitle('Equipo', highlight: true),
 
             // Card Andrés Sotil
             _TeamCard(
@@ -255,7 +258,9 @@ class CreditsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
           ],
+         ),
         ),
+       ),
       ),
     );
   }
@@ -790,36 +795,59 @@ Future<void> _launchSocial(BuildContext context, String url) async {
 
 class _SectionTitle extends StatelessWidget {
   final String text;
+  final bool highlight;
 
-  const _SectionTitle(this.text);
+  const _SectionTitle(this.text, {this.highlight = false});
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Row(
-          children: [
-            Container(
-              width: 4,
-              height: 18,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: highlight
+          ? Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
                 color: AppTheme.primaryColor,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              text,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryColor,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.primaryColor.withValues(alpha: 0.35),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
+                ],
+              ),
+              child: Text(
+                text.toUpperCase(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 4,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  text,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.primaryColor,
+                      ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
     );
   }
 }

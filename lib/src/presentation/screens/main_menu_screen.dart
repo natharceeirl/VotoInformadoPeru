@@ -266,7 +266,7 @@ class MainMenuScreen extends StatelessWidget {
           _Divider(key: ValueKey('d1')),
           _StatItem('963', 'Candidatos', Icons.person_rounded),
           _Divider(key: ValueKey('d2')),
-          _StatItem('8', 'Indicadores', Icons.analytics_rounded),
+          _StatItem('8', 'Indicadores', Icons.assessment),
           _Divider(key: ValueKey('d3')),
           _StatItem('56', 'Con sentencia', Icons.gavel_rounded),
         ],
