@@ -59,46 +59,51 @@ class ProcesoMenuScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // ── Opciones en grilla 2 columnas ────────────────────────────────
-              GridView.count(
-                crossAxisCount: 2,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 1.0,
-                children: [
-                  _OptionCard(
-                    icon: Icons.people_alt_rounded,
-                    title: 'Conoce a los Candidatos',
-                    subtitle: 'Perfil de integridad · Educación · Antecedentes',
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ConoceCandidatosScreen(proceso: proceso),
+              Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 420),
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 1.1,
+                    children: [
+                      _OptionCard(
+                        icon: Icons.people_alt_rounded,
+                        title: 'Conoce a los Candidatos',
+                        subtitle: 'Perfil de integridad · Educación · Antecedentes',
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                ConoceCandidatosScreen(proceso: proceso),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  _OptionCard(
-                    icon: Icons.bar_chart_rounded,
-                    title: 'Estadísticas por Partido',
-                    subtitle: 'Ranking · Puntaje promedio · Comparación',
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            EstadisticasPartidoScreen(proceso: proceso),
+                      _OptionCard(
+                        icon: Icons.bar_chart_rounded,
+                        title: 'Estadísticas por Partido',
+                        subtitle: 'Ranking · Puntaje promedio · Comparación',
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                EstadisticasPartidoScreen(proceso: proceso),
+                          ),
+                        ),
                       ),
-                    ),
+                      _OptionCard(
+                        icon: Icons.open_in_new_rounded,
+                        title: 'Ver en el JNE',
+                        subtitle: 'Portal oficial de Voto Informado del JNE',
+                        isExternal: true,
+                        onTap: _launchJne,
+                      ),
+                    ],
                   ),
-                  _OptionCard(
-                    icon: Icons.open_in_new_rounded,
-                    title: 'Ver en el JNE',
-                    subtitle: 'Portal oficial de Voto Informado del JNE',
-                    isExternal: true,
-                    onTap: _launchJne,
-                  ),
-                ],
+                ),
               ),
               const SizedBox(height: 24),
 
@@ -116,6 +121,17 @@ class ProcesoMenuScreen extends StatelessWidget {
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.3,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'NATHARCE - Desarrollo de Software',
+                style: TextStyle(
+                  color: Color(0xFF2C7BE5), // color más destacado
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.4,
                 ),
                 textAlign: TextAlign.center,
               ),

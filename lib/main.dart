@@ -247,7 +247,7 @@ class SplashScreen extends StatelessWidget {
                     ),
                     _HowItWorksStep(
                       step: 4,
-                      text: 'Vota informado el 11 de abril de 2026',
+                      text: 'Vota informado el 12 de abril de 2026',
                       isLast: true,
                     ),
                   ],

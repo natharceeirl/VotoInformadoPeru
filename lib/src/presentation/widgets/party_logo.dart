@@ -61,6 +61,8 @@ const Map<String, String> _jneToStandard = {
   'FRENTE DE LA ESPERANZA': 'Frente de la Esperanza',
   'PARTIDO FRENTE DE LA ESPERANZA 2021': 'Frente de la Esperanza',
   'FREPAP': 'FREPAP',
+  'FRENTE POPULAR AGRICOLA FIA DEL PERU': 'FREPAP',
+  'FRENTE POPULAR AGRÍCOLA FIA DEL PERÚ': 'FREPAP',
   'FUERZA POPULAR': 'Fuerza Popular',
   'FUERZA Y LIBERTAD': 'Fuerza y Libertad',
   'INTEGRIDAD DEMOCRATICA': 'Integridad Democrática',

@@ -81,7 +81,7 @@ enum ProcesoElectoral {
   }
 
   String get jnePortalUrl =>
-      'https://web.jne.gob.pe/serviciovotoinformado/';
+      'https://votoinformado.jne.gob.pe/home';
 }
 
 // ─── Experiencia Laboral ──────────────────────────────────────────────────────
@@ -458,12 +458,13 @@ class HojaVida {
   /// -5 pts si estudió en una universidad con licencia denegada o cuestionada
   int get penaltyUniversidadCuestionada => universidadCuestionada ? 5 : 0;
 
-  int get scoreFinal =>
-      (scoreEducacion + scoreIntegridadPenal + scoreIntegridadOblig
-       + bonusUniversidadElite
-       - penaltyProCrimen - penaltyCargosPublicos - penaltyInvestigaciones
-       - penaltyReinfo - penaltyUniversidadCuestionada)
-      .clamp(0, 100);
+  int get scoreFinal {
+    final raw = scoreEducacion + scoreIntegridadPenal + scoreIntegridadOblig
+        + bonusUniversidadElite
+        - penaltyProCrimen - penaltyCargosPublicos - penaltyInvestigaciones
+        - penaltyReinfo - penaltyUniversidadCuestionada;
+    return raw.clamp(0, 9999); // lower bound 0, no upper cap
+  }
 
   double get scoreNormalizado => scoreFinal.toDouble();
 
@@ -474,18 +475,21 @@ class HojaVida {
   // ── Labels y colores ───────────────────────────────────────────────────────
 
   Color get scoreColor {
+    if (scoreFinal >= 80) return const Color(0xFF1B5E20); // verde muy oscuro
     if (scoreFinal >= 70) return const Color(0xFF2E7D32); // verde oscuro
     if (scoreFinal >= 45) return const Color(0xFFF57F17); // ámbar
     return const Color(0xFFC62828);                        // rojo
   }
 
   Color get scoreBgColor {
+    if (scoreFinal >= 80) return const Color(0xFFD7F5DC);
     if (scoreFinal >= 70) return const Color(0xFFE8F5E9);
     if (scoreFinal >= 45) return const Color(0xFFFFF8E1);
     return const Color(0xFFFFEBEE);
   }
 
   String get scoreLabel {
+    if (scoreFinal >= 80) return 'Perfil excelente';
     if (scoreFinal >= 70) return 'Perfil sólido';
     if (scoreFinal >= 45) return 'Perfil moderado';
     return 'Perfil con alertas';

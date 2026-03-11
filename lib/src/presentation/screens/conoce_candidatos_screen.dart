@@ -302,8 +302,16 @@ class _ConoceCandidatosScreenState
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: color.withValues(alpha: 0.4)),
                     ),
-                    child: Text(nombre,
-                        style: TextStyle(fontSize: 10, color: color, fontWeight: FontWeight.w600)),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(width: 18, height: 18,
+                            child: PartyLogo(partyName: nombre, size: 18)),
+                        const SizedBox(width: 5),
+                        Text(nombre,
+                            style: TextStyle(fontSize: 10, color: color, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
                   );
                 }).toList(),
               ),
@@ -339,33 +347,51 @@ class _ConoceCandidatosScreenState
                   final nombre = (p['nombre'] as String? ?? '').toUpperCase();
                   final nivel = (p['nivel_riesgo'] as String? ?? '').toUpperCase();
                   final indice = (p['indice_riesgo_corrupcion'] as num?)?.toDouble() ?? 0.0;
+                  final casos = (p['casos_corrupcion'] as List?)?.cast<Map<String, dynamic>>() ?? [];
                   final isAlto = nivel == 'ALTO';
+                  final riskColor = isAlto ? Colors.red.shade700 : Colors.orange.shade700;
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.circle, size: 6,
-                            color: isAlto ? Colors.red.shade700 : Colors.orange.shade700),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: RichText(
-                            text: TextSpan(
-                              style: const TextStyle(fontSize: 12, color: Colors.black87),
-                              children: [
-                                TextSpan(text: nombre,
-                                    style: const TextStyle(fontWeight: FontWeight.w600)),
-                                TextSpan(
-                                  text: ' — $nivel (${indice.toStringAsFixed(2)})',
-                                  style: TextStyle(
-                                    color: isAlto ? Colors.red.shade700 : Colors.orange.shade700,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(width: 32, height: 32,
+                                child: PartyLogo(partyName: nombre, size: 32)),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(fontSize: 12, color: Colors.black87),
+                                  children: [
+                                    TextSpan(text: nombre,
+                                        style: const TextStyle(fontWeight: FontWeight.w600)),
+                                    TextSpan(
+                                      text: ' — $nivel (${indice.toStringAsFixed(2)})',
+                                      style: TextStyle(color: riskColor, fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
+                        if (casos.isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          ...casos.take(2).map((c) {
+                            final caso = c['nombre_caso'] as String? ?? '';
+                            final estado = c['estado'] as String? ?? '';
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 40, top: 2),
+                              child: Text(
+                                '• $caso${estado.isNotEmpty ? ' ($estado)' : ''}',
+                                style: TextStyle(fontSize: 10, color: riskColor, height: 1.4),
+                              ),
+                            );
+                          }),
+                        ],
                       ],
                     ),
                   );

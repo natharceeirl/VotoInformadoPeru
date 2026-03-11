@@ -84,10 +84,10 @@ class _EstadisticasPartidoScreenState
     );
   }
 
-  Widget _buildFilterBanner(List<String> porEstosNo) {
+  Widget _buildFilterBanner(List<String> porEstosNo, List<Map<String, dynamic>> detalle) {
     final excluir = ref.watch(excluirPartidosRiesgoProvider);
     return InkWell(
-      onTap: () => _showPorEstosNoDialog(context),
+      onTap: () => _showPorEstosNoDialog(context, detalle),
       child: Container(
         margin: const EdgeInsets.fromLTRB(10, 6, 10, 0),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -137,7 +137,7 @@ class _EstadisticasPartidoScreenState
     );
   }
 
-  void _showPorEstosNoDialog(BuildContext context) {
+  void _showPorEstosNoDialog(BuildContext context, List<Map<String, dynamic>> detalle) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -146,14 +146,82 @@ class _EstadisticasPartidoScreenState
           SizedBox(width: 8),
           Text('#PORESTOSNO', style: TextStyle(fontSize: 16)),
         ]),
-        content: const Text(
-          'Estos partidos tienen investigaciones activas por corrupción '
-          'o han sido vinculados a casos graves documentados.\n\n'
-          'Al activar el filtro, sus candidatos serán ocultados de la lista. '
-          'Puedes desactivarlo en cualquier momento.\n\n'
-          'Esta información proviene de fuentes periodísticas y judiciales públicas '
-          'y es orientativa — no constituye acusación formal.',
-          style: TextStyle(fontSize: 13, height: 1.5),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Partidos con antecedentes documentados de corrupción según '
+                'registros públicos e investigaciones judiciales.\n',
+                style: TextStyle(fontSize: 12, height: 1.5),
+              ),
+              if (detalle.isNotEmpty) ...[
+                const Divider(),
+                ...detalle.map((p) {
+                  final nombre = (p['nombre'] as String? ?? '').toUpperCase();
+                  final nivel = (p['nivel_riesgo'] as String? ?? '').toUpperCase();
+                  final indice = (p['indice_riesgo_corrupcion'] as num?)?.toDouble() ?? 0.0;
+                  final casos = (p['casos_corrupcion'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+                  final isAlto = nivel == 'ALTO';
+                  final riskColor = isAlto ? Colors.red.shade700 : Colors.orange.shade700;
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 32, height: 32,
+                              child: PartyLogo(partyName: nombre, size: 32),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(fontSize: 12, color: Colors.black87),
+                                  children: [
+                                    TextSpan(text: nombre,
+                                        style: const TextStyle(fontWeight: FontWeight.w600)),
+                                    TextSpan(
+                                      text: ' — $nivel (${indice.toStringAsFixed(2)})',
+                                      style: TextStyle(color: riskColor, fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (casos.isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          ...casos.take(2).map((c) {
+                            final caso = c['nombre_caso'] as String? ?? '';
+                            final estado = c['estado'] as String? ?? '';
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 40, top: 2),
+                              child: Text(
+                                '• $caso${estado.isNotEmpty ? ' ($estado)' : ''}',
+                                style: TextStyle(fontSize: 10, color: riskColor, height: 1.4),
+                              ),
+                            );
+                          }),
+                        ],
+                      ],
+                    ),
+                  );
+                }),
+                const Divider(),
+              ],
+              Text(
+                'Al activar el filtro, sus candidatos serán ocultados. '
+                'Información orientativa — no constituye acusación formal.',
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(
@@ -195,6 +263,7 @@ class _EstadisticasPartidoScreenState
     final color      = proceso.color;
     final async      = ref.watch(candidatosConHVProcesoProvider(proceso));
     final porEstosNo = ref.watch(porEstosNoProvider).asData?.value ?? [];
+    final detalle    = ref.watch(porEstosNoDetalleProvider).asData?.value ?? [];
     final excluir    = ref.watch(excluirPartidosRiesgoProvider);
 
     return Scaffold(
@@ -215,7 +284,7 @@ class _EstadisticasPartidoScreenState
           return Column(
             children: [
               _buildSearchBar(),
-              if (porEstosNo.isNotEmpty) _buildFilterBanner(porEstosNo),
+              if (porEstosNo.isNotEmpty) _buildFilterBanner(porEstosNo, detalle),
               Expanded(
                 child: proceso == ProcesoElectoral.presidentes
                     ? _PlanchaView(
@@ -1292,8 +1361,7 @@ void _showPlanchaDetalle(
 
             // ── Miembros de la plancha ────────────────────────────────────
             _SheetSection('PLANCHA PRESIDENCIAL', proceso.color),
-            ...miembros.map((c) =>
-              _MiembroRow(c: c, proceso: proceso)),
+            ...miembros.map((c) => _PlanchaMiembroCard(c: c, proceso: proceso)),
             const Divider(height: 20),
 
             // Nota legal
@@ -1309,6 +1377,130 @@ void _showPlanchaDetalle(
       ),
     ),
   );
+}
+
+// ─── Plancha miembro card (for detail sheet) ──────────────────────────────────
+
+class _PlanchaMiembroCard extends StatelessWidget {
+  final CandidatoConHV c;
+  final ProcesoElectoral proceso;
+  const _PlanchaMiembroCard({required this.c, required this.proceso});
+
+  String _shortCargo(String cargo) {
+    if (cargo.contains('SEGUNDO VICE')) return '2do Vicepresidente';
+    if (cargo.contains('PRIMER VICE')) return '1er Vicepresidente';
+    if (cargo.contains('PRESIDENTE')) return 'Presidente';
+    return cargo;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final hv = c.hv;
+    final scoreColor = _scoreColor(hv.scoreFinal.toDouble());
+    final scoreBg = _scoreBg(hv.scoreFinal.toDouble());
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(10),
+      onTap: () => _showCandidatoDetalle(context, c, proceso),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey.shade200),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                // Cargo badge
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: proceso.color.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(_shortCargo(c.cargo),
+                      style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold,
+                          color: proceso.color)),
+                ),
+                const Spacer(),
+                // Score
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: scoreBg,
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: scoreColor.withValues(alpha: 0.4)),
+                  ),
+                  child: Text('${hv.scoreFinal} pts',
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold,
+                          color: scoreColor)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(hv.nombre,
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 6),
+            // Info chips
+            Wrap(
+              spacing: 4, runSpacing: 4,
+              children: [
+                _InfoChip(Icons.school_rounded, hv.educacionLabel, Colors.blue.shade700),
+                if (hv.totalSentenciasPenales > 0)
+                  _InfoChip(Icons.gavel_rounded,
+                      '${hv.totalSentenciasPenales} sentencia(s) penal(es)', Colors.red.shade700)
+                else
+                  _InfoChip(Icons.verified_rounded, 'Sin sentencias penales', Colors.green.shade700),
+                if (hv.esReinfo)
+                  _InfoChip(Icons.terrain_rounded, 'Vinculado REINFO', Colors.orange.shade800),
+                if (hv.universidadElite)
+                  _InfoChip(Icons.star_rounded, 'Univ. élite', Colors.indigo),
+                if (hv.universidadCuestionada)
+                  _InfoChip(Icons.warning_rounded, 'Univ. cuestionada', Colors.brown.shade700),
+                if (hv.investigacionesConocidas.isNotEmpty)
+                  _InfoChip(Icons.report_rounded, 'Con investigaciones', Colors.red.shade900),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text('Toca para ver perfil completo',
+                style: TextStyle(fontSize: 9, color: Colors.grey.shade400,
+                    fontStyle: FontStyle.italic)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  const _InfoChip(this.icon, this.label, this.color);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.09),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 10, color: color),
+          const SizedBox(width: 3),
+          Text(label, style: TextStyle(fontSize: 9, color: color, fontWeight: FontWeight.w600)),
+        ],
+      ),
+    );
+  }
 }
 
 // ─── Shared score helpers ─────────────────────────────────────────────────────
@@ -1373,7 +1565,7 @@ class _ScoreBadge extends StatelessWidget {
           Text(score.toStringAsFixed(1),
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,
                 color: scoreColor, height: 1)),
-          Text('/100',
+          Text('pts',
             style: TextStyle(fontSize: 7, color: scoreColor, height: 1)),
         ],
       ),

@@ -72,13 +72,16 @@ class SelectionScreen extends StatelessWidget {
               const SizedBox(height: 12),
 
               // 2-column grid for electoral process cards
-              GridView.count(
+              Center(
+               child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: GridView.count(
                 crossAxisCount: 2,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.82,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1.1,
                 children: [
                   _ElectionCard(
                     icon: Image.asset(
@@ -157,12 +160,14 @@ class SelectionScreen extends StatelessWidget {
                   ),
                 ],
               ),
+               ),
+              ),
               const SizedBox(height: 28),
 
               // ── Sección: Herramientas ─────────────────────────────────────────
               _SectionHeader(
                 label: 'HERRAMIENTAS',
-                icon: Icons.build_rounded,
+                icon: Icons.handyman_rounded,
               ),
               const SizedBox(height: 12),
 
