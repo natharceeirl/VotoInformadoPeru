@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../domain/models/hoja_vida_models.dart';
 import 'conoce_candidatos_screen.dart';
 import 'estadisticas_partido_screen.dart';
@@ -7,34 +8,41 @@ import 'estadisticas_partido_screen.dart';
 export '../../domain/models/hoja_vida_models.dart' show ProcesoElectoral;
 
 /// Menú principal para cada proceso electoral.
-/// Muestra el encabezado del proceso + tarjetas de opciones.
+/// Muestra el encabezado del proceso + tarjetas de opciones en grilla 2 columnas.
 class ProcesoMenuScreen extends StatelessWidget {
   final ProcesoElectoral proceso;
 
   const ProcesoMenuScreen({super.key, required this.proceso});
 
+  static const _navy = Color(0xFF1E3A5F);
+
+  Future<void> _launchJne() async {
+    final uri = Uri.parse(proceso.jnePortalUrl);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      // silently ignore if cannot launch
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final color = proceso.color;
-
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: const Color(0xFFF0F4F8),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        foregroundColor: color,
+        foregroundColor: _navy,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shadowColor: Colors.black12,
         title: Text(
           proceso.displayName,
-          style: TextStyle(
-            color: Colors.grey.shade800,
-            fontWeight: FontWeight.w600,
+          style: const TextStyle(
+            color: _navy,
+            fontWeight: FontWeight.w700,
             fontSize: 17,
           ),
         ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.grey.shade700),
+        iconTheme: const IconThemeData(color: _navy),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Divider(height: 1, color: Colors.grey.shade200),
@@ -42,60 +50,72 @@ class ProcesoMenuScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ── Encabezado ─────────────────────────────────────────────────
+              // ── Encabezado ──────────────────────────────────────────────────
               _ProcessHeader(proceso: proceso),
               const SizedBox(height: 20),
 
-              // ── Disclaimer ────────────────────────────────────────────────
+              // ── Opciones en grilla 2 columnas ────────────────────────────────
+              GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 1.0,
+                children: [
+                  _OptionCard(
+                    icon: Icons.people_alt_rounded,
+                    title: 'Conoce a los Candidatos',
+                    subtitle: 'Perfil de integridad · Educación · Antecedentes',
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            ConoceCandidatosScreen(proceso: proceso),
+                      ),
+                    ),
+                  ),
+                  _OptionCard(
+                    icon: Icons.bar_chart_rounded,
+                    title: 'Estadísticas por Partido',
+                    subtitle: 'Ranking · Puntaje promedio · Comparación',
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            EstadisticasPartidoScreen(proceso: proceso),
+                      ),
+                    ),
+                  ),
+                  _OptionCard(
+                    icon: Icons.open_in_new_rounded,
+                    title: 'Ver en el JNE',
+                    subtitle: 'Portal oficial de Voto Informado del JNE',
+                    isExternal: true,
+                    onTap: _launchJne,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+
+              // ── Disclaimer ───────────────────────────────────────────────────
               _DisclaimerBox(),
-              const SizedBox(height: 20),
 
-              // ── Opciones ──────────────────────────────────────────────────
-              _MenuOption(
-                icon: Icons.people_alt_rounded,
-                title: 'Conoce a tus Candidatos',
-                subtitle: 'Perfil de integridad · Educación · Antecedentes',
-                detail: 'Candidatos ordenados por puntaje de transparencia 0–100',
-                color: color,
-                isHighlighted: true,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ConoceCandidatosScreen(proceso: proceso),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 10),
-              _MenuOption(
-                icon: Icons.bar_chart_rounded,
-                title: 'Estadísticas por Partido',
-                subtitle: 'Ranking · Puntaje promedio · Antecedentes',
-                detail: 'Comparación de partidos en este proceso electoral',
-                color: Colors.blueGrey,
-                isHighlighted: true,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        EstadisticasPartidoScreen(proceso: proceso),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-              Divider(color: Colors.grey.shade200),
+              // ── Footer ───────────────────────────────────────────────────────
+              const SizedBox(height: 28),
+              Divider(color: Colors.grey.shade300),
               const SizedBox(height: 12),
-              Text(
-                '#PORESTOSSI — Solo información pública\nDatos: JNE · ONPE · NATHARCE',
+              const Text(
+                '#PORESTOSSI — Datos: JNE · ONPE · NATHARCE',
                 style: TextStyle(
-                  color: Colors.grey.shade400,
+                  color: Color(0xFF9EAABB),
                   fontSize: 11,
-                  height: 1.6,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.3,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -115,57 +135,82 @@ class _ProcessHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = proceso.color;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF1E3A5F), Color(0xFF154360)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(proceso.icon, color: color, size: 26),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  proceso.displayName,
-                  style: TextStyle(
-                    color: Colors.grey.shade900,
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF1E3A5F).withValues(alpha: 0.35),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
-          const SizedBox(height: 14),
-          Text(
-            'Elecciones Perú 2026',
-            style: TextStyle(
-              color: color,
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
+        ],
+      ),
+      child: Row(
+        children: [
+          // PNG image
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(14),
+              child: Image.asset(
+                proceso.imagePath,
+                width: 80,
+                height: 80,
+                fit: BoxFit.contain,
+                errorBuilder: (_, __, ___) => Icon(
+                  proceso.icon,
+                  color: Colors.white70,
+                  size: 40,
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 6),
-          Text(
-            _description,
-            style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 13,
-              height: 1.4,
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Elecciones Perú 2026',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  proceso.displayName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    height: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  _description,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.75),
+                    fontSize: 12,
+                    height: 1.4,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -187,7 +232,131 @@ class _ProcessHeader extends StatelessWidget {
   }
 }
 
-// ─── Caja de disclaimer ───────────────────────────────────────────────────────
+// ─── Option card (grid item) ──────────────────────────────────────────────────
+
+class _OptionCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool isExternal;
+  final VoidCallback onTap;
+
+  const _OptionCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.isExternal = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: const Color(0xFF1E3A5F).withValues(alpha: 0.2),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E3A5F).withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      icon,
+                      color: const Color(0xFF1E3A5F),
+                      size: 22,
+                    ),
+                  ),
+                  if (isExternal)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E3A5F).withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Text(
+                        'EXTERNO',
+                        style: TextStyle(
+                          color: Color(0xFF1E3A5F),
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.6,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Color(0xFF1E3A5F),
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Expanded(
+                child: Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 11,
+                    height: 1.4,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    isExternal
+                        ? Icons.open_in_new_rounded
+                        : Icons.arrow_forward_ios_rounded,
+                    size: 12,
+                    color: const Color(0xFF1E3A5F).withValues(alpha: 0.5),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Disclaimer box ───────────────────────────────────────────────────────────
 
 class _DisclaimerBox extends StatelessWidget {
   @override
@@ -220,121 +389,6 @@ class _DisclaimerBox extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// ─── Opción del menú ──────────────────────────────────────────────────────────
-
-class _MenuOption extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String detail;
-  final Color color;
-  final bool isHighlighted;
-  final VoidCallback onTap;
-
-  const _MenuOption({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.detail,
-    required this.color,
-    required this.isHighlighted,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: isHighlighted
-                ? Colors.white
-                : const Color(0xFFF9FAFB),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: isHighlighted
-                  ? color.withValues(alpha: 0.35)
-                  : Colors.grey.shade200,
-              width: isHighlighted ? 1.5 : 1.0,
-            ),
-            boxShadow: isHighlighted
-                ? [
-                    BoxShadow(
-                      color: color.withValues(alpha: 0.08),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    )
-                  ]
-                : null,
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: isHighlighted ? 0.12 : 0.07),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  icon,
-                  color: isHighlighted ? color : Colors.grey.shade400,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        color: isHighlighted
-                            ? Colors.grey.shade900
-                            : Colors.grey.shade500,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        color: isHighlighted
-                            ? color.withValues(alpha: 0.85)
-                            : Colors.grey.shade400,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      detail,
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 14,
-                color: isHighlighted ? color.withValues(alpha: 0.5) : Colors.grey.shade300,
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

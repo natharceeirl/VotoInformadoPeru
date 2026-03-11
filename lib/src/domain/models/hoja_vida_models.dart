@@ -63,10 +63,20 @@ enum ProcesoElectoral {
 
   Color get color {
     switch (this) {
-      case ProcesoElectoral.presidentes:    return const Color(0xFF7B1FA2);
-      case ProcesoElectoral.diputados:      return const Color(0xFF1565C0);
-      case ProcesoElectoral.senadores:      return const Color(0xFF00695C);
-      case ProcesoElectoral.parlamentoAndino: return const Color(0xFFE65100);
+      case ProcesoElectoral.presidentes:    return const Color(0xFF1E3A5F);
+      case ProcesoElectoral.diputados:      return const Color(0xFF1B4F72);
+      case ProcesoElectoral.senadores:      return const Color(0xFF154360);
+      case ProcesoElectoral.parlamentoAndino: return const Color(0xFF1A5276);
+    }
+  }
+
+  /// Asset PNG image for use as icon in screens.
+  String get imagePath {
+    switch (this) {
+      case ProcesoElectoral.presidentes:    return 'assets/assets/Presidente.png';
+      case ProcesoElectoral.diputados:      return 'assets/assets/Diputados.png';
+      case ProcesoElectoral.senadores:      return 'assets/assets/Senadores.png';
+      case ProcesoElectoral.parlamentoAndino: return 'assets/assets/ParlamentoAndino.png';
     }
   }
 

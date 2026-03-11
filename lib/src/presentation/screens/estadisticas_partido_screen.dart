@@ -144,7 +144,7 @@ class _EstadisticasPartidoScreenState
         title: const Row(children: [
           Icon(Icons.warning_amber_rounded, color: Colors.orange),
           SizedBox(width: 8),
-          Text('#PORÉSTOSNÓ', style: TextStyle(fontSize: 16)),
+          Text('#PORESTOSNO', style: TextStyle(fontSize: 16)),
         ]),
         content: const Text(
           'Estos partidos tienen investigaciones activas por corrupción '
@@ -200,7 +200,7 @@ class _EstadisticasPartidoScreenState
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        title: const Text('Estadísticas por Partido'),
+        title: Text('${widget.proceso.displayName} — Estadísticas'),
         centerTitle: true,
         backgroundColor: color,
         foregroundColor: Colors.white,

@@ -8,183 +8,219 @@ import 'resumen_general_screen.dart';
 class SelectionScreen extends StatelessWidget {
   const SelectionScreen({super.key});
 
+  static const _navy = Color(0xFF1E3A5F);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: const Color(0xFFF0F4F8),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // ── Logo ────────────────────────────────────────────────────
+              // ── Logo ────────────────────────────────────────────────────────
               Center(
                 child: Image.asset(
                   'assets/assets/Logo_Icono_Nombre_Subtitulo.png',
-                  height: 150,
+                  height: 120,
                   errorBuilder: (_, __, ___) => const Icon(
                     Icons.how_to_vote,
                     size: 80,
-                    color: Color(0xFF1E3A8A),
+                    color: _navy,
                   ),
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Elecciones Perú 2026',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 15,
-                  fontStyle: FontStyle.italic,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 4),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey.shade200),
-                ),
-                child: Text(
-                  'Esta aplicación tiene como único objetivo informar a la ciudadanía. '
-                  'No promueve ni representa a ningún partido político. '
-                  'Todos los datos provienen de fuentes públicas oficiales (JNE · ONPE).',
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 11,
-                    height: 1.5,
-                  ),
-                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(height: 16),
 
-              // ── Sección: Procesos Electorales ────────────────────────────
-              _SectionLabel('¿QUÉ PROCESO ELECTORAL TE INTERESA?'),
-              const SizedBox(height: 12),
-
-              // Presidente y Vicepresidente
-              _ElectionCard(
-                icon: Icons.star_rounded,
-                title: 'Presidente y Vicepresidentes',
-                subtitle: 'Candidatos a la Presidencia y Vicepresidencias de la República',
-                details: const ['Conoce a los candidatos · Perfil de integridad'],
-                accentColor: const Color(0xFF7B1FA2),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const ProcesoMenuScreen(
-                    proceso: ProcesoElectoral.presidentes,
-                  ),
-                )),
-              ),
-              const SizedBox(height: 10),
-
-              // Diputados
-              _ElectionCard(
-                icon: Icons.account_balance_rounded,
-                title: 'Diputados',
-                subtitle: 'Candidatos al Congreso de la República — Cámara de Diputados',
-                details: const ['Por departamento · Perfil de integridad'],
-                accentColor: const Color(0xFF1565C0),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const ProcesoMenuScreen(
-                    proceso: ProcesoElectoral.diputados,
-                  ),
-                )),
-              ),
-              const SizedBox(height: 10),
-
-              // Senadores
-              _ElectionCard(
-                icon: Icons.gavel_rounded,
-                title: 'Senadores',
-                subtitle: 'Candidatos al Senado Nacional — análisis completo de transparencia',
-                details: const [
-                  '35 partidos · Índice de transparencia',
-                  'Educación · Ingresos · Sentencias · REINFO',
-                ],
-                accentColor: const Color(0xFF00695C),
-                badge: 'COMPLETO',
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const MainMenuScreen()),
+              // ── Stats bar ───────────────────────────────────────────────────
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  color: _navy,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.people_alt_rounded, color: Colors.white70, size: 14),
+                    SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        '+2,000 candidatos · 35 partidos · 4 procesos electorales',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.2,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 24),
 
-              // Parlamento Andino
-              _ElectionCard(
-                icon: Icons.public_rounded,
-                title: 'Parlamento Andino',
-                subtitle: 'Candidatos al Parlamento Andino — representación regional',
-                details: const ['Conoce a los candidatos · Perfil de integridad'],
-                accentColor: const Color(0xFFBF360C),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const ProcesoMenuScreen(
-                    proceso: ProcesoElectoral.parlamentoAndino,
-                  ),
-                )),
-              ),
-              const SizedBox(height: 20),
-
-              // ── Sección: Herramientas ────────────────────────────────────
-              _SectionLabel('HERRAMIENTAS'),
-              const SizedBox(height: 12),
-
-              // Simulador de Voto
-              _ElectionCard(
+              // ── Sección: Procesos Electorales ────────────────────────────────
+              _SectionHeader(
+                label: 'PROCESOS ELECTORALES 2026',
                 icon: Icons.how_to_vote_rounded,
-                title: 'Simulador de Voto',
-                subtitle: 'Aprende a votar correctamente el día de las elecciones',
-                details: const ['Guía paso a paso · Cédula virtual'],
-                accentColor: const Color(0xFF2E7D32),
-                badge: 'INTERACTIVO',
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const VoteSimulatorScreen()),
-                ),
               ),
-              const SizedBox(height: 10),
-
-              // Resumen General
-              _ElectionCard(
-                icon: Icons.summarize_rounded,
-                title: 'Resumen General',
-                subtitle:
-                    'Vista consolidada de los candidatos con mejor perfil de integridad',
-                details: const [
-                  'Todos los procesos · Top candidatos · Filtro por riesgo'
-                ],
-                accentColor: const Color(0xFF37474F),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (_) => const ResumenGeneralScreen()),
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              // Créditos
-              _ElectionCard(
-                icon: Icons.info_rounded,
-                title: 'Créditos y Fuentes',
-                subtitle: 'Equipo de desarrollo · Fuentes oficiales de datos',
-                details: const ['NATHARCE: Desarrollo de Software · JNE · ONPE'],
-                accentColor: const Color(0xFF546E7A),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const CreditsScreen()),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-              Divider(color: Colors.grey.shade200),
               const SizedBox(height: 12),
-              Text(
-                '#PORESTOSSI — Solo información pública · Datos: ONPE · JNE\nNATHARCE: Desarrollo de Software',
+
+              // 2-column grid for electoral process cards
+              GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 0.82,
+                children: [
+                  _ElectionCard(
+                    icon: Image.asset(
+                      'assets/assets/Presidente.png',
+                      width: 56,
+                      height: 56,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.star_rounded,
+                        size: 56,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    title: 'Presidente y Vicepresidentes',
+                    subtitle: 'Candidatos a la Presidencia y Vicepresidencias',
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const ProcesoMenuScreen(
+                        proceso: ProcesoElectoral.presidentes,
+                      ),
+                    )),
+                  ),
+                  _ElectionCard(
+                    icon: Image.asset(
+                      'assets/assets/Diputados.png',
+                      width: 56,
+                      height: 56,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.account_balance_rounded,
+                        size: 56,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    title: 'Diputados',
+                    subtitle: 'Cámara de Diputados del Congreso de la República',
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const ProcesoMenuScreen(
+                        proceso: ProcesoElectoral.diputados,
+                      ),
+                    )),
+                  ),
+                  _ElectionCard(
+                    icon: Image.asset(
+                      'assets/assets/Senadores.png',
+                      width: 56,
+                      height: 56,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.gavel_rounded,
+                        size: 56,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    title: 'Senadores',
+                    subtitle: 'Senado Nacional — análisis completo de transparencia',
+                    badge: 'COMPLETO',
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const MainMenuScreen()),
+                    ),
+                  ),
+                  _ElectionCard(
+                    icon: Image.asset(
+                      'assets/assets/ParlamentoAndino.png',
+                      width: 56,
+                      height: 56,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.public_rounded,
+                        size: 56,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    title: 'Parlamento Andino',
+                    subtitle: 'Representación regional de Perú ante el Parlamento Andino',
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const ProcesoMenuScreen(
+                        proceso: ProcesoElectoral.parlamentoAndino,
+                      ),
+                    )),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 28),
+
+              // ── Sección: Herramientas ─────────────────────────────────────────
+              _SectionHeader(
+                label: 'HERRAMIENTAS',
+                icon: Icons.build_rounded,
+              ),
+              const SizedBox(height: 12),
+
+              // Tools: 2+1 layout
+              Row(
+                children: [
+                  Expanded(
+                    child: _ToolCard(
+                      icon: Icons.how_to_vote_rounded,
+                      title: 'Simulador de Voto',
+                      subtitle: 'Aprende a votar correctamente',
+                      badge: 'INTERACTIVO',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => const VoteSimulatorScreen()),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _ToolCard(
+                      icon: Icons.analytics_rounded,
+                      title: 'Resumen General',
+                      subtitle: 'Top candidatos por integridad',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => const ResumenGeneralScreen()),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: _ToolCard(
+                  icon: Icons.info_rounded,
+                  title: 'Créditos y Fuentes',
+                  subtitle:
+                      'Equipo de desarrollo · Fuentes oficiales de datos (NATHARCE: Desarrollo de Software · JNE · ONPE)',
+                  horizontal: true,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const CreditsScreen()),
+                  ),
+                ),
+              ),
+
+              // ── Footer ───────────────────────────────────────────────────────
+              const SizedBox(height: 32),
+              Divider(color: Colors.grey.shade300),
+              const SizedBox(height: 12),
+              const Text(
+                '#PORESTOSSI — Datos: JNE · ONPE · NATHARCE',
                 style: TextStyle(
-                  color: Colors.grey.shade400,
+                  color: Color(0xFF9EAABB),
                   fontSize: 11,
-                  height: 1.6,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.3,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -196,43 +232,48 @@ class SelectionScreen extends StatelessWidget {
   }
 }
 
-// ─── Label de sección ─────────────────────────────────────────────────────────
+// ─── Section header ───────────────────────────────────────────────────────────
 
-class _SectionLabel extends StatelessWidget {
-  final String text;
-  const _SectionLabel(this.text);
+class _SectionHeader extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  const _SectionHeader({required this.label, required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Divider(color: Colors.grey.shade300)),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            text,
-            style: TextStyle(
-              color: Colors.grey.shade500,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
-            ),
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1E3A5F),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, color: Colors.white, size: 14),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Color(0xFF1E3A5F),
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.0,
           ),
         ),
-        Expanded(child: Divider(color: Colors.grey.shade300)),
+        const SizedBox(width: 10),
+        Expanded(child: Divider(color: Colors.grey.shade300, thickness: 1)),
       ],
     );
   }
 }
 
-// ─── Tarjeta de proceso electoral (tema claro) ────────────────────────────────
+// ─── Electoral process card (grid item) ──────────────────────────────────────
 
 class _ElectionCard extends StatelessWidget {
-  final IconData icon;
+  final Widget icon;
   final String title;
   final String subtitle;
-  final List<String> details;
-  final Color accentColor;
   final String? badge;
   final VoidCallback onTap;
 
@@ -240,8 +281,6 @@ class _ElectionCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.details,
-    required this.accentColor,
     required this.onTap,
     this.badge,
   });
@@ -252,117 +291,247 @@ class _ElectionCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF1E3A5F), Color(0xFF154360)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF1E3A5F).withValues(alpha: 0.35),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // PNG image
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: icon,
+              ),
+              const SizedBox(height: 12),
+              // Badge
+              if (badge != null) ...[
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    badge!,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+              ],
+              // Title
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 4),
+              // Subtitle
+              Expanded(
+                child: Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.75),
+                    fontSize: 10,
+                    height: 1.4,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 8),
+              // Arrow
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 10,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Tool card ────────────────────────────────────────────────────────────────
+
+class _ToolCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final String? badge;
+  final bool horizontal;
+  final VoidCallback onTap;
+
+  const _ToolCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.badge,
+    this.horizontal = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(14),
         child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: accentColor.withValues(alpha: 0.25),
+              color: const Color(0xFF1E3A5F).withValues(alpha: 0.2),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 8,
+                blurRadius: 6,
                 offset: const Offset(0, 2),
               ),
             ],
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Icono
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  color: accentColor.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: accentColor, size: 24),
-              ),
-              const SizedBox(width: 14),
-              // Texto
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: horizontal
+              ? Row(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E3A5F).withValues(alpha: 0.10),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(icon, color: const Color(0xFF1E3A5F), size: 22),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
                             title,
-                            style: TextStyle(
-                              color: Colors.grey.shade900,
-                              fontSize: 15,
+                            style: const TextStyle(
+                              color: Color(0xFF1E3A5F),
+                              fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                        if (badge != null) ...[
-                          const SizedBox(width: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 7, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: accentColor.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              badge!,
-                              style: TextStyle(
-                                color: accentColor,
-                                fontSize: 9,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.6,
-                              ),
+                          const SizedBox(height: 2),
+                          Text(
+                            subtitle,
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 11,
+                              height: 1.3,
                             ),
                           ),
                         ],
-                      ],
+                      ),
+                    ),
+                    const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 13,
+                      color: Color(0xFF1E3A5F),
+                    ),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E3A5F).withValues(alpha: 0.10),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(icon, color: const Color(0xFF1E3A5F), size: 22),
+                    ),
+                    const SizedBox(height: 10),
+                    if (badge != null) ...[
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E3A5F).withValues(alpha: 0.10),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          badge!,
+                          style: const TextStyle(
+                            color: Color(0xFF1E3A5F),
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Color(0xFF1E3A5F),
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        height: 1.3,
+                      ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       subtitle,
                       style: TextStyle(
                         color: Colors.grey.shade600,
-                        fontSize: 12,
+                        fontSize: 11,
                         height: 1.3,
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    ...details.map(
-                      (d) => Row(
-                        children: [
-                          Icon(Icons.check_circle_outline,
-                              size: 12, color: accentColor.withValues(alpha: 0.6)),
-                          const SizedBox(width: 5),
-                          Expanded(
-                            child: Text(
-                              d,
-                              style: TextStyle(
-                                color: Colors.grey.shade500,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(width: 8),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 14,
-                color: Colors.grey.shade400,
-              ),
-            ],
-          ),
         ),
       ),
     );

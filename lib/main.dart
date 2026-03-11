@@ -32,11 +32,11 @@ class SplashScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF5F7FA),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(28, 24, 28, 40),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
 
               // ── Logo ──────────────────────────────────────────────────────
               Center(
@@ -62,7 +62,7 @@ class SplashScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Text(
                 'Perú • Elecciones 2026',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -72,7 +72,37 @@ class SplashScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 20),
+
+              // ── Stats row ─────────────────────────────────────────────────
+              Row(
+                children: [
+                  _StatChip(
+                    value: '+2,000',
+                    label: 'candidatos\nanalizados',
+                    color: AppTheme.primaryColor,
+                    icon: Icons.person_search_rounded,
+                  ),
+                  const SizedBox(width: 8),
+                  _StatChip(
+                    value: '35',
+                    label: 'partidos\npolíticos',
+                    color: const Color(0xFF2563EB),
+                    icon: Icons.account_balance_rounded,
+                  ),
+                  const SizedBox(width: 8),
+                  _StatChip(
+                    value: '4',
+                    label: 'procesos\nelectorales',
+                    color: const Color(0xFF1D4ED8),
+                    icon: Icons.how_to_vote_rounded,
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+              const Divider(height: 1),
+              const SizedBox(height: 20),
 
               // ── Bienvenida card ──────────────────────────────────────────
               Container(
@@ -102,7 +132,9 @@ class SplashScreen extends StatelessWidget {
                           'Diputados, Senadores y Parlamento Andino del Perú '
                           'para las Elecciones 2026.',
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 16),
+                    Divider(height: 1),
+                    SizedBox(height: 16),
                     _SplashSection(
                       icon: Icons.people_rounded,
                       iconColor: Color(0xFF1565C0),
@@ -112,7 +144,9 @@ class SplashScreen extends StatelessWidget {
                           'datos abiertos del JNE, ONPE, Poder Judicial y el '
                           'Ministerio de Energía y Minas.',
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 16),
+                    Divider(height: 1),
+                    SizedBox(height: 16),
                     _SplashSection(
                       icon: Icons.lightbulb_rounded,
                       iconColor: Color(0xFFF9A825),
@@ -127,52 +161,348 @@ class SplashScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 20),
+              const Divider(height: 1),
+              const SizedBox(height: 20),
 
-              // ── Disclaimer ────────────────────────────────────────────────
-              Text(
-                '⚠ Herramienta informativa basada en datos públicos. No '
-                'representa acusación formal ni obligatoriedad de voto. '
-                'No financiada por ningún partido político ni afiliada a '
-                'ninguna institución pública.',
-                style: TextStyle(
-                  color: Colors.grey.shade500,
-                  fontSize: 11,
-                  fontStyle: FontStyle.italic,
+              // ── Cobertura de datos ────────────────────────────────────────
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Datos que analizamos',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.3,
+                      ),
                 ),
-                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  _DataCoverageCard(
+                    icon: Icons.school_rounded,
+                    label: 'Educación',
+                    color: const Color(0xFF0D47A1),
+                  ),
+                  const SizedBox(width: 8),
+                  _DataCoverageCard(
+                    icon: Icons.gavel_rounded,
+                    label: 'Integridad\nPenal',
+                    color: const Color(0xFFB71C1C),
+                  ),
+                  const SizedBox(width: 8),
+                  _DataCoverageCard(
+                    icon: Icons.verified_rounded,
+                    label: 'Cumplimiento',
+                    color: const Color(0xFF1B5E20),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+              const Divider(height: 1),
+              const SizedBox(height: 20),
+
+              // ── ¿Cómo funciona? ───────────────────────────────────────────
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '¿Cómo funciona?',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.3,
+                      ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFDDE4FF)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.04),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Column(
+                  children: [
+                    _HowItWorksStep(
+                      step: 1,
+                      text: 'Elige el proceso electoral que te interesa',
+                    ),
+                    _HowItWorksStep(
+                      step: 2,
+                      text: 'Conoce el perfil y puntuación de cada candidato',
+                    ),
+                    _HowItWorksStep(
+                      step: 3,
+                      text: 'Compara partidos por categorías de integridad',
+                    ),
+                    _HowItWorksStep(
+                      step: 4,
+                      text: 'Vota informado el 11 de abril de 2026',
+                      isLast: true,
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+              const Divider(height: 1),
+              const SizedBox(height: 20),
+
+              // ── Disclaimer box ────────────────────────────────────────────
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFFBEB),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFF59E0B)),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.warning_amber_rounded,
+                        color: Color(0xFFD97706), size: 22),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Herramienta informativa basada en datos públicos. '
+                        'No representa acusación formal ni obligatoriedad de voto. '
+                        'No financiada por ningún partido político ni afiliada a '
+                        'ninguna institución pública.',
+                        style: TextStyle(
+                          color: const Color(0xFF92400E),
+                          fontSize: 12,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
 
               const SizedBox(height: 28),
 
               // ── INGRESAR button ───────────────────────────────────────────
-              SizedBox(
+              Container(
                 width: double.infinity,
-                height: 54,
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.arrow_forward_ios_rounded, size: 18),
-                  label: const Text(
-                    'INGRESAR',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.primaryColor.withValues(alpha: 0.35),
+                      blurRadius: 14,
+                      offset: const Offset(0, 6),
                     ),
-                    elevation: 2,
-                  ),
-                  onPressed: () => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const SelectionScreen()),
+                  ],
+                ),
+                child: SizedBox(
+                  height: 56,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.arrow_forward_ios_rounded, size: 18),
+                    label: const Text(
+                      'INGRESAR',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.4),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primaryColor,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      elevation: 0,
+                    ),
+                    onPressed: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (_) => const SelectionScreen()),
+                    ),
                   ),
                 ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // ── Fuentes ───────────────────────────────────────────────────
+              Text(
+                'Fuentes: JNE · ONPE · Poder Judicial · MINEM',
+                style: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 11,
+                  letterSpacing: 0.3,
+                ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ── Helper Widgets ─────────────────────────────────────────────────────────────
+
+class _StatChip extends StatelessWidget {
+  final String value;
+  final String label;
+  final Color color;
+  final IconData icon;
+
+  const _StatChip({
+    required this.value,
+    required this.label,
+    required this.color,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: Colors.white.withValues(alpha: 0.85), size: 18),
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.85),
+                fontSize: 10,
+                height: 1.3,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DataCoverageCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  const _DataCoverageCard({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.07),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withValues(alpha: 0.25)),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 26),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: color,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                height: 1.3,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HowItWorksStep extends StatelessWidget {
+  final int step;
+  final String text;
+  final bool isLast;
+
+  const _HowItWorksStep({
+    required this.step,
+    required this.text,
+    this.isLast = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: isLast ? 0 : 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: const BoxDecoration(
+              color: AppTheme.primaryColor,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                '$step',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.grey.shade800,
+                fontSize: 13.5,
+                height: 1.4,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

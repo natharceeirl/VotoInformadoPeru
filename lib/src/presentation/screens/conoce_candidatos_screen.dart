@@ -399,7 +399,7 @@ class _ConoceCandidatosScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Conoce a tus Candidatos'),
+        title: Text(proceso.displayName),
         centerTitle: true,
         backgroundColor: color,
         foregroundColor: Colors.white,
@@ -1444,6 +1444,15 @@ void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proce
             if (hv.penaltyInvestigaciones > 0)
               _ScoreRow('Investigaciones/controversias (penalización)',
                   -hv.penaltyInvestigaciones, 0, Colors.red.shade700),
+            if (hv.penaltyReinfo > 0)
+              _ScoreRow('Vinculado a minería informal REINFO (penalización)',
+                  -hv.penaltyReinfo, 0, const Color(0xFF7B1FA2)),
+            if (hv.penaltyUniversidadCuestionada > 0)
+              _ScoreRow('Universidad con licencia denegada (penalización)',
+                  -hv.penaltyUniversidadCuestionada, 0, Colors.brown.shade700),
+            if (hv.bonusUniversidadElite > 0)
+              _ScoreRow('Universidad de élite reconocida (bonus)',
+                  hv.bonusUniversidadElite, 5, const Color(0xFF1565C0)),
             const SizedBox(height: 6),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
