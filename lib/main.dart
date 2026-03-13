@@ -90,7 +90,7 @@ class SplashScreen extends StatelessWidget {
                     value: '+2,000',
                     label: 'candidatos\nanalizados',
                     color: AppTheme.primaryColor,
-                    icon: Icons.person_search_rounded,
+                    icon: Icons.person_search,
                   ),
                   const SizedBox(width: 8),
                   _StatChip(
@@ -346,7 +346,17 @@ class SplashScreen extends StatelessWidget {
 
               // ── Fuentes ───────────────────────────────────────────────────
               Text(
-                'Fuentes: JNE · ONPE · Poder Judicial · MINEM',
+                'NATHARCE: Desarrollo de Software',
+                style: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 11,
+                  letterSpacing: 0.3,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                '#PORESTOSSI',
                 style: TextStyle(
                   color: Colors.grey.shade400,
                   fontSize: 11,

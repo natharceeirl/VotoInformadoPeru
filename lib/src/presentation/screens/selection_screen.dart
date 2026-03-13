@@ -24,7 +24,7 @@ class SelectionScreen extends StatelessWidget {
               Center(
                 child: Image.asset(
                   'assets/assets/Logo_Icono_Nombre_Subtitulo.png',
-                  height: 120,
+                  height: 300,
                   errorBuilder: (_, __, ___) => const Icon(
                     Icons.how_to_vote,
                     size: 80,
@@ -49,7 +49,7 @@ class SelectionScreen extends StatelessWidget {
                     SizedBox(width: 6),
                     Flexible(
                       child: Text(
-                        '+2,000 candidatos · 35 partidos · 4 procesos electorales',
+                        '+2,000 candidatos · 36 partidos · 4 procesos electorales',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 11,
@@ -191,12 +191,21 @@ class SelectionScreen extends StatelessWidget {
               const SizedBox(height: 32),
               Divider(color: Colors.grey.shade300),
               const SizedBox(height: 12),
-              const Text(
-                '#PORESTOSSI — Datos: JNE · ONPE · NATHARCE',
+              Text(
+                'NATHARCE: Desarrollo de Software',
                 style: TextStyle(
-                  color: Color(0xFF9EAABB),
+                  color: Colors.grey.shade400,
                   fontSize: 11,
-                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.3,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                '#PORESTOSSI',
+                style: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 11,
                   letterSpacing: 0.3,
                 ),
                 textAlign: TextAlign.center,
