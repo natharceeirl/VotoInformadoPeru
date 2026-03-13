@@ -42,7 +42,7 @@ class SplashScreen extends StatelessWidget {
               Center(
                 child: Image.asset(
                   'assets/assets/Logo_Icono_Nombre_Subtitulo.png',
-                  height: 180,
+                  height: 300,
                   errorBuilder: (_, __, ___) => Column(
                     children: [
                       Icon(Icons.how_to_vote,
@@ -64,7 +64,16 @@ class SplashScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                'Perú • Elecciones 2026',
+                'Perú',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Elecciones Generales 2026',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Colors.grey.shade600,
                       fontStyle: FontStyle.italic,
@@ -85,7 +94,7 @@ class SplashScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   _StatChip(
-                    value: '35',
+                    value: '36',
                     label: 'partidos\npolíticos',
                     color: const Color(0xFF2563EB),
                     icon: Icons.account_balance_rounded,
