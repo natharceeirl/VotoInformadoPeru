@@ -58,40 +58,37 @@ class ProcesoMenuScreen extends StatelessWidget {
               _ProcessHeader(proceso: proceso),
               const SizedBox(height: 20),
 
-              // ── Opciones en grilla 2 columnas ────────────────────────────────
-              LayoutBuilder(builder: (ctx, cons) {
-                return GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: cons.maxWidth > 500 ? 1.0 : 0.95,
-                  children: [
-                    _OptionCard(
-                      icon: Icons.people_alt_rounded,
-                      title: 'Conoce a los Candidatos',
-                      subtitle: 'Perfil de integridad · Educación · Antecedentes',
-                      onTap: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => ConoceCandidatosScreen(proceso: proceso))),
-                    ),
-                    _OptionCard(
-                      icon: Icons.bar_chart,
-                      title: 'Estadísticas por Partido',
-                      subtitle: 'Ranking · Puntaje promedio · Comparación',
-                      onTap: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => EstadisticasPartidoScreen(proceso: proceso))),
-                    ),
-                    _OptionCard(
-                      icon: Icons.open_in_new,
-                      title: 'Ver en el JNE',
-                      subtitle: 'Portal oficial de Voto Informado del JNE',
-                      isExternal: true,
-                      onTap: _launchJne,
-                    ),
-                  ],
-                );
-              }),
+              // ── Opciones ──────────────────────────────────────────────────────
+              _ActionRow(
+                icon: Icons.people,
+                iconColor: const Color(0xFF1565C0),
+                title: 'Conoce a los Candidatos',
+                subtitle: 'Perfil de integridad · Educación · Antecedentes',
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => ConoceCandidatosScreen(proceso: proceso))),
+              ),
+              const SizedBox(height: 10),
+              _ActionRow(
+                icon: Icons.poll,
+                iconColor: const Color(0xFF1B5E20),
+                title: 'Estadísticas por Partido',
+                subtitle: 'Ranking · Puntaje promedio · Comparación',
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => EstadisticasPartidoScreen(proceso: proceso))),
+              ),
+              const SizedBox(height: 16),
+              // JNE link (simple text button)
+              Center(
+                child: TextButton.icon(
+                  onPressed: _launchJne,
+                  icon: const Icon(Icons.open_in_new, size: 14),
+                  label: const Text('Ver candidatos en el portal oficial del JNE'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: const Color(0xFF1E3A5F),
+                    textStyle: const TextStyle(fontSize: 12),
+                  ),
+                ),
+              ),
               const SizedBox(height: 24),
 
               // ── Disclaimer ───────────────────────────────────────────────────
@@ -235,39 +232,36 @@ class _ProcessHeader extends StatelessWidget {
   }
 }
 
-// ─── Option card (grid item) ──────────────────────────────────────────────────
+// ─── Action row (horizontal option card) ─────────────────────────────────────
 
-class _OptionCard extends StatelessWidget {
+class _ActionRow extends StatelessWidget {
   final IconData icon;
+  final Color iconColor;
   final String title;
   final String subtitle;
-  final bool isExternal;
   final VoidCallback onTap;
 
-  const _OptionCard({
+  const _ActionRow({
     required this.icon,
+    required this.iconColor,
     required this.title,
     required this.subtitle,
     required this.onTap,
-    this.isExternal = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),
         child: Container(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: const Color(0xFF1E3A5F).withValues(alpha: 0.2),
-              width: 1.5,
-            ),
+            border: Border.all(color: const Color(0xFF1E3A5F).withValues(alpha: 0.15)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.04),
@@ -275,82 +269,47 @@ class _OptionCard extends StatelessWidget {
                 offset: const Offset(0, 2),
               ),
             ],
+            color: Colors.white,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1E3A5F).withValues(alpha: 0.10),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      icon,
-                      color: const Color(0xFF1E3A5F),
-                      size: 22,
-                    ),
-                  ),
-                  if (isExternal)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E3A5F).withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Text(
-                        'EXTERNO',
-                        style: TextStyle(
-                          color: Color(0xFF1E3A5F),
-                          fontSize: 8,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.6,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Color(0xFF1E3A5F),
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  height: 1.3,
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                child: Icon(icon, color: iconColor, size: 26),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(width: 14),
               Expanded(
-                child: Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 11,
-                    height: 1.4,
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Color(0xFF1E3A5F),
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 11,
+                        height: 1.3,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(
-                    isExternal
-                        ? Icons.open_in_new_rounded
-                        : Icons.arrow_forward_ios_rounded,
-                    size: 12,
-                    color: const Color(0xFF1E3A5F).withValues(alpha: 0.5),
-                  ),
-                ],
-              ),
+              const SizedBox(width: 8),
+              Icon(Icons.chevron_right, color: Colors.grey.shade400, size: 22),
             ],
           ),
         ),

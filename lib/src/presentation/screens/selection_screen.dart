@@ -71,75 +71,49 @@ class SelectionScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // 2-column grid for electoral process cards
-              LayoutBuilder(builder: (ctx, cons) {
-                final imgSize = cons.maxWidth > 500 ? 80.0 : 64.0;
-                return GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: cons.maxWidth > 500 ? 1.0 : 0.9,
-                  children: [
-                    _ElectionCard(
-                      icon: Image.asset(
-                        'assets/assets/Presidente.png',
-                        width: imgSize, height: imgSize,
-                        errorBuilder: (_, __, ___) => Icon(Icons.star, size: imgSize, color: Colors.white70),
-                      ),
-                      title: 'Presidente y Vicepresidentes',
-                      subtitle: 'Candidatos a la Presidencia y Vicepresidencias',
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.presidentes),
-                      )),
-                    ),
-                    _ElectionCard(
-                      icon: Image.asset(
-                        'assets/assets/Diputados.png',
-                        width: imgSize, height: imgSize,
-                        errorBuilder: (_, __, ___) => Icon(Icons.account_balance, size: imgSize, color: Colors.white70),
-                      ),
-                      title: 'Diputados',
-                      subtitle: 'Cámara de Diputados del Congreso de la República',
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.diputados),
-                      )),
-                    ),
-                    _ElectionCard(
-                      icon: Image.asset(
-                        'assets/assets/Senadores.png',
-                        width: imgSize, height: imgSize,
-                        errorBuilder: (_, __, ___) => Icon(Icons.gavel, size: imgSize, color: Colors.white70),
-                      ),
-                      title: 'Senadores',
-                      subtitle: 'Senado Nacional — análisis completo de transparencia',
-                      badge: 'COMPLETO',
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const MainMenuScreen()),
-                      ),
-                    ),
-                    _ElectionCard(
-                      icon: Image.asset(
-                        'assets/assets/ParlamentoAndino.png',
-                        width: imgSize, height: imgSize,
-                        errorBuilder: (_, __, ___) => Icon(Icons.public, size: imgSize, color: Colors.white70),
-                      ),
-                      title: 'Parlamento Andino',
-                      subtitle: 'Representación regional de Perú ante el Parlamento Andino',
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.parlamentoAndino),
-                      )),
-                    ),
-                  ],
-                );
-              }),
+              // Horizontal election process rows
+              _ElectionRow(
+                imagePath: 'assets/assets/Presidente.png',
+                title: 'Presidente y Vicepresidentes',
+                subtitle: 'Candidatos a la Presidencia y Vicepresidencias de la República',
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.presidentes),
+                )),
+              ),
+              const SizedBox(height: 8),
+              _ElectionRow(
+                imagePath: 'assets/assets/Diputados.png',
+                title: 'Diputados',
+                subtitle: 'Cámara de Diputados del Congreso de la República',
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.diputados),
+                )),
+              ),
+              const SizedBox(height: 8),
+              _ElectionRow(
+                imagePath: 'assets/assets/Senadores.png',
+                title: 'Senadores',
+                subtitle: 'Senado Nacional — análisis de transparencia',
+                badge: 'COMPLETO',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MainMenuScreen()),
+                ),
+              ),
+              const SizedBox(height: 8),
+              _ElectionRow(
+                imagePath: 'assets/assets/ParlamentoAndino.png',
+                title: 'Parlamento Andino',
+                subtitle: 'Representación regional de Perú ante el Parlamento Andino',
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.parlamentoAndino),
+                )),
+              ),
               const SizedBox(height: 28),
 
               // ── Sección: Herramientas ─────────────────────────────────────────
               _SectionHeader(
                 label: 'HERRAMIENTAS',
-                icon: Icons.construction,
+                icon: Icons.build,
               ),
               const SizedBox(height: 12),
 
@@ -161,7 +135,7 @@ class SelectionScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _ToolCard(
-                      icon: Icons.assessment,
+                      icon: Icons.grade,
                       title: 'Resumen General',
                       subtitle: 'Top candidatos por integridad',
                       onTap: () => Navigator.of(context).push(
@@ -254,17 +228,17 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-// ─── Electoral process card (grid item) ──────────────────────────────────────
+// ─── Election process horizontal row ─────────────────────────────────────────
 
-class _ElectionCard extends StatelessWidget {
-  final Widget icon;
+class _ElectionRow extends StatelessWidget {
+  final String imagePath;
   final String title;
   final String subtitle;
   final String? badge;
   final VoidCallback onTap;
 
-  const _ElectionCard({
-    required this.icon,
+  const _ElectionRow({
+    required this.imagePath,
     required this.title,
     required this.subtitle,
     required this.onTap,
@@ -277,97 +251,90 @@ class _ElectionCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [Color(0xFF1E3A5F), Color(0xFF154360)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
             ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF1E3A5F).withValues(alpha: 0.35),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+                color: const Color(0xFF1E3A5F).withValues(alpha: 0.28),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
               ),
             ],
           ),
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              // PNG image
+              // Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: icon,
-              ),
-              const SizedBox(height: 12),
-              // Badge
-              if (badge != null) ...[
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    badge!,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 8,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.8,
-                    ),
+                child: Image.asset(
+                  imagePath,
+                  width: 56,
+                  height: 56,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, __, ___) => const Icon(
+                    Icons.how_to_vote,
+                    size: 40,
+                    color: Colors.white70,
                   ),
                 ),
-                const SizedBox(height: 6),
-              ],
-              // Title
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  height: 1.3,
-                ),
               ),
-              const SizedBox(height: 4),
-              // Subtitle
+              const SizedBox(width: 14),
+              // Text
               Expanded(
-                child: Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.75),
-                    fontSize: 10,
-                    height: 1.4,
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (badge != null)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.amber.shade600,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          badge!,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                      ),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.72),
+                        fontSize: 11,
+                        height: 1.3,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 8),
-              // Arrow
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 10,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
+              const SizedBox(width: 8),
+              const Icon(Icons.chevron_right, color: Colors.white70, size: 22),
             ],
           ),
         ),

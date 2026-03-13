@@ -90,7 +90,7 @@ class SplashScreen extends StatelessWidget {
                     value: '+2,000',
                     label: 'candidatos\nanalizados',
                     color: AppTheme.primaryColor,
-                    icon: Icons.person_search,
+                    icon: Icons.people,
                   ),
                   const SizedBox(width: 8),
                   _StatChip(
