@@ -247,7 +247,7 @@ class CreditsScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             // ── Footer ───────────────────────────────────────────────────────
-            _CreditsFooter(),
+            const CreditsFooter(),
             const SizedBox(height: 32),
           ],
          ),
@@ -770,10 +770,10 @@ class _FaqSection extends StatelessWidget {
     _FaqItem(
       question: '¿Cómo se calcula la puntuación?',
       answer:
-          'Cada candidato recibe hasta 100 puntos distribuidos en tres categorías: '
+          'Cada candidato recibe hasta 105 puntos distribuidos en tres categorías: '
           'Educación (40 pts), Integridad Penal (35 pts) y Cumplimiento (25 pts). '
           'Se aplican penalizaciones por condenas, procesos activos y vínculos con '
-          'minería informal. Un bonus de +5 pts premia estudios en universidades élite.',
+          'minería informal. Un bonus premia estudios en universidades élite (5 pts).',
     ),
   ];
 
@@ -936,9 +936,9 @@ class _SocialChip extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Ink(
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.08),
+          color: color.withValues(alpha: 0.16),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
+          border: Border.all(color: color.withValues(alpha: 0.50), width: 1.2),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
@@ -1013,7 +1013,7 @@ class _PartyRankingSection extends StatelessWidget {
               ]),
               const SizedBox(height: 8),
               Text(
-                'Este índice evalúa a los 35 partidos políticos con candidatos al '
+                'Este índice evalúa a los 38 partidos políticos con candidatos al '
                 'Senado Nacional del Perú para las Elecciones 2026. Combina 8 '
                 'indicadores normalizados (0–100) ponderados para producir un '
                 'Score Final de Transparencia por partido.',
@@ -1187,10 +1187,10 @@ class _PartyRankingSection extends StatelessWidget {
   }
 }
 
-// ── Credits Footer ─────────────────────────────────────────────────────────────
+// ── Credits Footer (public so other screens can reuse it) ─────────────────────
 
-class _CreditsFooter extends StatelessWidget {
-  const _CreditsFooter();
+class CreditsFooter extends StatelessWidget {
+  const CreditsFooter({super.key});
 
   @override
   Widget build(BuildContext context) {

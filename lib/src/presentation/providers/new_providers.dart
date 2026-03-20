@@ -393,7 +393,17 @@ final candidatosConHVProcesoProvider =
           // Penalización pro-crimen (por nombre del candidato y por partido)
           final normNombre       = _normName(hv.nombre);
           final numLeyes         = proCrimen[normNombre] ?? 0;
-          final numLeyesPartido  = proCrimenPartido[_normName(hv.partido)] ?? 0;
+          // Partial match for party: "PARTIDO POLITICO NACIONAL PERU LIBRE"
+          // must match proCrimenPartido key "PERU LIBRE"
+          final normPartido = _normName(hv.partido);
+          int numLeyesPartido = proCrimenPartido[normPartido] ?? 0;
+          if (numLeyesPartido == 0) {
+            for (final e in proCrimenPartido.entries) {
+              if (normPartido.contains(e.key) && e.value > numLeyesPartido) {
+                numLeyesPartido = e.value;
+              }
+            }
+          }
           // Investigaciones: solo aplican al PRESIDENTE, no a vicepresidentes
           final esPresidente = c.cargo.toUpperCase().contains('PRESIDENTE DE LA REP') &&
               !c.cargo.toUpperCase().contains('VICE');

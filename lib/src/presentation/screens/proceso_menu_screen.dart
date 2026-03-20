@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../domain/models/hoja_vida_models.dart';
 import 'conoce_candidatos_screen.dart';
 import 'estadisticas_partido_screen.dart';
+import 'credits_screen.dart';
 
 // Re-export ProcesoElectoral so selection_screen.dart only needs to import this file
 export '../../domain/models/hoja_vida_models.dart' show ProcesoElectoral;
@@ -96,29 +97,7 @@ class ProcesoMenuScreen extends StatelessWidget {
 
               // ── Footer ───────────────────────────────────────────────────────
               const SizedBox(height: 28),
-              Divider(color: Colors.grey.shade300),
-              const SizedBox(height: 12),
-              const Text(
-                '#PORESTOSSI — Datos: JNE · ONPE · NATHARCE',
-                style: TextStyle(
-                  color: Color(0xFF9EAABB),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.3,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'NATHARCE - Desarrollo de Software',
-                style: TextStyle(
-                  color: Color(0xFF2C7BE5), // color más destacado
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.4,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              const CreditsFooter(),
             ],
           ),
         ),

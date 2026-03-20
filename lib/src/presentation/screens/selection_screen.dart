@@ -49,7 +49,7 @@ class SelectionScreen extends StatelessWidget {
                     SizedBox(width: 6),
                     Flexible(
                       child: Text(
-                        '+2,000 candidatos · 36 partidos · 4 procesos electorales',
+                        '+2,000 candidatos · 38 partidos · 4 procesos electorales',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 11,
@@ -93,7 +93,7 @@ class SelectionScreen extends StatelessWidget {
               _ElectionRow(
                 imagePath: 'assets/assets/Senadores.png',
                 title: 'Senadores',
-                subtitle: 'Senado Nacional — análisis de transparencia',
+                subtitle: 'Senado Nacional',
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const MainMenuScreen()),
                 ),
@@ -156,44 +156,8 @@ class SelectionScreen extends StatelessWidget {
               ),
 
               // ── Footer ───────────────────────────────────────────────────────
-              const SizedBox(height: 32),
-              Divider(color: Colors.grey.shade300),
-              const SizedBox(height: 16),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
-                  children: const [
-                    TextSpan(text: 'Desarrollado por '),
-                    TextSpan(
-                      text: 'NATHARCE',
-                      style: TextStyle(
-                        color: _navy,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    TextSpan(text: ' · Desarrollo de Software'),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-                decoration: BoxDecoration(
-                  color: _navy,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text(
-                  '#PORESTOSSI',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-              ),
+              const SizedBox(height: 28),
+              const CreditsFooter(),
             ],
           ),
         ),

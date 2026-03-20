@@ -94,7 +94,7 @@ class SplashScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   _StatChip(
-                    value: '36',
+                    value: '38',
                     label: 'partidos\npolíticos',
                     color: const Color(0xFF2563EB),
                     icon: Icons.account_balance_rounded,
@@ -137,7 +137,7 @@ class SplashScreen extends StatelessWidget {
                       iconColor: Color(0xFFFF8F00),
                       title: 'Bienvenido',
                       body: 'Esta herramienta permite conocer el perfil de '
-                          'transparencia de los candidatos a Presidente, '
+                          'transparencia de los candidatos a Presidente, Vicepresidentes, '
                           'Diputados, Senadores y Parlamento Andino del Perú '
                           'para las Elecciones 2026.',
                     ),
@@ -217,7 +217,7 @@ class SplashScreen extends StatelessWidget {
                   )),
                   SizedBox(width: 8),
                   Expanded(child: _DataCoverageCard(
-                    icon: Icons.assignment_ind,
+                    icon: Icons.history,
                     label: 'Cargos Previos',
                     color: Color(0xFFE65100),
                   )),

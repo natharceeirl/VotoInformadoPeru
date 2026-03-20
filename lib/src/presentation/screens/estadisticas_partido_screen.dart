@@ -19,12 +19,14 @@ class EstadisticasPartidoScreen extends ConsumerStatefulWidget {
 
 class _EstadisticasPartidoScreenState
     extends ConsumerState<EstadisticasPartidoScreen> {
-  String _searchText = '';
-  final TextEditingController _searchCtrl = TextEditingController();
+  String _nameFilter = '';
+  String? _partidoFilter;
+  String? _regionFilter;
+  final TextEditingController _nameCtrl = TextEditingController();
 
   @override
   void dispose() {
-    _searchCtrl.dispose();
+    _nameCtrl.dispose();
     super.dispose();
   }
 
@@ -34,52 +36,164 @@ class _EstadisticasPartidoScreenState
     bool excluir,
   ) {
     var result = candidatos;
-    if (_searchText.isNotEmpty) {
-      final q = _searchText.toUpperCase();
-      result = result.where((c) =>
-        c.hv.nombre.toUpperCase().contains(q) ||
-        c.hv.partido.toUpperCase().contains(q),
-      ).toList();
+    if (_nameFilter.isNotEmpty) {
+      final q = _nameFilter.toUpperCase();
+      result = result.where((c) => c.hv.nombre.toUpperCase().contains(q)).toList();
+    }
+    if (_partidoFilter != null) {
+      result = result.where((c) => c.hv.partido == _partidoFilter).toList();
+    }
+    if (_regionFilter != null) {
+      result = result.where((c) => c.departamento == _regionFilter).toList();
     }
     if (excluir && porEstosNo.isNotEmpty) {
-      result = result.where((c) =>
-        !porEstosNo.contains(_normName(c.hv.partido)),
-      ).toList();
+      result = result.where((c) {
+        final norm = _normName(c.hv.partido);
+        return !porEstosNo.any((p) => norm == p || norm.contains(p));
+      }).toList();
     }
     return result;
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildFilters(List<CandidatoConHV> todos) {
+    final cs = Theme.of(context).colorScheme;
+    final partidos = todos.map((c) => c.hv.partido).toSet().toList()..sort();
+    final proceso = widget.proceso;
+    final hasRegion = proceso == ProcesoElectoral.diputados ||
+        proceso == ProcesoElectoral.parlamentoAndino;
+    final regiones = hasRegion
+        ? (todos.map((c) => c.departamento).where((d) => d.isNotEmpty).toSet().toList()..sort())
+        : <String>[];
+    final hasActive = _nameFilter.isNotEmpty || _partidoFilter != null || _regionFilter != null;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-      child: TextField(
-        controller: _searchCtrl,
-        onChanged: (v) => setState(() => _searchText = v),
-        decoration: InputDecoration(
-          hintText: 'Buscar por nombre, apellido o partido...',
-          hintStyle: const TextStyle(fontSize: 13),
-          prefixIcon: const Icon(Icons.search_rounded, size: 18),
-          suffixIcon: _searchText.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear_rounded, size: 18),
-                  onPressed: () {
-                    _searchCtrl.clear();
-                    setState(() => _searchText = '');
-                  },
-                )
-              : null,
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Name search
+          TextField(
+            controller: _nameCtrl,
+            onChanged: (v) => setState(() => _nameFilter = v),
+            decoration: InputDecoration(
+              hintText: 'Buscar por nombre o apellido...',
+              hintStyle: const TextStyle(fontSize: 13),
+              prefixIcon: const Icon(Icons.person_search_rounded, size: 18),
+              suffixIcon: _nameFilter.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear_rounded, size: 18),
+                      onPressed: () {
+                        _nameCtrl.clear();
+                        setState(() => _nameFilter = '');
+                      },
+                    )
+                  : null,
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+            ),
           ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+          const SizedBox(height: 6),
+          // Party dropdown
+          Container(
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: cs.outline.withValues(alpha: 0.4)),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: DropdownButton<String>(
+              value: _partidoFilter,
+              isExpanded: true,
+              underline: const SizedBox.shrink(),
+              hint: const Text('Partido...', style: TextStyle(fontSize: 12)),
+              items: [
+                const DropdownMenuItem<String>(
+                  value: null,
+                  child: Text('Todos los partidos', style: TextStyle(fontSize: 12)),
+                ),
+                ...partidos.map((p) => DropdownMenuItem<String>(
+                      value: p,
+                      child: Row(children: [
+                        PartyLogo(partyName: p, size: 20),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(p,
+                              style: const TextStyle(fontSize: 11),
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                      ]),
+                    )),
+              ],
+              onChanged: (v) => setState(() => _partidoFilter = v),
+            ),
           ),
-        ),
+          // Region dropdown (Diputados / Parlamento Andino only)
+          if (hasRegion && regiones.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Container(
+              height: 44,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: cs.outline.withValues(alpha: 0.4)),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: DropdownButton<String>(
+                value: _regionFilter,
+                isExpanded: true,
+                underline: const SizedBox.shrink(),
+                hint: const Row(children: [
+                  Icon(Icons.map_outlined, size: 16),
+                  SizedBox(width: 6),
+                  Text('Todas las regiones', style: TextStyle(fontSize: 12)),
+                ]),
+                items: [
+                  const DropdownMenuItem<String>(
+                    value: null,
+                    child: Text('Todas las regiones', style: TextStyle(fontSize: 12)),
+                  ),
+                  ...regiones.map((r) => DropdownMenuItem<String>(
+                        value: r,
+                        child: Text(r, style: const TextStyle(fontSize: 12)),
+                      )),
+                ],
+                onChanged: (v) => setState(() => _regionFilter = v),
+              ),
+            ),
+          ],
+          if (hasActive) ...[
+            const SizedBox(height: 4),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: () {
+                  _nameCtrl.clear();
+                  setState(() {
+                    _nameFilter = '';
+                    _partidoFilter = null;
+                    _regionFilter = null;
+                  });
+                },
+                icon: const Icon(Icons.filter_alt_off_rounded, size: 14),
+                label: const Text('Limpiar filtros', style: TextStyle(fontSize: 12)),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
@@ -283,7 +397,7 @@ class _EstadisticasPartidoScreenState
           final filtrados = _applyFilters(candidatos, porEstosNo, excluir);
           return Column(
             children: [
-              _buildSearchBar(),
+              _buildFilters(candidatos),
               if (porEstosNo.isNotEmpty) _buildFilterBanner(porEstosNo, detalle),
               Expanded(
                 child: proceso == ProcesoElectoral.presidentes
@@ -1166,14 +1280,26 @@ void _showCandidatoDetalle(BuildContext context, CandidatoConHV c,
                 hv.scoreIntegridadOblig >= 20
                     ? const Color(0xFF2E7D32) : Colors.orange),
             if (hv.penaltyProCrimen > 0)
-              _ScoreRow('Leyes pro-crimen (penalización)',
+              _ScoreRow('Leyes pro-crimen personales (penalización)',
                   -hv.penaltyProCrimen, 0, Colors.deepOrange),
+            if (hv.penaltyProCrimenPartido > 0)
+              _ScoreRow('Partido apoyó leyes pro-crimen (penalización)',
+                  -hv.penaltyProCrimenPartido, 0, Colors.red.shade800),
             if (hv.penaltyCargosPublicos > 0)
               _ScoreRow('Cargos públicos previos (penalización)',
                   -hv.penaltyCargosPublicos, 0, Colors.orange),
             if (hv.penaltyInvestigaciones > 0)
               _ScoreRow('Investigaciones/controversias (penalización)',
                   -hv.penaltyInvestigaciones, 0, Colors.red.shade700),
+            if (hv.penaltyReinfo > 0)
+              _ScoreRow('Vinculado a REINFO (penalización)',
+                  -hv.penaltyReinfo, 0, const Color(0xFF7B1FA2)),
+            if (hv.penaltyUniversidadCuestionada > 0)
+              _ScoreRow('Universidad cuestionada (penalización)',
+                  -hv.penaltyUniversidadCuestionada, 0, Colors.brown.shade700),
+            if (hv.bonusUniversidadElite > 0)
+              _ScoreRow('Universidad de élite (bonus)',
+                  hv.bonusUniversidadElite, 5, const Color(0xFF1565C0)),
             const SizedBox(height: 6),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

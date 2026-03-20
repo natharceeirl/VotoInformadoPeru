@@ -29,7 +29,7 @@ class _ConoceCandidatosScreenState
   bool _bannerExpanded = false;
 
   bool get _hasTabs => widget.proceso == ProcesoElectoral.senadores;
-  bool get _hasActiveFilter => _nameFilter.isNotEmpty || _partidoFilter != null;
+  bool get _hasActiveFilter => _nameFilter.isNotEmpty || _partidoFilter != null || _deptoFilter != null;
 
   @override
   void initState() {
@@ -160,6 +160,7 @@ class _ConoceCandidatosScreenState
                   setState(() {
                     _nameFilter = '';
                     _partidoFilter = null;
+                    _deptoFilter = null;
                   });
                 },
                 icon: const Icon(Icons.filter_alt_off_rounded, size: 14),
@@ -566,6 +567,7 @@ class _SingleListView extends StatelessWidget {
     // ── Otros procesos: filter by departamento ─────────────────────────────
     final hasDepts =
         proceso == ProcesoElectoral.diputados ||
+        proceso == ProcesoElectoral.parlamentoAndino ||
         todos.any((c) => c.departamento.isNotEmpty);
 
     final deptos = todos.map((c) => c.departamento)
@@ -704,11 +706,11 @@ class _DeptoFilter extends StatelessWidget {
                 value: selected,
                 isExpanded: true,
                 underline: const SizedBox.shrink(),
-                hint: const Text('Todos los departamentos'),
+                hint: const Text('Todas las regiones'),
                 items: [
                   const DropdownMenuItem<String>(
                     value: null,
-                    child: Text('Todos los departamentos'),
+                    child: Text('Todas las regiones'),
                   ),
                   ...deptos.map((d) =>
                     DropdownMenuItem<String>(value: d, child: Text(d)),
@@ -1411,8 +1413,11 @@ void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proce
                 hv.scoreIntegridadOblig >= 20
                     ? const Color(0xFF2E7D32) : Colors.orange),
             if (hv.penaltyProCrimen > 0)
-              _ScoreRow('Leyes pro-crimen (penalización)',
+              _ScoreRow('Leyes pro-crimen personales (penalización)',
                   -hv.penaltyProCrimen, 0, Colors.deepOrange),
+            if (hv.penaltyProCrimenPartido > 0)
+              _ScoreRow('Partido apoyó leyes pro-crimen (penalización)',
+                  -hv.penaltyProCrimenPartido, 0, Colors.red.shade800),
             if (hv.penaltyCargosPublicos > 0)
               _ScoreRow('Cargos públicos previos (penalización)',
                   -hv.penaltyCargosPublicos, 0, Colors.orange),
@@ -1442,7 +1447,7 @@ void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proce
                   Text('Puntaje total',
                     style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.bold)),
-                  Text('${hv.scoreFinal} / 100',
+                  Text('${hv.scoreFinal} / 105',
                     style: TextStyle(fontWeight: FontWeight.bold,
                         fontSize: 16, color: hv.scoreColor)),
                 ],
