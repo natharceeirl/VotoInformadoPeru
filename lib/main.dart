@@ -186,40 +186,47 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              const Wrap(
-                spacing: 8,
-                runSpacing: 8,
+              const Row(
                 children: [
-                  _DataCoverageCard(
+                  Expanded(child: _DataCoverageCard(
                     icon: Icons.school_rounded,
                     label: 'Educación',
                     color: Color(0xFF0D47A1),
-                  ),
-                  _DataCoverageCard(
+                  )),
+                  SizedBox(width: 8),
+                  Expanded(child: _DataCoverageCard(
                     icon: Icons.gavel_rounded,
-                    label: 'Integridad\nPenal',
+                    label: 'Integridad Penal',
                     color: Color(0xFFB71C1C),
-                  ),
-                  _DataCoverageCard(
+                  )),
+                  SizedBox(width: 8),
+                  Expanded(child: _DataCoverageCard(
                     icon: Icons.verified_rounded,
                     label: 'Cumplimiento',
                     color: Color(0xFF1B5E20),
-                  ),
-                  _DataCoverageCard(
+                  )),
+                ],
+              ),
+              const SizedBox(height: 8),
+              const Row(
+                children: [
+                  Expanded(child: _DataCoverageCard(
                     icon: Icons.account_balance_rounded,
-                    label: 'Universidades\nde Prestigio',
+                    label: 'Univ. de Prestigio',
                     color: Color(0xFF6A1B9A),
-                  ),
-                  _DataCoverageCard(
-                    icon: Icons.work_rounded,
-                    label: 'Cargos\nPrevios',
+                  )),
+                  SizedBox(width: 8),
+                  Expanded(child: _DataCoverageCard(
+                    icon: Icons.assignment_ind,
+                    label: 'Cargos Previos',
                     color: Color(0xFFE65100),
-                  ),
-                  _DataCoverageCard(
+                  )),
+                  SizedBox(width: 8),
+                  Expanded(child: _DataCoverageCard(
                     icon: Icons.warning_rounded,
-                    label: 'Partido\nPro-Crimen',
+                    label: 'Partido Pro-Crimen',
                     color: Color(0xFF880E4F),
-                  ),
+                  )),
                 ],
               ),
 
@@ -479,26 +486,28 @@ class _DataCoverageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100,
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withValues(alpha: 0.25)),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: color, size: 26),
-          const SizedBox(height: 8),
+          Icon(icon, color: color, size: 22),
+          const SizedBox(height: 6),
           Text(
             label,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: color,
-              fontSize: 12,
+              fontSize: 10,
               fontWeight: FontWeight.w600,
-              height: 1.3,
+              height: 1.2,
             ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

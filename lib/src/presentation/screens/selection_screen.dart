@@ -116,7 +116,7 @@ class SelectionScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // Tools: 2+1 layout
+              // Tools: 2 equal columns
               Row(
                 children: [
                   Expanded(
@@ -144,18 +144,14 @@ class SelectionScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: _ToolCard(
-                  icon: Icons.info_rounded,
-                  title: 'Créditos y Fuentes',
-                  subtitle:
-                      'Equipo de desarrollo · Fuentes oficiales de datos (NATHARCE: Desarrollo de Software · JNE · ONPE)',
-                  horizontal: true,
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const CreditsScreen()),
-                  ),
+
+              // ── Créditos y Fuentes ────────────────────────────────────────────
+              const SizedBox(height: 28),
+              Divider(color: Colors.grey.shade300),
+              const SizedBox(height: 20),
+              _CreditsCard(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const CreditsScreen()),
                 ),
               ),
 
@@ -343,7 +339,6 @@ class _ToolCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final bool horizontal;
   final VoidCallback onTap;
 
   const _ToolCard({
@@ -351,7 +346,6 @@ class _ToolCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
-    this.horizontal = false,
   });
 
   @override
@@ -378,85 +372,164 @@ class _ToolCard extends StatelessWidget {
               ),
             ],
           ),
-          child: horizontal
-              ? Row(
-                  children: [
-                    Container(
-                      width: 42,
-                      height: 42,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E3A5F).withValues(alpha: 0.10),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(icon, color: const Color(0xFF1E3A5F), size: 22),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: const TextStyle(
-                              color: Color(0xFF1E3A5F),
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            subtitle,
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontSize: 11,
-                              height: 1.3,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 13,
-                      color: Color(0xFF1E3A5F),
-                    ),
-                  ],
-                )
-              : Column(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E3A5F).withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: const Color(0xFF1E3A5F), size: 22),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Color(0xFF1E3A5F),
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 11,
+                  height: 1.3,
+                ),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Credits card ─────────────────────────────────────────────────────────────
+
+class _CreditsCard extends StatelessWidget {
+  final VoidCallback onTap;
+  const _CreditsCard({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                const Color(0xFF1E3A5F),
+                const Color(0xFF0D2540),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF1E3A5F).withValues(alpha: 0.35),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(Icons.info_outline_rounded,
+                    color: Colors.white, size: 24),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 42,
-                      height: 42,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E3A5F).withValues(alpha: 0.10),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(icon, color: const Color(0xFF1E3A5F), size: 22),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        color: Color(0xFF1E3A5F),
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        height: 1.3,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      subtitle,
+                    const Text(
+                      'Créditos y Metodología',
                       style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 11,
-                        height: 1.3,
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.2,
                       ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Equipo · Fuentes JNE/ONPE/REINFO · Cómo calculamos los puntajes',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.72),
+                        fontSize: 11,
+                        height: 1.35,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Text(
+                            'NATHARCE',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Text(
+                            '#PORESTOSSI',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(width: 8),
+              const Icon(Icons.arrow_forward_ios_rounded,
+                  color: Colors.white70, size: 18),
+            ],
+          ),
         ),
       ),
     );
