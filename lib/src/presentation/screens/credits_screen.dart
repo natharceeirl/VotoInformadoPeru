@@ -181,7 +181,7 @@ class CreditsScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               _TeamCard(
-                icon: Icons.code_rounded,
+                iconImageAsset: 'assets/assets/Logo_Icono_Nombre_Subtitulo.png',
                 iconBgColor: const Color(0xFF1D4ED8),
                 bgColor: const Color(0xFFEBF3FF),
                 borderColor: const Color(0xFF1D4ED8),
@@ -290,7 +290,8 @@ class _SocialChipData {
 // ── Team Card ──────────────────────────────────────────────────────────────────
 
 class _TeamCard extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
+  final String? iconImageAsset;
   final Color iconBgColor;
   final Color bgColor;
   final Color borderColor;
@@ -301,7 +302,8 @@ class _TeamCard extends StatelessWidget {
   final List<_SocialChipData> chips;
 
   const _TeamCard({
-    required this.icon,
+    this.icon,
+    this.iconImageAsset,
     required this.iconBgColor,
     required this.bgColor,
     required this.borderColor,
@@ -335,12 +337,18 @@ class _TeamCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(iconImageAsset != null ? 4 : 10),
                 decoration: BoxDecoration(
-                  color: iconBgColor,
+                  color: iconImageAsset != null ? Colors.white : iconBgColor,
                   borderRadius: BorderRadius.circular(10),
+                  border: iconImageAsset != null
+                      ? Border.all(color: iconBgColor.withValues(alpha: 0.2))
+                      : null,
                 ),
-                child: Icon(icon, color: Colors.white, size: 20),
+                child: iconImageAsset != null
+                    ? Image.asset(iconImageAsset!,
+                        height: 40, width: 40, fit: BoxFit.contain)
+                    : Icon(icon, color: Colors.white, size: 20),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -942,14 +950,12 @@ class _SocialChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => _launchSocial(context, url),
+    return Material(
+      color: color,
       borderRadius: BorderRadius.circular(20),
-      child: Ink(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(20),
-        ),
+      child: InkWell(
+        onTap: () => _launchSocial(context, url),
+        borderRadius: BorderRadius.circular(20),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
           child: Row(
