@@ -199,6 +199,7 @@ class HojaVida {
   final int    cantidadMineras;           // número de licencias mineras (0 = ninguna)
   final bool   universidadCuestionada;    // estudió en una universidad con licencia denegada o cuestionada
   final bool   universidadElite;          // estudió en una universidad de élite reconocida
+  final String departamentoHv;            // departamento extraído de la primera exp. laboral (fallback para Parlamento Andino)
 
   const HojaVida({
     required this.dni,
@@ -234,6 +235,7 @@ class HojaVida {
     this.cantidadMineras = 0,
     this.universidadCuestionada = false,
     this.universidadElite = false,
+    this.departamentoHv = '',
   });
 
   factory HojaVida.fromJson(String dni, Map<String, dynamic> j) {
@@ -335,6 +337,16 @@ class HojaVida {
       cargosPartidarios:     parseCargos(j['cargosPartidarios'], 'partidario'),
       cargosEleccionPopular: parseCargos(j['cargosEleccionPopular'], 'popular'),
       notaAdicional: j['notaAdicional'] as String? ?? '',
+      departamentoHv: () {
+        final expList = j['experienciaLaboral'];
+        if (expList is List && expList.isNotEmpty) {
+          final first = expList.first;
+          if (first is Map<String, dynamic>) {
+            return (first['departamento'] as String? ?? '').toUpperCase();
+          }
+        }
+        return '';
+      }(),
     );
   }
 
@@ -382,6 +394,7 @@ class HojaVida {
     cantidadMineras:        cantidadMineras        ?? this.cantidadMineras,
     universidadCuestionada: universidadCuestionada ?? this.universidadCuestionada,
     universidadElite:       universidadElite       ?? this.universidadElite,
+    departamentoHv:         departamentoHv,
   );
 
   // ── Scoring ────────────────────────────────────────────────────────────────

@@ -1314,7 +1314,7 @@ void _showCandidatoDetalle(BuildContext context, CandidatoConHV c,
                 children: [
                   const Text('Puntaje total',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('${hv.scoreFinal} / 100',
+                  Text('${hv.scoreFinal} / 105',
                     style: TextStyle(fontWeight: FontWeight.bold,
                         fontSize: 16, color: hv.scoreColor)),
                 ],

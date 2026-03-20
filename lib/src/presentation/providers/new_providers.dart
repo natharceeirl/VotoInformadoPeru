@@ -457,7 +457,11 @@ final candidatosConHVProcesoProvider =
           result.add(CandidatoConHV(
             hv:           hv,
             tipoDistrito: tipoDistrito,
-            departamento: c.departamento,
+            // Parlamento Andino has no strDepartamento in the BD file;
+            // fall back to the departamento of the first labor entry in the HV.
+            departamento: c.departamento.isNotEmpty
+                ? c.departamento
+                : hv.departamentoHv,
             posicion:     c.posicion,
             fotoUrl:      c.fotoUrl,
             strNombre:    c.strNombre,

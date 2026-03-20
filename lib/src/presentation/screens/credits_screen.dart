@@ -110,107 +110,106 @@ class CreditsScreen extends StatelessWidget {
 
             // Card Andrés Sotil
             _TeamCard(
-              icon: Icons.sports_soccer_rounded,
-              iconBgColor: const Color(0xFF1E3A8A),
-              bgColor: const Color(0xFFF0F4FF),
-              borderColor: const Color(0xFF1E3A8A),
-              name: 'LA PELOTA EN NUESTRA CANCHA',
-              role: 'Promotor & Contenido',
-              person: 'Andrés Sotil',
-              description:
-                  'Iniciativa ciudadana de educación cívica y transparencia política. '
-                  'Responsable del análisis de datos, contenido editorial y difusión.',
-              chips: const [
-                _SocialChipData(
-                  platform: 'TikTok',
-                  handle: '@andressotil',
-                  iconData: FontAwesomeIcons.tiktok,
-                  color: Colors.black87,
-                  url: 'https://www.tiktok.com/@andressotil',
-                ),
-                _SocialChipData(
-                  platform: 'Instagram',
-                  handle: '@andressotil',
-                  iconData: FontAwesomeIcons.instagram,
-                  color: Color(0xFFE1306C),
-                  url: 'https://www.instagram.com/andressotil',
-                ),
-                _SocialChipData(
-                  platform: 'WhatsApp',
-                  handle: '+51 933 879 803',
-                  iconData: FontAwesomeIcons.whatsapp,
-                  color: Color(0xFF25D366),
-                  url: 'https://wa.me/51933879803',
-                ),
-                _SocialChipData(
-                  platform: 'X',
-                  handle: '@andressotil',
-                  iconData: FontAwesomeIcons.xTwitter,
-                  color: Colors.black87,
-                  url: 'https://x.com/andressotil',
-                ),
-                _SocialChipData(
-                  platform: 'Web',
-                  handle: 'lapelotaennuestracancha.com',
-                  iconData: FontAwesomeIcons.globe,
-                  color: Color(0xFF2563EB),
-                  url: 'https://www.lapelotaennuestracancha.com',
-                ),
-                _SocialChipData(
-                  platform: 'Email',
-                  handle: 'profandressotil@hotmail.com',
-                  iconData: FontAwesomeIcons.envelope,
-                  color: Color(0xFF0D9488),
-                  url: 'mailto:profandressotil@hotmail.com',
-                ),
-              ],
-            ),
+                icon: Icons.sports_soccer_rounded,
+                iconBgColor: const Color(0xFF1E3A8A),
+                bgColor: const Color(0xFFF0F4FF),
+                borderColor: const Color(0xFF1E3A8A),
+                name: 'LA PELOTA EN NUESTRA CANCHA',
+                role: 'Promotor & Contenido',
+                person: 'Andrés Sotil',
+                description:
+                    'Iniciativa ciudadana de educación cívica y transparencia política. '
+                    'Responsable del análisis de datos, contenido editorial y difusión.',
+                chips: const [
+                  _SocialChipData(
+                    platform: 'TikTok',
+                    handle: '@andressotil',
+                    iconData: FontAwesomeIcons.tiktok,
+                    color: Colors.black87,
+                    url: 'https://www.tiktok.com/@andressotil',
+                  ),
+                  _SocialChipData(
+                    platform: 'Instagram',
+                    handle: '@andressotil',
+                    iconData: FontAwesomeIcons.instagram,
+                    color: Color(0xFFE1306C),
+                    url: 'https://www.instagram.com/andressotil',
+                  ),
+                  _SocialChipData(
+                    platform: 'WhatsApp',
+                    handle: '+51 933 879 803',
+                    iconData: FontAwesomeIcons.whatsapp,
+                    color: Color(0xFF25D366),
+                    url: 'https://wa.me/51933879803',
+                  ),
+                  _SocialChipData(
+                    platform: 'X',
+                    handle: '@andressotil',
+                    iconData: FontAwesomeIcons.xTwitter,
+                    color: Colors.black87,
+                    url: 'https://x.com/andressotil',
+                  ),
+                  _SocialChipData(
+                    platform: 'Web',
+                    handle: 'lapelotaennuestracancha.com',
+                    iconData: FontAwesomeIcons.globe,
+                    color: Color(0xFF2563EB),
+                    url: 'https://www.lapelotaennuestracancha.com',
+                  ),
+                  _SocialChipData(
+                    platform: 'Email',
+                    handle: 'profandressotil@hotmail.com',
+                    iconData: FontAwesomeIcons.envelope,
+                    color: Color(0xFF0D9488),
+                    url: 'mailto:profandressotil@hotmail.com',
+                  ),
+                ],
+              ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // Card NATHARCE
-            _TeamCard(
-              icon: Icons.code_rounded,
-              iconBgColor: const Color(0xFF1D4ED8),
-              bgColor: const Color(0xFFEBF3FF),
-              borderColor: const Color(0xFF1D4ED8),
-              name: 'NATHARCE',
-              role: 'Desarrollo de Software',
-              person: 'Patrick Harvey',
-              description:
-                  'Desarrollo web y móvil. Automatizaciones y despliegues en producción/nube. '
-                  'Soluciones tecnológicas a la medida de cada cliente.',
-              chips: const [
-                _SocialChipData(
-                  platform: 'TikTok',
-                  handle: '@natharce',
-                  iconData: FontAwesomeIcons.tiktok,
-                  color: Colors.black87,
-                  url: 'https://www.tiktok.com/@natharce',
-                ),
-                _SocialChipData(
-                  platform: 'WhatsApp',
-                  handle: '+51 994 894 379',
-                  iconData: FontAwesomeIcons.whatsapp,
-                  color: Color(0xFF25D366),
-                  url: 'https://wa.me/51994894379',
-                ),
-                _SocialChipData(
-                  platform: 'Web',
-                  handle: 'natharce.netlify.app',
-                  iconData: FontAwesomeIcons.globe,
-                  color: Color(0xFF2563EB),
-                  url: 'https://natharce.netlify.app/',
-                ),
-                _SocialChipData(
-                  platform: 'Email',
-                  handle: 'natharce.eirl@gmail.com',
-                  iconData: FontAwesomeIcons.envelope,
-                  color: Color(0xFF0D9488),
-                  url: 'mailto:natharce.eirl@gmail.com',
-                ),
-              ],
-            ),
+              _TeamCard(
+                icon: Icons.code_rounded,
+                iconBgColor: const Color(0xFF1D4ED8),
+                bgColor: const Color(0xFFEBF3FF),
+                borderColor: const Color(0xFF1D4ED8),
+                name: 'NATHARCE',
+                role: 'Desarrollo de Software',
+                person: 'Patrick Harvey',
+                description:
+                    'Desarrollo web y móvil. Automatizaciones y despliegues en producción/nube. '
+                    'Soluciones tecnológicas a la medida de cada cliente.',
+                chips: const [
+                  _SocialChipData(
+                    platform: 'TikTok',
+                    handle: '@natharce',
+                    iconData: FontAwesomeIcons.tiktok,
+                    color: Colors.black87,
+                    url: 'https://www.tiktok.com/@natharce',
+                  ),
+                  _SocialChipData(
+                    platform: 'WhatsApp',
+                    handle: '+51 994 894 379',
+                    iconData: FontAwesomeIcons.whatsapp,
+                    color: Color(0xFF25D366),
+                    url: 'https://wa.me/51994894379',
+                  ),
+                  _SocialChipData(
+                    platform: 'Web',
+                    handle: 'natharce.netlify.app',
+                    iconData: FontAwesomeIcons.globe,
+                    color: Color(0xFF2563EB),
+                    url: 'https://natharce.netlify.app/',
+                  ),
+                  _SocialChipData(
+                    platform: 'Email',
+                    handle: 'natharce.eirl@gmail.com',
+                    iconData: FontAwesomeIcons.envelope,
+                    color: Color(0xFF0D9488),
+                    url: 'mailto:natharce.eirl@gmail.com',
+                  ),
+                ],
+              ),
 
             const SizedBox(height: 28),
             const Divider(height: 1),
@@ -936,9 +935,9 @@ class _SocialChip extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Ink(
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.16),
+          color: color.withValues(alpha: 0.13),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: color.withValues(alpha: 0.50), width: 1.2),
+          border: Border.all(color: color, width: 1.3),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
@@ -956,12 +955,12 @@ class _SocialChip extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: color,
                     ),
                   ),
                   Text(
                     handle,
-                    style: TextStyle(fontSize: 10, color: color),
+                    style: TextStyle(fontSize: 10, color: color.withValues(alpha: 0.8)),
                   ),
                 ],
               ),
@@ -1143,7 +1142,7 @@ class _PartyRankingSection extends StatelessWidget {
             border: Border.all(color: const Color(0xFFDDE4FF)),
           ),
           child: Column(children: [
-            _CrRangeTile(label: '80 – 100', desc: 'Transparencia alta', color: Colors.green),
+            _CrRangeTile(label: '80 – 105', desc: 'Transparencia alta', color: Colors.green),
             _CrRangeTile(label: '60 – 79', desc: 'Transparencia media-alta', color: Colors.lightGreen),
             _CrRangeTile(label: '40 – 59', desc: 'Riesgo moderado', color: Colors.amber),
             _CrRangeTile(label: '20 – 39', desc: 'Riesgo elevado', color: Colors.orange),

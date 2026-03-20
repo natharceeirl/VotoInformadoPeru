@@ -217,7 +217,7 @@ class SplashScreen extends StatelessWidget {
                   )),
                   SizedBox(width: 8),
                   Expanded(child: _DataCoverageCard(
-                    icon: Icons.history,
+                    icon: Icons.history_rounded,
                     label: 'Cargos Previos',
                     color: Color(0xFFE65100),
                   )),

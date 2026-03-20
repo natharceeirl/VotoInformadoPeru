@@ -8,6 +8,7 @@ import 'compare_parties_screen.dart';
 import 'charts_hub_screen.dart';
 import 'data_sources_screen.dart';
 import 'conoce_candidatos_screen.dart';
+import 'credits_screen.dart';
 import '../../domain/models/hoja_vida_models.dart';
 
 class MainMenuScreen extends StatelessWidget {
@@ -17,7 +18,7 @@ class MainMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('#PORESTOSSI: SENADO NACIONAL'),
+        title: const Text('Senadores'),
         elevation: 0,
         centerTitle: true,
       ),
@@ -212,26 +213,7 @@ class MainMenuScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 28),
-              const Divider(),
-              const SizedBox(height: 10),
-              Text(
-                '#PORESTOSSI — Datos: ONPE - JNE · 35 partidos · 963 candidatos',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.80),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'NATHARCE: Desarrollo de Software',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 14,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.80),
-                  letterSpacing: 0.4,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              const CreditsFooter(),
               const SizedBox(height: 8),
             ],
           ),
