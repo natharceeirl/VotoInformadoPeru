@@ -25,13 +25,11 @@ class _ConoceCandidatosScreenState
   String _nameFilter = '';
   late TextEditingController _nameCtrl;
   String? _partidoFilter;
-  String? _regionFilter;
   String? _deptoFilter;
   bool _bannerExpanded = false;
 
   bool get _hasTabs => widget.proceso == ProcesoElectoral.senadores;
-  bool get _hasActiveFilter =>
-      _nameFilter.isNotEmpty || _partidoFilter != null || _regionFilter != null;
+  bool get _hasActiveFilter => _nameFilter.isNotEmpty || _partidoFilter != null;
 
   @override
   void initState() {
@@ -70,9 +68,7 @@ class _ConoceCandidatosScreenState
     if (_partidoFilter != null) {
       result = result.where((c) => c.hv.partido == _partidoFilter).toList();
     }
-    if (_regionFilter != null && widget.proceso != ProcesoElectoral.presidentes) {
-      result = result.where((c) => c.departamento == _regionFilter).toList();
-    }
+
     if (excluir && porEstosNo.isNotEmpty) {
       result = result.where((c) {
         final r = _normPartido(c.hv.partido);
@@ -83,15 +79,8 @@ class _ConoceCandidatosScreenState
   }
 
   Widget _buildFilters(List<CandidatoConHV> todos) {
-    final proceso = widget.proceso;
-    final bool showRegion = proceso != ProcesoElectoral.presidentes && !_hasTabs;
+    // Region filter is handled internally by _SingleListView / _SenadoresView
     final partidos = todos.map((c) => c.hv.partido).toSet().toList()..sort();
-    final deptos = todos
-        .map((c) => c.departamento)
-        .where((d) => d.isNotEmpty)
-        .toSet()
-        .toList()
-      ..sort();
     final cs = Theme.of(context).colorScheme;
 
     return Padding(
@@ -127,78 +116,39 @@ class _ConoceCandidatosScreenState
             ),
           ),
           const SizedBox(height: 6),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 44,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: cs.outline.withValues(alpha: 0.4)),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: DropdownButton<String>(
-                    value: _partidoFilter,
-                    isExpanded: true,
-                    underline: const SizedBox.shrink(),
-                    hint: const Text('Partido...', style: TextStyle(fontSize: 12)),
-                    items: [
-                      const DropdownMenuItem<String>(
-                        value: null,
-                        child: Text('Todos los partidos', style: TextStyle(fontSize: 12)),
-                      ),
-                      ...partidos.map((p) => DropdownMenuItem<String>(
-                            value: p,
-                            child: Row(children: [
-                              PartyLogo(partyName: p, size: 20),
-                              const SizedBox(width: 6),
-                              Expanded(
-                                child: Text(p,
-                                    style: const TextStyle(fontSize: 11),
-                                    overflow: TextOverflow.ellipsis),
-                              ),
-                            ]),
-                          )),
-                    ],
-                    onChanged: (v) => setState(() => _partidoFilter = v),
-                  ),
+          Container(
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: cs.outline.withValues(alpha: 0.4)),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: DropdownButton<String>(
+              value: _partidoFilter,
+              isExpanded: true,
+              underline: const SizedBox.shrink(),
+              hint: const Text('Partido...', style: TextStyle(fontSize: 12)),
+              items: [
+                const DropdownMenuItem<String>(
+                  value: null,
+                  child: Text('Todos los partidos', style: TextStyle(fontSize: 12)),
                 ),
-              ),
-              if (showRegion && deptos.isNotEmpty) ...[
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Container(
-                    height: 44,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: cs.outline.withValues(alpha: 0.4)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: DropdownButton<String>(
-                      value: _regionFilter,
-                      isExpanded: true,
-                      underline: const SizedBox.shrink(),
-                      hint: const Text('Región...', style: TextStyle(fontSize: 12)),
-                      items: [
-                        const DropdownMenuItem<String>(
-                          value: null,
-                          child: Text('Todas las regiones', style: TextStyle(fontSize: 12)),
+                ...partidos.map((p) => DropdownMenuItem<String>(
+                      value: p,
+                      child: Row(children: [
+                        PartyLogo(partyName: p, size: 20),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(p,
+                              style: const TextStyle(fontSize: 11),
+                              overflow: TextOverflow.ellipsis),
                         ),
-                        ...deptos.map((d) => DropdownMenuItem<String>(
-                              value: d,
-                              child: Text(d,
-                                  style: const TextStyle(fontSize: 12),
-                                  overflow: TextOverflow.ellipsis),
-                            )),
-                      ],
-                      onChanged: (v) => setState(() => _regionFilter = v),
-                    ),
-                  ),
-                ),
+                      ]),
+                    )),
               ],
-            ],
+              onChanged: (v) => setState(() => _partidoFilter = v),
+            ),
           ),
           if (_hasActiveFilter) ...[
             const SizedBox(height: 4),
@@ -210,7 +160,6 @@ class _ConoceCandidatosScreenState
                   setState(() {
                     _nameFilter = '';
                     _partidoFilter = null;
-                    _regionFilter = null;
                   });
                 },
                 icon: const Icon(Icons.filter_alt_off_rounded, size: 14),
@@ -1037,7 +986,7 @@ class _ScoreBadge extends StatelessWidget {
               Text('${hv.scoreFinal}',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold,
                     color: hv.scoreColor, height: 1)),
-              Text('/100',
+              Text('/105',
                 style: TextStyle(fontSize: 7,
                     color: hv.scoreColor.withValues(alpha: 0.7), height: 1)),
             ],

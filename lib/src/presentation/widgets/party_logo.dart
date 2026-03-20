@@ -39,6 +39,7 @@ const Map<String, String> _partyLogoFiles = {
   'Verde': 'Verde.png',
   'Salvemos al Perú': 'Salvemos_al_Peru.png',
   'Perú Moderno': 'Peru_Moderno.png',
+  'Ciudadanos por el Perú': 'Ciudadanos_Por_El_Peru.png',
 };
 
 /// Maps JNE all-caps party names to the standard names used in [_partyLogoFiles].
@@ -108,6 +109,8 @@ const Map<String, String> _jneToStandard = {
   'PARTIDO POLITICO PERU MODERNO': 'Perú Moderno',
   'PARTIDO PATRIOTICO DEL PERU': 'PPP',
   'PARTIDO PATRIÓTICO DEL PERÚ': 'PPP',
+  'CIUDADANOS POR EL PERU': 'Ciudadanos por el Perú',
+  'PARTIDO CIUDADANOS POR EL PERU': 'Ciudadanos por el Perú',
 };
 
 /// Strips accents from a string for case-insensitive, accent-insensitive matching.

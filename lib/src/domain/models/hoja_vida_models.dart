@@ -192,7 +192,8 @@ class HojaVida {
   final List<CargoPolitico> cargosPartidarios;
   final List<CargoPolitico> cargosEleccionPopular;
   final String notaAdicional;
-  final int    numLeyesProCrimen;         // nº de leyes pro-crimen apoyadas (0 = ninguna)
+  final int    numLeyesProCrimen;         // nº de leyes pro-crimen apoyadas personalmente (0 = ninguna)
+  final int    numLeyesProCrimenPartido;  // nº de leyes pro-crimen apoyadas por su partido (0 = ninguna)
   final String investigacionesConocidas;  // texto de investigaciones/controversias conocidas
   final bool   esReinfo;                  // candidato aparece en base de datos REINFO
   final int    cantidadMineras;           // número de licencias mineras (0 = ninguna)
@@ -227,6 +228,7 @@ class HojaVida {
     this.cargosEleccionPopular = const [],
     this.notaAdicional = '',
     this.numLeyesProCrimen = 0,
+    this.numLeyesProCrimenPartido = 0,
     this.investigacionesConocidas = '',
     this.esReinfo = false,
     this.cantidadMineras = 0,
@@ -340,6 +342,7 @@ class HojaVida {
 
   HojaVida copyWith({
     int?    numLeyesProCrimen,
+    int?    numLeyesProCrimenPartido,
     String? investigacionesConocidas,
     bool?   esReinfo,
     int?    cantidadMineras,
@@ -373,6 +376,7 @@ class HojaVida {
     cargosEleccionPopular: cargosEleccionPopular,
     notaAdicional: notaAdicional,
     numLeyesProCrimen:        numLeyesProCrimen        ?? this.numLeyesProCrimen,
+    numLeyesProCrimenPartido: numLeyesProCrimenPartido ?? this.numLeyesProCrimenPartido,
     investigacionesConocidas: investigacionesConocidas ?? this.investigacionesConocidas,
     esReinfo:               esReinfo               ?? this.esReinfo,
     cantidadMineras:        cantidadMineras        ?? this.cantidadMineras,
@@ -412,8 +416,11 @@ class HojaVida {
 
   // ── Penalizaciones ─────────────────────────────────────────────────────────
 
-  /// -5 pts por cada ley pro-crimen apoyada, máximo -20
+  /// -5 pts por cada ley pro-crimen apoyada personalmente, máximo -20
   int get penaltyProCrimen => (numLeyesProCrimen * 5).clamp(0, 20);
+
+  /// -8 pts por cada ley pro-crimen que su partido apoyó, máximo -25
+  int get penaltyProCrimenPartido => (numLeyesProCrimenPartido * 8).clamp(0, 25);
 
   // Texto unificado de todos los cargos para búsqueda de keywords
   String get _allCargosText {
@@ -461,7 +468,8 @@ class HojaVida {
   int get scoreFinal {
     final raw = scoreEducacion + scoreIntegridadPenal + scoreIntegridadOblig
         + bonusUniversidadElite
-        - penaltyProCrimen - penaltyCargosPublicos - penaltyInvestigaciones
+        - penaltyProCrimen - penaltyProCrimenPartido
+        - penaltyCargosPublicos - penaltyInvestigaciones
         - penaltyReinfo - penaltyUniversidadCuestionada;
     return raw.clamp(0, 9999); // lower bound 0, no upper cap
   }

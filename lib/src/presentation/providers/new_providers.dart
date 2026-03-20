@@ -376,8 +376,9 @@ final hojasVidaProcesoProvider =
 /// Aplica penalización por leyes pro-crimen, investigaciones, REINFO y universidades.
 final candidatosConHVProcesoProvider =
     FutureProvider.family<List<CandidatoConHV>, ProcesoElectoral>((ref, proceso) async {
-      final hojas          = await ref.watch(hojasVidaProcesoProvider(proceso).future);
-      final proCrimen      = await ref.watch(proCrimenMapProvider.future);
+      final hojas               = await ref.watch(hojasVidaProcesoProvider(proceso).future);
+      final proCrimen           = await ref.watch(proCrimenMapProvider.future);
+      final proCrimenPartido    = await ref.watch(proCrimenPartidoProvider.future);
       final investigaciones = proceso == ProcesoElectoral.presidentes
           ? await ref.watch(investigacionesPresidentesProvider.future)
           : <String, String>{};
@@ -389,9 +390,10 @@ final candidatosConHVProcesoProvider =
         for (final c in bd) {
           HojaVida? hv = hojas[c.dni] ?? hojas[c.paddedDni];
           if (hv == null) continue;
-          // Penalización pro-crimen (por nombre del candidato)
-          final normNombre = _normName(hv.nombre);
-          final numLeyes   = proCrimen[normNombre] ?? 0;
+          // Penalización pro-crimen (por nombre del candidato y por partido)
+          final normNombre       = _normName(hv.nombre);
+          final numLeyes         = proCrimen[normNombre] ?? 0;
+          final numLeyesPartido  = proCrimenPartido[_normName(hv.partido)] ?? 0;
           // Investigaciones: solo aplican al PRESIDENTE, no a vicepresidentes
           final esPresidente = c.cargo.toUpperCase().contains('PRESIDENTE DE LA REP') &&
               !c.cargo.toUpperCase().contains('VICE');
@@ -431,14 +433,15 @@ final candidatosConHVProcesoProvider =
               }
             }
           }
-          if (numLeyes > 0 || inv.isNotEmpty || esReinfo || uniCuestionada || uniElite) {
+          if (numLeyes > 0 || numLeyesPartido > 0 || inv.isNotEmpty || esReinfo || uniCuestionada || uniElite) {
             hv = hv.copyWith(
-              numLeyesProCrimen:        numLeyes > 0   ? numLeyes   : null,
-              investigacionesConocidas: inv.isNotEmpty  ? inv        : null,
-              esReinfo:               esReinfo          ? true       : null,
-              cantidadMineras:        esReinfo          ? cantMineras : null,
-              universidadCuestionada: uniCuestionada    ? true       : null,
-              universidadElite:       uniElite          ? true       : null,
+              numLeyesProCrimen:        numLeyes > 0        ? numLeyes        : null,
+              numLeyesProCrimenPartido: numLeyesPartido > 0 ? numLeyesPartido : null,
+              investigacionesConocidas: inv.isNotEmpty       ? inv             : null,
+              esReinfo:               esReinfo               ? true            : null,
+              cantidadMineras:        esReinfo               ? cantMineras      : null,
+              universidadCuestionada: uniCuestionada         ? true            : null,
+              universidadElite:       uniElite               ? true            : null,
             );
           }
           result.add(CandidatoConHV(

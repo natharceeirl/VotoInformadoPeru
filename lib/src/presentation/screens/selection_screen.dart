@@ -94,7 +94,6 @@ class SelectionScreen extends StatelessWidget {
                 imagePath: 'assets/assets/Senadores.png',
                 title: 'Senadores',
                 subtitle: 'Senado Nacional — análisis de transparencia',
-                badge: 'COMPLETO',
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const MainMenuScreen()),
                 ),
@@ -125,7 +124,6 @@ class SelectionScreen extends StatelessWidget {
                       icon: Icons.how_to_vote_rounded,
                       title: 'Simulador de Voto',
                       subtitle: 'Aprende a votar correctamente',
-                      badge: 'INTERACTIVO',
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (_) => const VoteSimulatorScreen()),
@@ -164,25 +162,41 @@ class SelectionScreen extends StatelessWidget {
               // ── Footer ───────────────────────────────────────────────────────
               const SizedBox(height: 32),
               Divider(color: Colors.grey.shade300),
-              const SizedBox(height: 12),
-              Text(
-                'NATHARCE: Desarrollo de Software',
-                style: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontSize: 11,
-                  letterSpacing: 0.3,
-                ),
+              const SizedBox(height: 16),
+              RichText(
                 textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                  children: const [
+                    TextSpan(text: 'Desarrollado por '),
+                    TextSpan(
+                      text: 'NATHARCE',
+                      style: TextStyle(
+                        color: _navy,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    TextSpan(text: ' · Desarrollo de Software'),
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
-              Text(
-                '#PORESTOSSI',
-                style: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontSize: 11,
-                  letterSpacing: 0.3,
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                decoration: BoxDecoration(
+                  color: _navy,
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                textAlign: TextAlign.center,
+                child: const Text(
+                  '#PORESTOSSI',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0,
+                  ),
+                ),
               ),
             ],
           ),
@@ -234,7 +248,6 @@ class _ElectionRow extends StatelessWidget {
   final String imagePath;
   final String title;
   final String subtitle;
-  final String? badge;
   final VoidCallback onTap;
 
   const _ElectionRow({
@@ -242,7 +255,6 @@ class _ElectionRow extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
-    this.badge,
   });
 
   @override
@@ -292,24 +304,6 @@ class _ElectionRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (badge != null)
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 4),
-                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.amber.shade600,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          badge!,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.8,
-                          ),
-                        ),
-                      ),
                     Text(
                       title,
                       style: const TextStyle(
@@ -349,7 +343,6 @@ class _ToolCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final String? badge;
   final bool horizontal;
   final VoidCallback onTap;
 
@@ -358,7 +351,6 @@ class _ToolCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
-    this.badge,
     this.horizontal = false,
   });
 
@@ -443,26 +435,6 @@ class _ToolCard extends StatelessWidget {
                       child: Icon(icon, color: const Color(0xFF1E3A5F), size: 22),
                     ),
                     const SizedBox(height: 10),
-                    if (badge != null) ...[
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF1E3A5F).withValues(alpha: 0.10),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          badge!,
-                          style: const TextStyle(
-                            color: Color(0xFF1E3A5F),
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.6,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                    ],
                     Text(
                       title,
                       style: const TextStyle(

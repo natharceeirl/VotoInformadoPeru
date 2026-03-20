@@ -186,24 +186,39 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              Row(
+              const Wrap(
+                spacing: 8,
+                runSpacing: 8,
                 children: [
                   _DataCoverageCard(
                     icon: Icons.school_rounded,
                     label: 'Educación',
-                    color: const Color(0xFF0D47A1),
+                    color: Color(0xFF0D47A1),
                   ),
-                  const SizedBox(width: 8),
                   _DataCoverageCard(
                     icon: Icons.gavel_rounded,
                     label: 'Integridad\nPenal',
-                    color: const Color(0xFFB71C1C),
+                    color: Color(0xFFB71C1C),
                   ),
-                  const SizedBox(width: 8),
                   _DataCoverageCard(
                     icon: Icons.verified_rounded,
                     label: 'Cumplimiento',
-                    color: const Color(0xFF1B5E20),
+                    color: Color(0xFF1B5E20),
+                  ),
+                  _DataCoverageCard(
+                    icon: Icons.account_balance_rounded,
+                    label: 'Universidades\nde Prestigio',
+                    color: Color(0xFF6A1B9A),
+                  ),
+                  _DataCoverageCard(
+                    icon: Icons.work_rounded,
+                    label: 'Cargos\nPrevios',
+                    color: Color(0xFFE65100),
+                  ),
+                  _DataCoverageCard(
+                    icon: Icons.warning_rounded,
+                    label: 'Partido\nPro-Crimen',
+                    color: Color(0xFF880E4F),
                   ),
                 ],
               ),
@@ -344,25 +359,43 @@ class SplashScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // ── Fuentes ───────────────────────────────────────────────────
-              Text(
-                'NATHARCE: Desarrollo de Software',
-                style: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontSize: 11,
-                  letterSpacing: 0.3,
-                ),
+              // ── Footer ────────────────────────────────────────────────────
+              const Divider(height: 1),
+              const SizedBox(height: 16),
+              RichText(
                 textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                  children: [
+                    const TextSpan(text: 'Desarrollado por '),
+                    TextSpan(
+                      text: 'NATHARCE',
+                      style: TextStyle(
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const TextSpan(text: ' · Desarrollo de Software'),
+                  ],
+                ),
               ),
-              const SizedBox(height: 10),
-              Text(
-                '#PORESTOSSI',
-                style: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontSize: 11,
-                  letterSpacing: 0.3,
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryColor,
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                textAlign: TextAlign.center,
+                child: const Text(
+                  '#PORESTOSSI',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0,
+                  ),
+                ),
               ),
             ],
           ),
@@ -445,30 +478,29 @@ class _DataCoverageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.07),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withValues(alpha: 0.25)),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 26),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: color,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                height: 1.3,
-              ),
+    return Container(
+      width: 100,
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 26),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              height: 1.3,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
