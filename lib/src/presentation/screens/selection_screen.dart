@@ -40,7 +40,7 @@ class SelectionScreen extends StatelessWidget {
               _ElectionRow(
                 imagePath: 'assets/assets/Diputados.png',
                 title: 'Diputados',
-                subtitle: 'Cámara de Diputados del Congreso de la República',
+                subtitle: 'Cámara de Diputados (130) del Congreso de la República',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.diputados),
                 )),
@@ -49,7 +49,7 @@ class SelectionScreen extends StatelessWidget {
               _ElectionRow(
                 imagePath: 'assets/assets/Senadores.png',
                 title: 'Senadores',
-                subtitle: 'Senado Nacional',
+                subtitle: 'Senado Nacional -  60 senadores elegidos de dos formas distintas: Distrito Único (30) y Distrito Múltiple (30)',
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const MainMenuScreen()),
                 ),
@@ -58,7 +58,7 @@ class SelectionScreen extends StatelessWidget {
               _ElectionRow(
                 imagePath: 'assets/assets/ParlamentoAndino.png',
                 title: 'Parlamento Andino',
-                subtitle: 'Representación regional de Perú ante el Parlamento Andino',
+                subtitle: 'Representación regional (5) de Perú ante el Parlamento Andino',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => const ProcesoMenuScreen(proceso: ProcesoElectoral.parlamentoAndino),
                 )),

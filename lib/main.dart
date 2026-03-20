@@ -217,7 +217,7 @@ class SplashScreen extends StatelessWidget {
                   )),
                   SizedBox(width: 8),
                   Expanded(child: _DataCoverageCard(
-                    icon: Icons.work,
+                    icon: Icons.how_to_vote_rounded,
                     label: 'Cargos Previos',
                     color: Color(0xFFE65100),
                   )),

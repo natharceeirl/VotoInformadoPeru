@@ -44,46 +44,7 @@ class MainMenuScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ── Logo ──────────────────────────────────────────────────────
-              Center(
-                child: Image.asset(
-                  'assets/assets/Logo_Icono_Nombre_Subtitulo.png',
-                  height: 200,
-                  errorBuilder: (_, __, ___) => Icon(
-                    Icons.how_to_vote,
-                    size: 72,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Índice de Transparencia y Riesgo de Corrupción',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 2),
-              Text(
-                'Senado Nacional Perú • Elecciones 2026',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-                  fontStyle: FontStyle.italic,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'NATHARCE: Desarrollo de Software',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-                  fontSize: 10,
-                  letterSpacing: 0.4,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
+              const AppBrandHeader(),
 
               // ── Stats banner ───────────────────────────────────────────────
               //_StatsBanner(),

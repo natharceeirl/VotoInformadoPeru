@@ -947,16 +947,15 @@ class _SocialChip extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Ink(
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.18),
+          color: color,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: color, width: 1.5),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              FaIcon(iconData, size: 14, color: color),
+              FaIcon(iconData, size: 14, color: Colors.white),
               const SizedBox(width: 7),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -964,21 +963,21 @@ class _SocialChip extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
-                      color: color,
+                      color: Colors.white,
                     ),
                   ),
                   Text(
                     handle,
-                    style: TextStyle(fontSize: 10, color: color.withValues(alpha: 0.8)),
+                    style: const TextStyle(fontSize: 10, color: Colors.white70),
                   ),
                 ],
               ),
               const SizedBox(width: 5),
-              Icon(Icons.open_in_new_rounded,
-                  size: 11, color: color.withValues(alpha: 0.55)),
+              const Icon(Icons.open_in_new_rounded,
+                  size: 11, color: Colors.white60),
             ],
           ),
         ),
