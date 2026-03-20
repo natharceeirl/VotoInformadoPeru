@@ -3,6 +3,64 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
 
+// ── Shared App Brand Header ───────────────────────────────────────────────────
+class AppBrandHeader extends StatelessWidget {
+  const AppBrandHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/assets/Logo_Icono_Nombre_Subtitulo.png',
+          height: 190,
+          errorBuilder: (_, __, ___) => Icon(
+            Icons.how_to_vote,
+            size: 100,
+            color: AppTheme.primaryColor,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+          decoration: BoxDecoration(
+            color: AppTheme.primaryColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Text(
+            'Por Estos Sí · v1.0',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          'Elecciones Generales Perú 2026',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.grey.shade600,
+              ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'NATHARCE: Desarrollo de Software',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Colors.grey.shade500,
+                fontSize: 11,
+                letterSpacing: 0.4,
+              ),
+        ),
+        const SizedBox(height: 28),
+        const Divider(height: 1),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+}
+
 class CreditsScreen extends StatelessWidget {
   const CreditsScreen({super.key});
 
@@ -21,53 +79,7 @@ class CreditsScreen extends StatelessWidget {
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // ── Logo ────────────────────────────────────────────────────────
-            Image.asset(
-              'assets/assets/Logo_Icono_Nombre_Subtitulo.png',
-              height: 190,
-              errorBuilder: (_, __, ___) => Icon(
-                Icons.how_to_vote,
-                size: 100,
-                color: AppTheme.primaryColor,
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            // ── Version badge ────────────────────────────────────────────────
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
-              decoration: BoxDecoration(
-                color: AppTheme.primaryColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Text(
-                'Por Estos Sí · v1.0',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Elecciones Generales Perú 2026',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey.shade600,
-                  ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'NATHARCE: Desarrollo de Software',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.grey.shade500,
-                    fontSize: 11,
-                    letterSpacing: 0.4,
-                  ),
-            ),
-            const SizedBox(height: 28),
-            const Divider(height: 1),
-            const SizedBox(height: 24),
+            const AppBrandHeader(),
 
             // ── Misión ───────────────────────────────────────────────────────
             _SectionTitle('Misión'),
@@ -935,9 +947,9 @@ class _SocialChip extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Ink(
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.13),
+          color: color.withValues(alpha: 0.18),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: color, width: 1.3),
+          border: Border.all(color: color, width: 1.5),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),

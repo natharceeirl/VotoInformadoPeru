@@ -18,9 +18,25 @@ class MainMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Senadores'),
+        backgroundColor: Colors.white,
+        foregroundColor: const Color(0xFF1E3A5F),
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
+        shadowColor: Colors.black12,
+        title: const Text(
+          'Senadores',
+          style: TextStyle(
+            color: Color(0xFF1E3A5F),
+            fontWeight: FontWeight.w700,
+            fontSize: 17,
+          ),
+        ),
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Color(0xFF1E3A5F)),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Divider(height: 1, color: Colors.grey.shade200),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

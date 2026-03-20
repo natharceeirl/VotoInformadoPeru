@@ -8,8 +8,6 @@ import 'resumen_general_screen.dart';
 class SelectionScreen extends StatelessWidget {
   const SelectionScreen({super.key});
 
-  static const _navy = Color(0xFF1E3A5F);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,49 +18,7 @@ class SelectionScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // ── Logo ────────────────────────────────────────────────────────
-              Center(
-                child: Image.asset(
-                  'assets/assets/Logo_Icono_Nombre_Subtitulo.png',
-                  height: 300,
-                  errorBuilder: (_, __, ___) => const Icon(
-                    Icons.how_to_vote,
-                    size: 80,
-                    color: _navy,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // ── Stats bar ───────────────────────────────────────────────────
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                decoration: BoxDecoration(
-                  color: _navy,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.people_alt_rounded, color: Colors.white70, size: 14),
-                    SizedBox(width: 6),
-                    Flexible(
-                      child: Text(
-                        '+2,000 candidatos · 38 partidos · 4 procesos electorales',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.2,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
+              const AppBrandHeader(),
 
               // ── Sección: Procesos Electorales ────────────────────────────────
               _SectionHeader(

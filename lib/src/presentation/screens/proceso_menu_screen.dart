@@ -55,6 +55,7 @@ class ProcesoMenuScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const AppBrandHeader(),
               // ── Encabezado ──────────────────────────────────────────────────
               _ProcessHeader(proceso: proceso),
               const SizedBox(height: 20),
