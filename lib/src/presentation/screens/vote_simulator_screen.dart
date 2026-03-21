@@ -232,9 +232,11 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
   late final PageController _pc;
   int _currentPage = 0;
 
+  // Intro state
+  bool _started = false;
+
   // Section 1 state
   int? _presIdx;
-  bool _presShowAll = false;
 
   // Sections 2–5: [sectionControllerIdx][partyIdx][boxIdx]
   // sectionControllerIdx 0=Sec2, 1=Sec3, 2=Sec4, 3=Sec5
@@ -275,7 +277,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
   void _clearAll() {
     setState(() {
       _presIdx = null;
-      _presShowAll = false;
+      _started = false;
     });
     for (final s in _ctrl) {
       for (final p in s) {
@@ -313,28 +315,24 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
 
           // Regla 1
           _ruleText('Marca con una CRUZ (✗) dentro del símbolo del partido o la foto del candidato.'),
-          const SizedBox(height: 8),
-          Row(children: [
-            Expanded(child: _ruleImg('assets/assets/MarcaCruz.png', 'Marca Cruz')),
-            const SizedBox(width: 8),
-            Expanded(child: _ruleImg('assets/assets/MarcaX.png', 'Marca X')),
-          ]),
           const SizedBox(height: 10),
+          _ruleImg('assets/assets/MarcaCruz.png', 'Marca Cruz'),
+          const SizedBox(height: 8),
+          _ruleImg('assets/assets/MarcaX.png', 'Marca X'),
+          const SizedBox(height: 12),
 
           // Regla 2
           _ruleText('Votar por MÁS DE 1 PARTIDO en una sección ANULA ese voto.'),
-          const SizedBox(height: 8),
-          _ruleImg('assets/assets/VotoInv\u00e1lido.png', 'Voto Inválido'),
           const SizedBox(height: 10),
+          _ruleImg('assets/assets/VotoInv\u00e1lido.png', 'Voto Inválido'),
+          const SizedBox(height: 12),
 
           // Regla 3
           _ruleText('PUEDES votar por partidos DISTINTOS en cada sección sin anular ningún voto.'),
+          const SizedBox(height: 10),
+          _ruleImg('assets/assets/VotoPreferencial.png', 'Voto Preferencial'),
           const SizedBox(height: 8),
-          Row(children: [
-            Expanded(child: _ruleImg('assets/assets/VotoPreferencial.png', 'Voto Preferencial')),
-            const SizedBox(width: 8),
-            Expanded(child: _ruleImg('assets/assets/VotoV\u00e1lido.png', 'Voto Válido')),
-          ]),
+          _ruleImg('assets/assets/VotoV\u00e1lido.png', 'Voto Válido'),
         ],
       ),
     );
@@ -358,19 +356,21 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
 
   Widget _ruleImg(String path, String label) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.circular(8),
       child: Image.asset(
         path,
+        width: double.infinity,
         fit: BoxFit.contain,
         errorBuilder: (_, __, ___) => Container(
-          height: 56,
+          height: 100,
+          width: double.infinity,
           decoration: BoxDecoration(
               color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(6)),
+              borderRadius: BorderRadius.circular(8)),
           child: Center(
             child: Text(label,
                 style:
-                    const TextStyle(fontSize: 10, color: Colors.grey)),
+                    const TextStyle(fontSize: 12, color: Colors.grey)),
           ),
         ),
       ),
@@ -459,11 +459,11 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.zoom_in, size: 14, color: Color(0xFFF57F17)),
+              Icon(Icons.ballot_outlined, size: 14, color: Color(0xFFF57F17)),
               SizedBox(width: 6),
               Flexible(
                 child: Text(
-                  'Imagen de referencia · Pellizca para hacer zoom',
+                  'Imagen de referencia — Cédula de votación 2026',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 11, color: Color(0xFF5D4037)),
                 ),
@@ -478,31 +478,26 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                 const BorderRadius.vertical(bottom: Radius.circular(8)),
             color: Colors.white,
           ),
-          constraints: const BoxConstraints(maxHeight: 320),
           child: ClipRRect(
             borderRadius:
                 const BorderRadius.vertical(bottom: Radius.circular(6)),
-            child: InteractiveViewer(
-              maxScale: 6.0,
-              minScale: 0.5,
-              child: Image.asset(
-                'assets/assets/CedulaVotacion.png',
-                width: double.infinity,
-                fit: BoxFit.contain,
-                errorBuilder: (_, __, ___) => Container(
-                  height: 160,
-                  color: Colors.grey.shade100,
-                  child: const Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.ballot_outlined,
-                            size: 48, color: Colors.grey),
-                        SizedBox(height: 8),
-                        Text('Cédula de Votación',
-                            style: TextStyle(color: Colors.grey)),
-                      ],
-                    ),
+            child: Image.asset(
+              'assets/assets/CedulaVotacion.png',
+              width: double.infinity,
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) => Container(
+                height: 200,
+                color: Colors.grey.shade100,
+                child: const Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.ballot_outlined,
+                          size: 48, color: Colors.grey),
+                      SizedBox(height: 8),
+                      Text('Cédula de Votación',
+                          style: TextStyle(color: Colors.grey)),
+                    ],
                   ),
                 ),
               ),
@@ -522,16 +517,137 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
     );
   }
 
-  // ── Page 0: Sección 1 — Presidente ────────────────────────────────────────
+  // ── Intro page (before simulation starts) ─────────────────────────────────
 
-  Widget _buildPage0() {
-    final def = _kSections[0];
+  Widget _buildIntroPage() {
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const AppBrandHeader(),
+          // What is this
+          Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: _navy.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: _navy.withValues(alpha: 0.2)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.how_to_vote_rounded, color: _navy, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'El Simulador de Cédula te explica cómo votar correctamente '
+                    'en cada una de las 5 secciones de la cédula de votación '
+                    'de las Elecciones Generales Perú 2026. '
+                    'Practica antes del 12 de abril.',
+                    style: TextStyle(
+                        fontSize: 12.5,
+                        color: Colors.grey.shade800,
+                        height: 1.5),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Cedula reference
+          _cedulaImage(),
+          const SizedBox(height: 16),
+          // Rules
+          _rulesCard(),
+          const SizedBox(height: 8),
+          // Sections overview
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF3F4F6),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  const Icon(Icons.list_alt_rounded, size: 16, color: _navy),
+                  const SizedBox(width: 8),
+                  Text('Las 5 secciones de tu cédula',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                          color: _navy)),
+                ]),
+                const SizedBox(height: 10),
+                ..._kSections.map((s) => Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: Row(children: [
+                        Container(
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                              color: s.color, shape: BoxShape.circle),
+                          child: Center(
+                            child: Text('${s.number}',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(s.title,
+                              style: const TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w500)),
+                        ),
+                      ]),
+                    )),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          // COMENZAR button
+          SizedBox(
+            height: 52,
+            child: ElevatedButton.icon(
+              onPressed: () => setState(() => _started = true),
+              icon: const Icon(Icons.play_arrow_rounded, size: 22),
+              label: const Text(
+                'COMENZAR VOTACIÓN',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.8),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _navy,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                elevation: 2,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          const CreditsFooter(),
+        ],
+      ),
+    );
+  }
+
+  // ── Page 0: Sección 1 — Presidente ────────────────────────────────────────
+
+  Widget _buildPage0() {
+    final def = _kSections[0];
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
           _secCard(def),
           _cedulaImage(),
           const SizedBox(height: 16),
@@ -571,9 +687,25 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
         for (final c in candidatos) {
           byParty.putIfAbsent(c.hv.partido, () => c);
         }
-        final parties = byParty.entries.toList();
-        final showCount =
-            _presShowAll ? parties.length : (parties.length > 6 ? 6 : parties.length);
+        // Sort by _kPartyOrder
+        final parties = byParty.entries.toList()
+          ..sort((a, b) {
+            int idx(String name) {
+              final n = name.toUpperCase()
+                  .replaceAll('Á','A').replaceAll('É','E')
+                  .replaceAll('Í','I').replaceAll('Ó','O')
+                  .replaceAll('Ú','U').replaceAll('Ñ','N');
+              for (int i = 0; i < _kPartyOrder.length; i++) {
+                final k = _kPartyOrder[i].toUpperCase()
+                    .replaceAll('Á','A').replaceAll('É','E')
+                    .replaceAll('Í','I').replaceAll('Ó','O')
+                    .replaceAll('Ú','U').replaceAll('Ñ','N');
+                if (n.contains(k) || k.contains(n)) return i;
+              }
+              return 999;
+            }
+            return idx(a.key).compareTo(idx(b.key));
+          });
 
         return Card(
           elevation: 2,
@@ -611,31 +743,11 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                   ),
                 ]),
               ),
-              // Rows
-              ...parties.sublist(0, showCount).asMap().entries.map((e) {
+              // All rows
+              ...parties.asMap().entries.map((e) {
                 return _presRow(e.key, e.value.key, e.value.value,
                     _presIdx == e.key, color);
               }),
-              if (parties.length > 6)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 6, horizontal: 12),
-                  child: TextButton.icon(
-                    onPressed: () =>
-                        setState(() => _presShowAll = !_presShowAll),
-                    icon: Icon(
-                        _presShowAll
-                            ? Icons.expand_less
-                            : Icons.expand_more,
-                        size: 18),
-                    label: Text(
-                      _presShowAll
-                          ? 'Ver menos'
-                          : 'Ver todos (${parties.length - 6} más)',
-                      style: TextStyle(color: color, fontSize: 13),
-                    ),
-                  ),
-                ),
               const SizedBox(height: 8),
             ],
           ),
@@ -977,25 +1089,27 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
           child: Divider(height: 1, color: Colors.grey.shade200),
         ),
       ),
-      body: Column(
-        children: [
-          _StepBar(current: _currentPage),
-          Expanded(
-            child: PageView(
-              controller: _pc,
-              onPageChanged: (i) => setState(() => _currentPage = i),
+      body: _started
+          ? Column(
               children: [
-                _buildPage0(),
-                _buildPartyPage(1),
-                _buildPartyPage(2),
-                _buildPartyPage(3),
-                _buildPartyPage(4),
+                _StepBar(current: _currentPage),
+                Expanded(
+                  child: PageView(
+                    controller: _pc,
+                    onPageChanged: (i) => setState(() => _currentPage = i),
+                    children: [
+                      _buildPage0(),
+                      _buildPartyPage(1),
+                      _buildPartyPage(2),
+                      _buildPartyPage(3),
+                      _buildPartyPage(4),
+                    ],
+                  ),
+                ),
+                _buildNavBar(),
               ],
-            ),
-          ),
-          _buildNavBar(),
-        ],
-      ),
+            )
+          : _buildIntroPage(),
     );
   }
 }

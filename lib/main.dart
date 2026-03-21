@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'src/presentation/theme/app_theme.dart';
 import 'src/presentation/screens/selection_screen.dart';
+import 'src/presentation/screens/credits_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -36,52 +37,7 @@ class SplashScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 8),
-
-              // ── Logo ──────────────────────────────────────────────────────
-              Center(
-                child: Image.asset(
-                  'assets/assets/Logo_Icono_Nombre_Subtitulo.png',
-                  height: 300,
-                  errorBuilder: (_, __, ___) => Column(
-                    children: [
-                      Icon(Icons.how_to_vote,
-                          size: 100, color: AppTheme.primaryColor),
-                      const SizedBox(height: 12),
-                      Text(
-                        '#PORESTOSSI',
-                        style: Theme.of(context)
-                            .textTheme
-                            .displaySmall
-                            ?.copyWith(
-                              color: AppTheme.primaryColor,
-                              fontWeight: FontWeight.w900,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Perú',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.grey.shade600,
-                      fontStyle: FontStyle.italic,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Elecciones Generales 2026',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.grey.shade600,
-                      fontStyle: FontStyle.italic,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 20),
+              const AppBrandHeader(),
 
               // ── Stats row ─────────────────────────────────────────────────
               Row(
@@ -365,45 +321,7 @@ class SplashScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 20),
-
-              // ── Footer ────────────────────────────────────────────────────
-              const Divider(height: 1),
-              const SizedBox(height: 16),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
-                  children: [
-                    const TextSpan(text: 'Desarrollado por '),
-                    TextSpan(
-                      text: 'NATHARCE',
-                      style: TextStyle(
-                        color: AppTheme.primaryColor,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const TextSpan(text: ' · Desarrollo de Software'),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text(
-                  '#PORESTOSSI',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-              ),
+              const CreditsFooter(),
             ],
           ),
         ),
