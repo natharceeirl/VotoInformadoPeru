@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'credits_screen.dart';
+
+const _navy = Color(0xFF1E3A5F);
 
 class DataSourcesScreen extends StatelessWidget {
   const DataSourcesScreen({super.key});
@@ -11,16 +14,30 @@ class DataSourcesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fuente de los Datos'),
+        backgroundColor: Colors.white,
+        foregroundColor: _navy,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        shadowColor: Colors.black12,
+        title: const Text(
+          'Fuente de los Datos',
+          style: TextStyle(
+              color: _navy, fontWeight: FontWeight.w700, fontSize: 17),
+        ),
         centerTitle: true,
-        leading: const BackButton(),
+        iconTheme: const IconThemeData(color: _navy),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Divider(height: 1, color: Colors.grey.shade200),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const AppBrandHeader(),
               // ── Intro ────────────────────────────────────────────────────────
               _SectionCard(
                 color: cs.primary,
@@ -361,7 +378,7 @@ class DataSourcesScreen extends StatelessWidget {
                 isThreeLine: true,
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
               // ── Nota legal ──────────────────────────────────────────────────
               Container(
@@ -394,6 +411,8 @@ class DataSourcesScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 28),
+              const CreditsFooter(),
             ],
           ),
         ),
