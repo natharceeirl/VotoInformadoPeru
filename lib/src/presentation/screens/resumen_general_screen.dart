@@ -565,7 +565,7 @@ class _StrategicVoteSectionState
                       padding: EdgeInsets.all(16),
                       child: CircularProgressIndicator(),
                     ))
-                  else ...[
+                  /*else ...[
                     _buildViabilityBlock('Diputados', dipList,
                         widget.excluir, widget.porEstosNo,
                         const Color(0xFF1B4F72),
@@ -602,7 +602,7 @@ class _StrategicVoteSectionState
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),
