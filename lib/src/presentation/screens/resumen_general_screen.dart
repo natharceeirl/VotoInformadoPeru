@@ -148,61 +148,79 @@ class _ResumenGeneralScreenState extends ConsumerState<ResumenGeneralScreen> {
   // ── Tab bar ───────────────────────────────────────────────────────────────
 
   Widget _buildTabBar() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: _tabs.map((t) {
-          final active = _selectedTab == t.idx;
-          final tabColor = _tabColors[t.idx];
-          return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: GestureDetector(
-              onTap: () => setState(() {
-                _selectedTab = t.idx;
-                _selectedRegion = null;
-              }),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                decoration: BoxDecoration(
-                  color: active ? tabColor : Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: active ? tabColor : Colors.grey.shade300,
-                    width: active ? 1.5 : 1,
-                  ),
-                  boxShadow: active
-                      ? [
-                          BoxShadow(
-                              color: tabColor.withValues(alpha: 0.28),
-                              blurRadius: 8,
-                              offset: const Offset(0, 3))
-                        ]
-                      : [],
+    return Column(
+      children: _tabs.map((t) {
+        final active = _selectedTab == t.idx;
+        final tabColor = _tabColors[t.idx];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: GestureDetector(
+            onTap: () => setState(() {
+              _selectedTab = t.idx;
+              _selectedRegion = null;
+            }),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              width: double.infinity,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+              decoration: BoxDecoration(
+                color: active ? tabColor : Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: active ? tabColor : Colors.grey.shade300,
+                  width: active ? 1.5 : 1,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(t.icon,
-                        size: 18,
-                        color: active ? Colors.white : Colors.grey.shade500),
-                    const SizedBox(height: 4),
-                    Text(
-                      t.label,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: active ? Colors.white : Colors.grey.shade600,
-                          height: 1.2),
+                boxShadow: active
+                    ? [
+                        BoxShadow(
+                            color: tabColor.withValues(alpha: 0.28),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3))
+                      ]
+                    : [],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: active
+                          ? Colors.white.withValues(alpha: 0.2)
+                          : tabColor.withValues(alpha: 0.1),
                     ),
-                  ],
-                ),
+                    child: Icon(t.icon,
+                        size: 20,
+                        color: active ? Colors.white : tabColor),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      t.label.replaceAll('\n', ' '),
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: active
+                              ? Colors.white
+                              : Colors.grey.shade800),
+                    ),
+                  ),
+                  Icon(
+                    active
+                        ? Icons.keyboard_arrow_down_rounded
+                        : Icons.chevron_right_rounded,
+                    color:
+                        active ? Colors.white : Colors.grey.shade400,
+                    size: 20,
+                  ),
+                ],
               ),
             ),
-          );
-        }).toList(),
-      ),
+          ),
+        );
+      }).toList(),
     );
   }
 

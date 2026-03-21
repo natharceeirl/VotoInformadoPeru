@@ -799,11 +799,21 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
               ),
             ),
             if (selected)
-              Text('✗',
-                  style: const TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red)),
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.red.withValues(alpha: 0.12),
+                ),
+                alignment: Alignment.center,
+                child: const Text('✗',
+                    style: TextStyle(
+                        fontSize: 42,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                        height: 1.0)),
+              ),
           ]),
           const SizedBox(width: 10),
           Expanded(
@@ -835,11 +845,21 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                 ),
               ),
               if (selected)
-                Text('✗',
-                    style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red)),
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red.withValues(alpha: 0.12),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text('✗',
+                      style: TextStyle(
+                          fontSize: 38,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                          height: 1.0)),
+                ),
             ]),
             const SizedBox(height: 2),
             Container(
@@ -972,11 +992,22 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                             ),
                           ),
                           if (selected)
-                            const Text('✗',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red)),
+                            Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.red
+                                    .withValues(alpha: 0.12),
+                              ),
+                              alignment: Alignment.center,
+                              child: const Text('✗',
+                                  style: TextStyle(
+                                      fontSize: 34,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                      height: 1.0)),
+                            ),
                         ]),
                       ),
                       const SizedBox(width: 8),
