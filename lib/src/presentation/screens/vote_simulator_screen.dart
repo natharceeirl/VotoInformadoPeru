@@ -800,10 +800,10 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
             ),
             if (selected)
               Text('✗',
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: color.withValues(alpha: 0.85))),
+                      color: Colors.red)),
           ]),
           const SizedBox(width: 10),
           Expanded(
@@ -836,10 +836,10 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
               ),
               if (selected)
                 Text('✗',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: color.withValues(alpha: 0.85))),
+                        color: Colors.red)),
             ]),
             const SizedBox(height: 2),
             Container(
@@ -972,12 +972,11 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                             ),
                           ),
                           if (selected)
-                            Text('✗',
+                            const Text('✗',
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: def.color
-                                        .withValues(alpha: 0.85))),
+                                    color: Colors.red)),
                         ]),
                       ),
                       const SizedBox(width: 8),
@@ -1092,6 +1091,53 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
 
           const SizedBox(height: 4),
           _buildOverallSummary(),
+          const SizedBox(height: 14),
+
+          // Motivational message
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF1F2),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFFFDA4AF)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.how_to_vote_rounded,
+                    color: Color(0xFFBE123C), size: 24),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '¡Tu voto es tu voz — no la desperdicies!',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFBE123C)),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'No votar es, indirectamente, favorecer a quienes rechazas. '
+                        'Los partidos que han llevado al Perú a la corrupción '
+                        'cuentan con el ausentismo: mientras menos ciudadanos íntegros '
+                        'voten, más fácil es para ellos ganar con su base cautiva.\n\n'
+                        'Cada voto a un candidato honesto suma. Lleva a esta app '
+                        'a tus amigos y familia para que también voten informados '
+                        'el 12 de abril de 2026.',
+                        style: TextStyle(
+                            fontSize: 12,
+                            height: 1.5,
+                            color: Colors.red.shade900),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 24),
           const CreditsFooter(),
         ],

@@ -17,7 +17,7 @@ const _tabs = [
   _TabDef(1, 'Senadores\nNacional', Icons.public_rounded),
   _TabDef(2, 'Senadores\nRegional', Icons.map_rounded),
   _TabDef(3, 'Diputados', Icons.account_balance_rounded),
-  _TabDef(4, 'Parl.\nAndino', Icons.language_rounded),
+  _TabDef(4, 'Parlamento\nAndino', Icons.account_balance_rounded),
 ];
 
 const _tabColors = [
@@ -1259,24 +1259,8 @@ class _ProcesoSection extends ConsumerWidget {
 // ── Candidato list with limit (shared) ───────────────────────────────────────
 
 Widget _buildCandidatoList(
-    BuildContext context, List<CandidatoConHV> lista, Color color,
-    {int limit = 25}) {
-  final visible = lista.take(limit).toList();
-  return Column(
-    children: [
-      ...visible.asMap().entries.map(
-          (e) => _candidatoRow(context, e.key + 1, e.value, color)),
-      if (lista.length > limit)
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text(
-            'Mostrando $limit de ${lista.length}. Usa el Directorio para ver todos.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
-          ),
-        ),
-    ],
-  );
+    BuildContext context, List<CandidatoConHV> lista, Color color) {
+  return _CandidatoListPaginated(lista: lista, color: color);
 }
 
 // ── Candidato row (shared) ────────────────────────────────────────────────────
@@ -1586,15 +1570,14 @@ void _showHV(BuildContext context, CandidatoConHV c) {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: hv.scoreColor
-                                      .withValues(alpha: 0.25),
+                                  color: Colors.white.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(hv.scoreLabel,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.bold,
-                                        color: hv.scoreColor)),
+                                        color: Colors.white)),
                               ),
                             ],
                           ),
@@ -1606,172 +1589,197 @@ void _showHV(BuildContext context, CandidatoConHV c) {
 
             // ── Body ─────────────────────────────────────────────────
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Score breakdown
-                  _hvSection('Desglose del Puntaje', _navy),
-                  _scoreRow('Educación', hv.scoreEducacion, 40, _navy,
-                      positive: true),
-                  _scoreRow('Integridad Penal', hv.scoreIntegridadPenal,
-                      35, _navy,
-                      positive: true),
-                  _scoreRow('Obligaciones', hv.scoreIntegridadOblig, 25,
-                      _navy,
-                      positive: true),
-                  if (hv.bonusUniversidadElite > 0)
-                    _scoreRow('+ Univ. de élite',
-                        hv.bonusUniversidadElite, 5,
-                        Colors.green.shade600,
+                  // Score breakdown — navy/blue
+                  _hvSectionCard('Desglose del Puntaje', _navy,
+                      const Color(0xFFEFF6FF), [
+                    _scoreRow('Educación', hv.scoreEducacion, 40, _navy,
                         positive: true),
-                  if (hv.penaltyReinfo > 0)
-                    _scoreRow('− REINFO (minería)', -hv.penaltyReinfo, 15,
-                        Colors.red.shade700,
-                        positive: false),
-                  if (hv.penaltyUniversidadCuestionada > 0)
-                    _scoreRow('− Univ. cuestionada',
-                        -hv.penaltyUniversidadCuestionada, 5,
-                        Colors.red.shade700,
-                        positive: false),
-                  if (hv.penaltyProCrimen > 0)
-                    _scoreRow('− Leyes pro-crimen (personal)',
-                        -hv.penaltyProCrimen, 20, Colors.red.shade700,
-                        positive: false),
-                  if (hv.penaltyProCrimenPartido > 0)
-                    _scoreRow('− Leyes pro-crimen (partido)',
-                        -hv.penaltyProCrimenPartido, 25,
-                        Colors.red.shade700,
-                        positive: false),
-                  if (hv.penaltyCargosPublicos > 0)
-                    _scoreRow('− Cargos públicos previos',
-                        -hv.penaltyCargosPublicos, 15,
-                        Colors.orange.shade700,
-                        positive: false),
-                  if (hv.penaltyInvestigaciones > 0)
-                    _scoreRow('− Investigaciones conocidas',
-                        -hv.penaltyInvestigaciones, 10,
-                        Colors.red.shade700,
-                        positive: false),
-                  const SizedBox(height: 16),
+                    _scoreRow('Integridad Penal', hv.scoreIntegridadPenal,
+                        35, _navy,
+                        positive: true),
+                    _scoreRow('Obligaciones', hv.scoreIntegridadOblig, 25,
+                        _navy,
+                        positive: true),
+                    if (hv.bonusUniversidadElite > 0)
+                      _scoreRow('+ Univ. de élite', hv.bonusUniversidadElite,
+                          5, Colors.green.shade700,
+                          positive: true),
+                    if (hv.penaltyReinfo > 0)
+                      _scoreRow('− REINFO (minería)', -hv.penaltyReinfo, 15,
+                          Colors.red.shade700,
+                          positive: false),
+                    if (hv.penaltyUniversidadCuestionada > 0)
+                      _scoreRow('− Univ. cuestionada',
+                          -hv.penaltyUniversidadCuestionada, 5,
+                          Colors.red.shade700,
+                          positive: false),
+                    if (hv.penaltyProCrimen > 0)
+                      _scoreRow('− Leyes pro-crimen (personal)',
+                          -hv.penaltyProCrimen, 20, Colors.red.shade700,
+                          positive: false),
+                    if (hv.penaltyProCrimenPartido > 0)
+                      _scoreRow('− Leyes pro-crimen (partido)',
+                          -hv.penaltyProCrimenPartido, 25,
+                          Colors.red.shade700,
+                          positive: false),
+                    if (hv.penaltyCargosPublicos > 0)
+                      _scoreRow('− Cargos públicos previos',
+                          -hv.penaltyCargosPublicos, 15,
+                          Colors.orange.shade700,
+                          positive: false),
+                    if (hv.penaltyInvestigaciones > 0)
+                      _scoreRow('− Investigaciones conocidas',
+                          -hv.penaltyInvestigaciones, 10,
+                          Colors.red.shade700,
+                          positive: false),
+                  ]),
 
-                  // Personal & academic
-                  _hvSection('Datos Personales y Académicos', _navy),
-                  _detRow(Icons.badge_rounded, _navy, 'DNI', hv.dni),
-                  _detRow(Icons.format_list_numbered_rounded, _navy,
-                      'Posición en lista', '#${c.posicion}'),
-                  if (c.cargo.isNotEmpty)
-                    _detRow(Icons.work_outline_rounded, _navy, 'Cargo',
-                        c.cargo),
-                  _detRow(Icons.school_rounded, _navy, 'Nivel educativo',
-                      hv.educacionLabel),
-                  if (hv.universidades.isNotEmpty)
-                    _detRow(Icons.account_balance_rounded, _navy,
-                        'Universidad(es)', hv.universidades.join('; ')),
-                  if (hv.posgrados.isNotEmpty)
-                    _detRow(Icons.military_tech_rounded, _navy, 'Posgrado(s)',
-                        hv.posgrados.join('; ')),
-                  if (hv.universidadElite)
-                    _flag(Icons.star_rounded, Colors.green.shade600,
-                        'Universidad de élite reconocida'),
-                  if (hv.universidadCuestionada)
-                    _flag(Icons.warning_rounded, Colors.orange.shade700,
-                        'Universidad con licencia cuestionada'),
-                  const SizedBox(height: 16),
+                  // Personal & academic — blue
+                  _hvSectionCard('Datos Personales y Académicos',
+                      const Color(0xFF2563EB), const Color(0xFFEFF6FF), [
+                    _detRow(Icons.badge_rounded, const Color(0xFF2563EB),
+                        'DNI', hv.dni),
+                    _detRow(Icons.format_list_numbered_rounded,
+                        const Color(0xFF2563EB), 'Posición en lista',
+                        '#${c.posicion}'),
+                    if (c.cargo.isNotEmpty)
+                      _detRow(Icons.work_outline_rounded,
+                          const Color(0xFF2563EB), 'Cargo', c.cargo),
+                    _detRow(Icons.school_rounded, const Color(0xFF2563EB),
+                        'Nivel educativo', hv.educacionLabel),
+                    if (hv.universidades.isNotEmpty)
+                      _detRow(Icons.account_balance_rounded,
+                          const Color(0xFF2563EB), 'Universidad(es)',
+                          hv.universidades.join('; ')),
+                    if (hv.posgrados.isNotEmpty)
+                      _detRow(Icons.military_tech_rounded,
+                          const Color(0xFF2563EB), 'Posgrado(s)',
+                          hv.posgrados.join('; ')),
+                    if (hv.universidadElite)
+                      _flag(Icons.star_rounded, Colors.green.shade700,
+                          'Universidad de élite reconocida'),
+                    if (hv.universidadCuestionada)
+                      _flag(Icons.warning_rounded, Colors.orange.shade700,
+                          'Universidad con licencia cuestionada'),
+                  ]),
 
-                  // Integrity
-                  _hvSection('Integridad y Antecedentes', _navy),
-                  _detRow(Icons.gavel_rounded, _navy, 'Sentencias penales',
-                      hv.totalSentenciasPenales == 0
-                          ? 'Ninguna registrada'
-                          : '${hv.totalSentenciasPenales} sentencia(s)'),
-                  _detRow(Icons.receipt_long_rounded, _navy,
-                      'Sent. obligaciones',
-                      hv.totalSentenciasObligaciones == 0
-                          ? 'Ninguna registrada'
-                          : '${hv.totalSentenciasObligaciones} sentencia(s)'),
-                  _detRow(
-                      Icons.terrain_rounded,
-                      hv.esReinfo ? Colors.orange.shade700 : _navy,
-                      'REINFO (minería informal)',
-                      hv.esReinfo
-                          ? 'Sí — ${hv.cantidadMineras > 0 ? '${hv.cantidadMineras} registro(s)' : 'en registro REINFO'}'
-                          : 'No registrado'),
-                  if (hv.numLeyesProCrimen > 0)
-                    _detRow(Icons.policy_rounded, Colors.red.shade700,
-                        'Leyes pro-crimen (personal)',
-                        '${hv.numLeyesProCrimen} ley(es) apoyada(s)'),
-                  if (hv.numLeyesProCrimenPartido > 0)
-                    _detRow(Icons.policy_rounded, Colors.red.shade700,
-                        'Leyes pro-crimen (partido)',
-                        '${hv.numLeyesProCrimenPartido} ley(es) por el partido'),
-                  if (hv.investigacionesConocidas.isNotEmpty)
-                    _detRow(Icons.search_rounded, Colors.red.shade700,
-                        'Investigaciones', hv.investigacionesConocidas),
-                  if (hv.notaAdicional.isNotEmpty)
-                    _detRow(Icons.notes_rounded, Colors.grey.shade700,
-                        'Nota', hv.notaAdicional),
-                  const SizedBox(height: 16),
+                  // Integrity — red
+                  _hvSectionCard('Integridad y Antecedentes',
+                      const Color(0xFFB91C1C), const Color(0xFFFEF2F2), [
+                    _detRow(Icons.gavel_rounded, const Color(0xFFB91C1C),
+                        'Sentencias penales',
+                        hv.totalSentenciasPenales == 0
+                            ? 'Ninguna registrada'
+                            : '${hv.totalSentenciasPenales} sentencia(s)'),
+                    _detRow(Icons.receipt_long_rounded,
+                        const Color(0xFFB91C1C), 'Sent. obligaciones',
+                        hv.totalSentenciasObligaciones == 0
+                            ? 'Ninguna registrada'
+                            : '${hv.totalSentenciasObligaciones} sentencia(s)'),
+                    _detRow(
+                        Icons.terrain_rounded,
+                        hv.esReinfo
+                            ? Colors.orange.shade700
+                            : const Color(0xFFB91C1C),
+                        'REINFO (minería informal)',
+                        hv.esReinfo
+                            ? 'Sí — ${hv.cantidadMineras > 0 ? '${hv.cantidadMineras} registro(s)' : 'en registro REINFO'}'
+                            : 'No registrado'),
+                    if (hv.numLeyesProCrimen > 0)
+                      _detRow(Icons.policy_rounded, Colors.red.shade700,
+                          'Leyes pro-crimen (personal)',
+                          '${hv.numLeyesProCrimen} ley(es) apoyada(s)'),
+                    if (hv.numLeyesProCrimenPartido > 0)
+                      _detRow(Icons.policy_rounded, Colors.red.shade700,
+                          'Leyes pro-crimen (partido)',
+                          '${hv.numLeyesProCrimenPartido} ley(es) por el partido'),
+                    if (hv.investigacionesConocidas.isNotEmpty)
+                      _detRow(Icons.search_rounded, Colors.red.shade700,
+                          'Investigaciones', hv.investigacionesConocidas),
+                    if (hv.notaAdicional.isNotEmpty)
+                      _detRow(Icons.notes_rounded, Colors.grey.shade600,
+                          'Nota', hv.notaAdicional),
+                  ]),
 
-                  // Financial
-                  _hvSection('Información Financiera Declarada', _navy),
-                  _detRow(Icons.payments_rounded, _navy,
-                      'Ingresos totales',
-                      '${_fmtSoles(hv.ingresoTotal)}${hv.anioIngresos.isNotEmpty ? ' (${hv.anioIngresos})' : ''}'),
-                  if (hv.ingresoPublico > 0)
-                    _detRow(Icons.account_balance_wallet_rounded, _navy,
-                        'Ingresos públicos',
-                        _fmtSoles(hv.ingresoPublico)),
-                  if (hv.ingresoPrivado > 0)
-                    _detRow(Icons.store_rounded, _navy,
-                        'Ingresos privados',
-                        _fmtSoles(hv.ingresoPrivado)),
-                  _detRow(Icons.home_rounded, _navy, 'Inmuebles',
-                      hv.numInmuebles == 0
-                          ? 'No declarado'
-                          : '${hv.numInmuebles} bien(es) — ${_fmtSoles(hv.valorInmuebles)}'),
-                  if (hv.numVehiculos > 0)
-                    _detRow(Icons.directions_car_rounded, _navy, 'Vehículos',
-                        '${hv.numVehiculos}'),
-                  const SizedBox(height: 16),
+                  // Financial — green
+                  _hvSectionCard('Información Financiera Declarada',
+                      const Color(0xFF059669), const Color(0xFFF0FDF4), [
+                    _detRow(Icons.payments_rounded, const Color(0xFF059669),
+                        'Ingresos totales',
+                        '${_fmtSoles(hv.ingresoTotal)}${hv.anioIngresos.isNotEmpty ? ' (${hv.anioIngresos})' : ''}'),
+                    if (hv.ingresoPublico > 0)
+                      _detRow(Icons.account_balance_wallet_rounded,
+                          const Color(0xFF059669), 'Ingresos públicos',
+                          _fmtSoles(hv.ingresoPublico)),
+                    if (hv.ingresoPrivado > 0)
+                      _detRow(Icons.store_rounded, const Color(0xFF059669),
+                          'Ingresos privados', _fmtSoles(hv.ingresoPrivado)),
+                    _detRow(Icons.home_rounded, const Color(0xFF059669),
+                        'Inmuebles',
+                        hv.numInmuebles == 0
+                            ? 'No declarado'
+                            : '${hv.numInmuebles} bien(es) — ${_fmtSoles(hv.valorInmuebles)}'),
+                    if (hv.numVehiculos > 0)
+                      _detRow(Icons.directions_car_rounded,
+                          const Color(0xFF059669), 'Vehículos',
+                          '${hv.numVehiculos}'),
+                  ]),
 
-                  // Cargos previos
+                  // Cargos políticos — indigo
                   if (hv.cargosEleccionPopular.isNotEmpty ||
-                      hv.cargosPartidarios.isNotEmpty) ...[
-                    _hvSection('Cargos por Elección Popular', _navy),
-                    ...hv.cargosEleccionPopular.take(6).map((cp) =>
-                        _cargoRow(cp.cargo, cp.entidad, cp.periodo, _navy)),
-                    if (hv.cargosPartidarios.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      _hvSection('Cargos Partidarios', Colors.grey.shade600),
-                      ...hv.cargosPartidarios.take(4).map((cp) => _cargoRow(
-                          cp.cargo, cp.entidad, cp.periodo,
-                          Colors.grey.shade600)),
-                    ],
-                    const SizedBox(height: 16),
-                  ],
+                      hv.cargosPartidarios.isNotEmpty)
+                    _hvSectionCard('Cargos Políticos',
+                        const Color(0xFF4338CA), const Color(0xFFEEF2FF), [
+                      if (hv.cargosEleccionPopular.isNotEmpty) ...[
+                        Text('Por elección popular:',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF4338CA))),
+                        const SizedBox(height: 4),
+                        ...hv.cargosEleccionPopular.take(6).map((cp) =>
+                            _cargoRow(cp.cargo, cp.entidad, cp.periodo,
+                                const Color(0xFF4338CA))),
+                      ],
+                      if (hv.cargosPartidarios.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Text('Cargos partidarios:',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade600)),
+                        const SizedBox(height: 4),
+                        ...hv.cargosPartidarios.take(4).map((cp) =>
+                            _cargoRow(cp.cargo, cp.entidad, cp.periodo,
+                                Colors.grey.shade600)),
+                      ],
+                    ]),
 
-                  // Experience
-                  if (hv.experienciaLaboral.isNotEmpty) ...[
-                    _hvSection('Experiencia Laboral', _navy),
-                    ...hv.experienciaLaboral.take(4).map((e) => _cargoRow(
-                        e.cargo, e.institucion,
-                        [e.fechaInicio, e.fechaFin]
-                            .where((s) => s.isNotEmpty)
-                            .join(' – '),
-                        Colors.blueGrey.shade600)),
-                    const SizedBox(height: 16),
-                  ],
+                  // Experience — cyan
+                  if (hv.experienciaLaboral.isNotEmpty)
+                    _hvSectionCard('Experiencia Laboral',
+                        const Color(0xFF0891B2), const Color(0xFFECFEFF), [
+                      ...hv.experienciaLaboral.take(4).map((e) => _cargoRow(
+                          e.cargo,
+                          e.institucion,
+                          [e.fechaInicio, e.fechaFin]
+                              .where((s) => s.isNotEmpty)
+                              .join(' – '),
+                          const Color(0xFF0891B2))),
+                    ]),
 
-                  // Renunció a
-                  if (hv.renuncioA.isNotEmpty) ...[
-                    _hvSection('Renunció a', Colors.orange.shade700),
-                    _detRow(Icons.exit_to_app_rounded,
-                        Colors.orange.shade700,
-                        'Partidos anteriores',
-                        hv.renuncioA.join(', ')),
-                    const SizedBox(height: 16),
-                  ],
+                  // Renunció a — amber
+                  if (hv.renuncioA.isNotEmpty)
+                    _hvSectionCard('Renunció a', const Color(0xFFD97706),
+                        const Color(0xFFFFFBEB), [
+                      _detRow(Icons.exit_to_app_rounded,
+                          const Color(0xFFD97706), 'Partidos anteriores',
+                          hv.renuncioA.join(', ')),
+                    ]),
 
                   // JNE link
                   Center(
@@ -1808,28 +1816,102 @@ String _fmtSoles(double v) {
   return 'S/ ${v.toStringAsFixed(2)}';
 }
 
-// ── HV helper widgets ─────────────────────────────────────────────────────────
+// ── Paginated candidate list widget ──────────────────────────────────────────
 
-Widget _hvSection(String title, Color color) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(0, 4, 0, 10),
-    child: Row(children: [
-      Expanded(
-          child: Divider(color: color.withValues(alpha: 0.2), height: 1)),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Text(title.toUpperCase(),
-            style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: color,
-                letterSpacing: 0.8)),
-      ),
-      Expanded(
-          child: Divider(color: color.withValues(alpha: 0.2), height: 1)),
-    ]),
+class _CandidatoListPaginated extends StatefulWidget {
+  final List<CandidatoConHV> lista;
+  final Color color;
+
+  const _CandidatoListPaginated(
+      {required this.lista, required this.color});
+
+  @override
+  State<_CandidatoListPaginated> createState() =>
+      _CandidatoListPaginatedState();
+}
+
+class _CandidatoListPaginatedState
+    extends State<_CandidatoListPaginated> {
+  int _count = 15;
+
+  @override
+  Widget build(BuildContext context) {
+    final visible = widget.lista.take(_count).toList();
+    final remaining = widget.lista.length - _count;
+    return Column(
+      children: [
+        ...visible.asMap().entries.map(
+            (e) => _candidatoRow(context, e.key + 1, e.value, widget.color)),
+        if (remaining > 0)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: OutlinedButton.icon(
+              onPressed: () => setState(() => _count += 15),
+              icon: const Icon(Icons.expand_more_rounded, size: 16),
+              label: Text(
+                'Cargar 15 más ($remaining restantes)',
+                style: const TextStyle(fontSize: 12),
+              ),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: widget.color,
+                side:
+                    BorderSide(color: widget.color.withValues(alpha: 0.5)),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+// ── Colored section card for HV sheet ────────────────────────────────────────
+
+Widget _hvSectionCard(
+    String title, Color color, Color bgColor, List<Widget> rows) {
+  return Container(
+    margin: const EdgeInsets.only(bottom: 14),
+    decoration: BoxDecoration(
+      color: bgColor,
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(color: color.withValues(alpha: 0.2)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.14),
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(10)),
+          ),
+          child: Row(children: [
+            Expanded(
+              child: Text(
+                title.toUpperCase(),
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                    letterSpacing: 0.8),
+              ),
+            ),
+          ]),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: rows,
+          ),
+        ),
+      ],
+    ),
   );
 }
+
+// ── HV helper widgets ─────────────────────────────────────────────────────────
 
 Widget _scoreRow(String label, int value, int max, Color color,
     {required bool positive}) {
