@@ -20,6 +20,14 @@ const _tabs = [
   _TabDef(4, 'Parl.\nAndino', Icons.language_rounded),
 ];
 
+const _tabColors = [
+  Color(0xFFD97706), // amber — Presidente y VP
+  Color(0xFF2563EB), // blue — Senadores Nacional
+  Color(0xFF0891B2), // cyan — Senadores Regional
+  Color(0xFF7C3AED), // purple — Diputados
+  Color(0xFF059669), // green — Parlamento Andino
+];
+
 class _TabDef {
   final int idx;
   final String label;
@@ -145,6 +153,7 @@ class _ResumenGeneralScreenState extends ConsumerState<ResumenGeneralScreen> {
       child: Row(
         children: _tabs.map((t) {
           final active = _selectedTab == t.idx;
+          final tabColor = _tabColors[t.idx];
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: GestureDetector(
@@ -156,18 +165,18 @@ class _ResumenGeneralScreenState extends ConsumerState<ResumenGeneralScreen> {
                 duration: const Duration(milliseconds: 180),
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
-                  color: active ? _navy : Colors.white,
+                  color: active ? tabColor : Colors.white,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: active ? _navy : Colors.grey.shade300,
+                    color: active ? tabColor : Colors.grey.shade300,
                     width: active ? 1.5 : 1,
                   ),
                   boxShadow: active
                       ? [
                           BoxShadow(
-                              color: _navy.withValues(alpha: 0.18),
-                              blurRadius: 6,
-                              offset: const Offset(0, 2))
+                              color: tabColor.withValues(alpha: 0.28),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3))
                         ]
                       : [],
                 ),
@@ -875,14 +884,8 @@ class _SenadorSection extends ConsumerWidget {
           );
         }
 
-        return Column(
-          children: lista
-              .asMap()
-              .entries
-              .map((e) => _candidatoRow(
-                  context, e.key + 1, e.value, ProcesoElectoral.senadores.color))
-              .toList(),
-        );
+        return _buildCandidatoList(
+            context, lista, ProcesoElectoral.senadores.color);
       },
     );
   }
@@ -995,11 +998,7 @@ class _SenadorRegionalSection extends ConsumerWidget {
                     style: TextStyle(color: Colors.grey.shade500)),
               )
             else
-              ...lista
-                  .asMap()
-                  .entries
-                  .map((e) => _candidatoRow(
-                      context, e.key + 1, e.value, color)),
+              _buildCandidatoList(context, lista, color),
           ],
         );
       },
@@ -1055,14 +1054,7 @@ class _ProcesoSection extends ConsumerWidget {
           );
         }
 
-        return Column(
-          children: lista
-              .asMap()
-              .entries
-              .map((e) => _candidatoRow(
-                  context, e.key + 1, e.value, color))
-              .toList(),
-        );
+        return _buildCandidatoList(context, lista, color);
       },
     );
   }
@@ -1262,6 +1254,29 @@ class _ProcesoSection extends ConsumerWidget {
       ]),
     );
   }
+}
+
+// ── Candidato list with limit (shared) ───────────────────────────────────────
+
+Widget _buildCandidatoList(
+    BuildContext context, List<CandidatoConHV> lista, Color color,
+    {int limit = 25}) {
+  final visible = lista.take(limit).toList();
+  return Column(
+    children: [
+      ...visible.asMap().entries.map(
+          (e) => _candidatoRow(context, e.key + 1, e.value, color)),
+      if (lista.length > limit)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Text(
+            'Mostrando $limit de ${lista.length}. Usa el Directorio para ver todos.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+          ),
+        ),
+    ],
+  );
 }
 
 // ── Candidato row (shared) ────────────────────────────────────────────────────
@@ -1554,10 +1569,10 @@ void _showHV(BuildContext context, CandidatoConHV c) {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text('${hv.scoreFinal}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 42,
                                   fontWeight: FontWeight.w900,
-                                  color: hv.scoreColor)),
+                                  color: Colors.white)),
                           const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1640,13 +1655,22 @@ void _showHV(BuildContext context, CandidatoConHV c) {
                         positive: false),
                   const SizedBox(height: 16),
 
-                  // Education & personal
+                  // Personal & academic
                   _hvSection('Datos Personales y Académicos', _navy),
+                  _detRow(Icons.badge_rounded, _navy, 'DNI', hv.dni),
+                  _detRow(Icons.format_list_numbered_rounded, _navy,
+                      'Posición en lista', '#${c.posicion}'),
+                  if (c.cargo.isNotEmpty)
+                    _detRow(Icons.work_outline_rounded, _navy, 'Cargo',
+                        c.cargo),
                   _detRow(Icons.school_rounded, _navy, 'Nivel educativo',
                       hv.educacionLabel),
                   if (hv.universidades.isNotEmpty)
                     _detRow(Icons.account_balance_rounded, _navy,
-                        'Universidad(es)', hv.universidades.join(', ')),
+                        'Universidad(es)', hv.universidades.join('; ')),
+                  if (hv.posgrados.isNotEmpty)
+                    _detRow(Icons.military_tech_rounded, _navy, 'Posgrado(s)',
+                        hv.posgrados.join('; ')),
                   if (hv.universidadElite)
                     _flag(Icons.star_rounded, Colors.green.shade600,
                         'Universidad de élite reconocida'),
@@ -1671,7 +1695,7 @@ void _showHV(BuildContext context, CandidatoConHV c) {
                       hv.esReinfo ? Colors.orange.shade700 : _navy,
                       'REINFO (minería informal)',
                       hv.esReinfo
-                          ? 'Sí — en registro REINFO'
+                          ? 'Sí — ${hv.cantidadMineras > 0 ? '${hv.cantidadMineras} registro(s)' : 'en registro REINFO'}'
                           : 'No registrado'),
                   if (hv.numLeyesProCrimen > 0)
                     _detRow(Icons.policy_rounded, Colors.red.shade700,
@@ -1684,17 +1708,68 @@ void _showHV(BuildContext context, CandidatoConHV c) {
                   if (hv.investigacionesConocidas.isNotEmpty)
                     _detRow(Icons.search_rounded, Colors.red.shade700,
                         'Investigaciones', hv.investigacionesConocidas),
+                  if (hv.notaAdicional.isNotEmpty)
+                    _detRow(Icons.notes_rounded, Colors.grey.shade700,
+                        'Nota', hv.notaAdicional),
+                  const SizedBox(height: 16),
+
+                  // Financial
+                  _hvSection('Información Financiera Declarada', _navy),
+                  _detRow(Icons.payments_rounded, _navy,
+                      'Ingresos totales',
+                      '${_fmtSoles(hv.ingresoTotal)}${hv.anioIngresos.isNotEmpty ? ' (${hv.anioIngresos})' : ''}'),
+                  if (hv.ingresoPublico > 0)
+                    _detRow(Icons.account_balance_wallet_rounded, _navy,
+                        'Ingresos públicos',
+                        _fmtSoles(hv.ingresoPublico)),
+                  if (hv.ingresoPrivado > 0)
+                    _detRow(Icons.store_rounded, _navy,
+                        'Ingresos privados',
+                        _fmtSoles(hv.ingresoPrivado)),
+                  _detRow(Icons.home_rounded, _navy, 'Inmuebles',
+                      hv.numInmuebles == 0
+                          ? 'No declarado'
+                          : '${hv.numInmuebles} bien(es) — ${_fmtSoles(hv.valorInmuebles)}'),
+                  if (hv.numVehiculos > 0)
+                    _detRow(Icons.directions_car_rounded, _navy, 'Vehículos',
+                        '${hv.numVehiculos}'),
                   const SizedBox(height: 16),
 
                   // Cargos previos
                   if (hv.cargosEleccionPopular.isNotEmpty ||
                       hv.cargosPartidarios.isNotEmpty) ...[
-                    _hvSection('Cargos Previos', _navy),
-                    ...hv.cargosEleccionPopular.take(5).map((cp) =>
+                    _hvSection('Cargos por Elección Popular', _navy),
+                    ...hv.cargosEleccionPopular.take(6).map((cp) =>
                         _cargoRow(cp.cargo, cp.entidad, cp.periodo, _navy)),
-                    ...hv.cargosPartidarios.take(3).map((cp) => _cargoRow(
-                        cp.cargo, cp.entidad, cp.periodo,
-                        Colors.grey.shade600)),
+                    if (hv.cargosPartidarios.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      _hvSection('Cargos Partidarios', Colors.grey.shade600),
+                      ...hv.cargosPartidarios.take(4).map((cp) => _cargoRow(
+                          cp.cargo, cp.entidad, cp.periodo,
+                          Colors.grey.shade600)),
+                    ],
+                    const SizedBox(height: 16),
+                  ],
+
+                  // Experience
+                  if (hv.experienciaLaboral.isNotEmpty) ...[
+                    _hvSection('Experiencia Laboral', _navy),
+                    ...hv.experienciaLaboral.take(4).map((e) => _cargoRow(
+                        e.cargo, e.institucion,
+                        [e.fechaInicio, e.fechaFin]
+                            .where((s) => s.isNotEmpty)
+                            .join(' – '),
+                        Colors.blueGrey.shade600)),
+                    const SizedBox(height: 16),
+                  ],
+
+                  // Renunció a
+                  if (hv.renuncioA.isNotEmpty) ...[
+                    _hvSection('Renunció a', Colors.orange.shade700),
+                    _detRow(Icons.exit_to_app_rounded,
+                        Colors.orange.shade700,
+                        'Partidos anteriores',
+                        hv.renuncioA.join(', ')),
                     const SizedBox(height: 16),
                   ],
 
@@ -1707,7 +1782,7 @@ void _showHV(BuildContext context, CandidatoConHV c) {
                             mode: LaunchMode.externalApplication);
                       },
                       icon: const Icon(Icons.open_in_new_rounded, size: 14),
-                      label: const Text('Ver en portal JNE'),
+                      label: const Text('Ver hoja de vida en portal JNE'),
                       style: OutlinedButton.styleFrom(
                           foregroundColor: _navy,
                           side: BorderSide(
@@ -1722,6 +1797,15 @@ void _showHV(BuildContext context, CandidatoConHV c) {
       ),
     ),
   );
+}
+
+// ── HV helpers ────────────────────────────────────────────────────────────────
+
+String _fmtSoles(double v) {
+  if (v <= 0) return 'No declarado';
+  if (v >= 1000000) return 'S/ ${(v / 1000000).toStringAsFixed(2)}M';
+  if (v >= 1000) return 'S/ ${(v / 1000).toStringAsFixed(1)}K';
+  return 'S/ ${v.toStringAsFixed(2)}';
 }
 
 // ── HV helper widgets ─────────────────────────────────────────────────────────

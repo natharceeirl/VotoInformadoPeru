@@ -186,7 +186,7 @@ class _StepBar extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(5, (i) {
+        children: List.generate(6, (i) {
           final active = i == current;
           final done = i < current;
           return Padding(
@@ -237,6 +237,11 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
 
   // Section 1 state
   int? _presIdx;
+  String? _presPartySelected;
+  String? _presNameSelected;
+
+  // Sections 2–5 selected party per section (ctrlIdx 0-3)
+  List<int?> _selParty = [null, null, null, null];
 
   // Sections 2–5: [sectionControllerIdx][partyIdx][boxIdx]
   // sectionControllerIdx 0=Sec2, 1=Sec3, 2=Sec4, 3=Sec5
@@ -277,6 +282,9 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
   void _clearAll() {
     setState(() {
       _presIdx = null;
+      _presPartySelected = null;
+      _presNameSelected = null;
+      _selParty = [null, null, null, null];
       _started = false;
     });
     for (final s in _ctrl) {
@@ -759,8 +767,11 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
   Widget _presRow(int idx, String partyName, CandidatoConHV c,
       bool selected, Color color) {
     return InkWell(
-      onTap: () =>
-          setState(() => _presIdx = selected ? null : idx),
+      onTap: () => setState(() {
+        _presIdx = selected ? null : idx;
+        _presPartySelected = selected ? null : partyName;
+        _presNameSelected = selected ? null : c.hv.nombre;
+      }),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
@@ -869,7 +880,6 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
     // pageIdx: 1=Sec2, 2=Sec3, 3=Sec4, 4=Sec5
     final def = _kSections[pageIdx];
     final ctrlIdx = pageIdx - 1; // maps to _ctrl[0..3]
-    final isLast = pageIdx == 4;
     final boxes = _ctrl[ctrlIdx][0].length;
 
     return SingleChildScrollView(
@@ -924,27 +934,51 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                   final partyIdx = entry.key;
                   final name = entry.value;
                   final controllers = _ctrl[ctrlIdx][partyIdx];
+                  final selected = _selParty[ctrlIdx] == partyIdx;
                   return Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 7),
                     decoration: BoxDecoration(
-                        border: Border(
-                            bottom:
-                                BorderSide(color: Colors.grey.shade200))),
+                      color: selected
+                          ? def.color.withValues(alpha: 0.07)
+                          : null,
+                      border: Border(
+                          bottom: BorderSide(color: Colors.grey.shade200)),
+                    ),
                     child: Row(children: [
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.grey.shade300),
-                            color: Colors.white),
-                        child: ClipOval(
-                          child: Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: PartyLogo(partyName: name, size: 32),
+                      GestureDetector(
+                        onTap: () => setState(() =>
+                            _selParty[ctrlIdx] =
+                                selected ? null : partyIdx),
+                        child: Stack(alignment: Alignment.center, children: [
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: selected
+                                    ? def.color
+                                    : Colors.grey.shade300,
+                                width: selected ? 2 : 1,
+                              ),
+                              color: Colors.white,
+                            ),
+                            child: ClipOval(
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: PartyLogo(partyName: name, size: 32),
+                              ),
+                            ),
                           ),
-                        ),
+                          if (selected)
+                            Text('✗',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: def.color
+                                        .withValues(alpha: 0.85))),
+                        ]),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
@@ -973,10 +1007,317 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
               ],
             ),
           ),
-          if (isLast) ...[
-            const SizedBox(height: 24),
-            const CreditsFooter(),
+        ],
+      ),
+    );
+  }
+
+  // ── Page 5: Results summary ───────────────────────────────────────────────
+
+  Widget _buildResultsPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [_navy, Color(0xFF0D2540)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Column(children: [
+              const Icon(Icons.how_to_vote_rounded,
+                  color: Colors.white, size: 36),
+              const SizedBox(height: 8),
+              const Text(
+                'Resumen de tu Voto Simulado',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Elecciones Generales Perú 2026 — 12 de abril',
+                style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    fontSize: 12),
+              ),
+            ]),
+          ),
+          const SizedBox(height: 20),
+
+          _buildVoteResult(
+            sectionNum: 1,
+            title: 'Presidente y Vicepresidentes',
+            color: _kSections[0].color,
+            partyName: _presPartySelected,
+            candidateName: _presNameSelected,
+            prefs: const [],
+            isSelected: _presIdx != null,
+          ),
+          const SizedBox(height: 10),
+
+          ...[0, 1, 2, 3].map((ctrlIdx) {
+            final pageIdx = ctrlIdx + 1;
+            final def = _kSections[pageIdx];
+            final selIdx = _selParty[ctrlIdx];
+            final partyName =
+                selIdx != null ? _kPartyOrder[selIdx] : null;
+            final prefs = selIdx != null
+                ? _ctrl[ctrlIdx][selIdx]
+                    .map((c) => c.text)
+                    .where((t) => t.isNotEmpty)
+                    .toList()
+                : <String>[];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: _buildVoteResult(
+                sectionNum: pageIdx + 1,
+                title: def.title,
+                color: def.color,
+                partyName: partyName,
+                candidateName: null,
+                prefs: prefs,
+                isSelected: selIdx != null,
+              ),
+            );
+          }),
+
+          const SizedBox(height: 4),
+          _buildOverallSummary(),
+          const SizedBox(height: 24),
+          const CreditsFooter(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVoteResult({
+    required int sectionNum,
+    required String title,
+    required Color color,
+    required String? partyName,
+    required String? candidateName,
+    required List<String> prefs,
+    required bool isSelected,
+  }) {
+    final bool hasPref = prefs.isNotEmpty;
+    final String statusText;
+    final Color statusColor;
+    final IconData statusIcon;
+
+    if (isSelected) {
+      statusText = 'VOTO VÁLIDO';
+      statusColor = Colors.green.shade700;
+      statusIcon = Icons.check_circle_rounded;
+    } else if (hasPref) {
+      statusText = 'ADVERTENCIA — Preferencia sin partido marcado';
+      statusColor = Colors.orange.shade700;
+      statusIcon = Icons.warning_rounded;
+    } else {
+      statusText = 'EN BLANCO / SIN MARCAR';
+      statusColor = Colors.grey.shade500;
+      statusIcon = Icons.radio_button_unchecked_rounded;
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color:
+              isSelected ? color.withValues(alpha: 0.4) : Colors.grey.shade200,
+          width: isSelected ? 1.5 : 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 4,
+              offset: const Offset(0, 2))
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Container(
+              width: 26,
+              height: 26,
+              decoration:
+                  BoxDecoration(color: color, shape: BoxShape.circle),
+              child: Center(
+                child: Text('$sectionNum',
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13)),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(title,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: color)),
+            ),
+          ]),
+          const SizedBox(height: 10),
+          const Divider(height: 1),
+          const SizedBox(height: 10),
+          if (partyName != null) ...[
+            Row(children: [
+              PartyLogo(partyName: partyName, size: 32),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(partyName,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 13),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
+                    if (candidateName != null)
+                      Text(candidateName,
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey.shade600)),
+                  ],
+                ),
+              ),
+            ]),
+            if (prefs.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: prefs
+                    .asMap()
+                    .entries
+                    .map((e) => Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: color.withValues(alpha: 0.10),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                                color: color.withValues(alpha: 0.35)),
+                          ),
+                          child: Text(
+                            'Preferencia ${e.key + 1}: #${e.value}',
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: color),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ],
+          ] else if (hasPref) ...[
+            Row(children: [
+              Icon(Icons.warning_amber_rounded,
+                  color: Colors.orange.shade700, size: 16),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Escribiste número(s) de preferencia pero no marcaste ningún partido.',
+                  style:
+                      TextStyle(fontSize: 11, color: Colors.orange.shade700),
+                ),
+              ),
+            ]),
+          ] else ...[
+            Text(
+              'No marcaste ningún partido en esta sección.',
+              style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+            ),
           ],
+          const SizedBox(height: 10),
+          Row(children: [
+            Icon(statusIcon, size: 14, color: statusColor),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(statusText,
+                  style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: statusColor)),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOverallSummary() {
+    final totalMarked = (_presIdx != null ? 1 : 0) +
+        _selParty.where((s) => s != null).length;
+    final allMarked =
+        _presIdx != null && _selParty.every((s) => s != null);
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: allMarked ? Colors.green.shade50 : Colors.amber.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+            color: allMarked
+                ? Colors.green.shade300
+                : Colors.amber.shade300),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            allMarked ? Icons.check_circle_rounded : Icons.info_rounded,
+            color: allMarked
+                ? Colors.green.shade700
+                : Colors.amber.shade700,
+            size: 22,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  allMarked
+                      ? '¡Voto completo! Marcaste las 5 secciones.'
+                      : 'Marcaste $totalMarked de 5 secciones.',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    color: allMarked
+                        ? Colors.green.shade800
+                        : Colors.amber.shade800,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  allMarked
+                      ? 'Simulación completa. Puedes votar por distintos partidos en cada sección — todos son válidos.'
+                      : 'Las secciones sin marcar cuentan como votos en blanco. Votar en blanco es tu derecho.',
+                  style: TextStyle(
+                    fontSize: 11,
+                    height: 1.4,
+                    color: allMarked
+                        ? Colors.green.shade700
+                        : Colors.amber.shade700,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -1013,7 +1354,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
           const SizedBox(width: 12),
         ],
         Expanded(
-          child: _currentPage < 4
+          child: _currentPage < 5
               ? FilledButton(
                   onPressed: () => _goTo(_currentPage + 1),
                   style: FilledButton.styleFrom(
@@ -1103,6 +1444,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                       _buildPartyPage(2),
                       _buildPartyPage(3),
                       _buildPartyPage(4),
+                      _buildResultsPage(),
                     ],
                   ),
                 ),
