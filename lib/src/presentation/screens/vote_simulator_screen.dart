@@ -363,26 +363,69 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
   }
 
   Widget _ruleImg(String path, String label) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Image.asset(
-        path,
-        width: double.infinity,
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Container(
-          height: 100,
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(8)),
-          child: Center(
-            child: Text(label,
-                style:
-                    const TextStyle(fontSize: 12, color: Colors.grey)),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.asset(
+            path,
+            width: double.infinity,
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) => Container(
+              height: 100,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(8)),
+              child: Center(
+                child: Text(label,
+                    style: const TextStyle(
+                        fontSize: 12, color: Colors.grey)),
+              ),
+            ),
           ),
         ),
       ),
     );
+  }
+
+  // ── Web-safe content wrapper (caps width on wide screens) ─────────────────
+
+  Widget _webSafe(Widget child) => Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: child,
+        ),
+      );
+
+  // ── Candidate lookup helper for results page ──────────────────────────────
+
+  static String _normSim(String s) => s
+      .toUpperCase()
+      .replaceAll('Á', 'A')
+      .replaceAll('É', 'E')
+      .replaceAll('Í', 'I')
+      .replaceAll('Ó', 'O')
+      .replaceAll('Ú', 'U')
+      .replaceAll('Ñ', 'N')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+
+  CandidatoConHV? _findCand(
+      List<CandidatoConHV> lista, String? partyName, String prefStr) {
+    if (partyName == null) return null;
+    final num = int.tryParse(prefStr.trim());
+    if (num == null || num <= 0) return null;
+    final norm = _normSim(partyName);
+    return lista
+        .where((c) {
+          final cn = _normSim(c.hv.partido);
+          return (cn == norm || cn.contains(norm) || norm.contains(cn)) &&
+              c.posicion == num;
+        })
+        .firstOrNull;
   }
 
   // ── Section explanation card ──────────────────────────────────────────────
@@ -653,7 +696,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
     final def = _kSections[0];
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-      child: Column(
+      child: _webSafe(Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _secCard(def),
@@ -662,7 +705,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
           _rulesCard(),
           _buildPresSection(def.color),
         ],
-      ),
+      )),
     );
   }
 
@@ -904,7 +947,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-      child: Column(
+      child: _webSafe(Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _secCard(def),
@@ -1038,16 +1081,40 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 
   // ── Page 5: Results summary ───────────────────────────────────────────────
 
   Widget _buildResultsPage() {
+    // Load candidate data for preference lookup (read once when page is shown)
+    final senadoresAll = ref
+            .read(candidatosConHVProcesoProvider(ProcesoElectoral.senadores))
+            .asData
+            ?.value ??
+        [];
+    final diputados = ref
+            .read(candidatosConHVProcesoProvider(ProcesoElectoral.diputados))
+            .asData
+            ?.value ??
+        [];
+    final parlAnd = ref
+            .read(candidatosConHVProcesoProvider(
+                ProcesoElectoral.parlamentoAndino))
+            .asData
+            ?.value ??
+        [];
+    final sectionCandidates = [
+      senadoresAll.where((c) => c.tipoDistrito == 'ÚNICO').toList(),
+      senadoresAll.where((c) => c.tipoDistrito == 'MÚLTIPLE').toList(),
+      diputados,
+      parlAnd,
+    ];
+
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-      child: Column(
+      child: _webSafe(Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
@@ -1116,6 +1183,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                 candidateName: null,
                 prefs: prefs,
                 isSelected: selIdx != null,
+                sectionCandidates: sectionCandidates[ctrlIdx],
               ),
             );
           }),
@@ -1172,7 +1240,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
           const SizedBox(height: 24),
           const CreditsFooter(),
         ],
-      ),
+      )),
     );
   }
 
@@ -1184,6 +1252,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
     required String? candidateName,
     required List<String> prefs,
     required bool isSelected,
+    List<CandidatoConHV>? sectionCandidates,
   }) {
     final bool hasPref = prefs.isNotEmpty;
     final String statusText;
@@ -1274,31 +1343,74 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
             ]),
             if (prefs.isNotEmpty) ...[
               const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 4,
-                children: prefs
-                    .asMap()
-                    .entries
-                    .map((e) => Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: color.withValues(alpha: 0.10),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                                color: color.withValues(alpha: 0.35)),
+              ...prefs.asMap().entries.map((e) {
+                final cand = _findCand(
+                    sectionCandidates ?? [], partyName, e.value);
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 6),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 7),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.07),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                        color: color.withValues(alpha: 0.30)),
+                  ),
+                  child: Row(children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 7, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        'Pref. ${e.key + 1}: #${e.value}',
+                        style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: color),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    if (cand != null) ...[
+                      if (cand.fotoUrl != null)
+                        ClipOval(
+                          child: Image.network(
+                            cand.fotoUrl!,
+                            width: 26,
+                            height: 26,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) =>
+                                const SizedBox(),
                           ),
-                          child: Text(
-                            'Preferencia ${e.key + 1}: #${e.value}',
-                            style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: color),
-                          ),
-                        ))
-                    .toList(),
-              ),
+                        ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          cand.hv.nombre,
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey.shade800),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ] else if (sectionCandidates != null) ...[
+                      Expanded(
+                        child: Text(
+                          'Número #${e.value} no encontrado en la lista del partido',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.orange.shade700),
+                        ),
+                      ),
+                    ] else
+                      const Expanded(child: SizedBox()),
+                  ]),
+                );
+              }),
             ],
           ] else if (hasPref) ...[
             Row(children: [

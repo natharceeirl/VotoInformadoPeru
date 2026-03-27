@@ -1,9 +1,20 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+/// GUIDs whose stored photo file uses .jpeg extension instead of .jpg.
+const _jpegGuids = {
+  '251cd1c0-acc7-4338-bd8a-439ccb9238d0',
+  '789b7714-8633-4a59-a89b-7fab4646fef1',
+  '28a58063-8e4b-4dc5-b418-b84defcc0946',
+};
+
 /// Builds the photo URL: Netlify redirect proxy on web (avoids CORS), direct on native.
-String _jneFotoUrl(String guid) => kIsWeb
-    ? '/foto-proxy/$guid'
-    : 'https://votoinformado.jne.gob.pe/VotoInformado/Informacion/GetFoto?guidFoto=$guid';
+String _jneFotoUrl(String guid) {
+  final suffix =
+      _jpegGuids.contains(guid.toLowerCase()) ? '.jpeg' : '';
+  return kIsWeb
+      ? '/foto-proxy/$guid$suffix'
+      : 'https://votoinformado.jne.gob.pe/VotoInformado/Informacion/GetFoto?guidFoto=$guid$suffix';
+}
 
 /// Modelo ligero de senadoNacional.json — solo los campos útiles para la app.
 class SenadoCandidato {
