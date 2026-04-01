@@ -1133,7 +1133,7 @@ class _ProcesoSection extends ConsumerWidget {
     final avgRounded = avgScore.round();
 
     return GestureDetector(
-      onTap: () => _showHV(context, pres),
+      onTap: () => showCandidatoHV(context, pres),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(12),
@@ -1222,7 +1222,7 @@ class _ProcesoSection extends ConsumerWidget {
   Widget _memberRow(
       BuildContext context, CandidatoConHV c, String label) {
     return GestureDetector(
-      onTap: () => _showHV(context, c),
+      onTap: () => showCandidatoHV(context, c),
       child: Row(children: [
         CircleAvatar(
           radius: 14,
@@ -1289,7 +1289,7 @@ Widget _candidatoRow(
   final fotoUrl = candidato.fotoUrl;
 
   return GestureDetector(
-    onTap: () => _showHV(context, candidato),
+    onTap: () => showCandidatoHV(context, candidato),
     child: Container(
       margin: const EdgeInsets.only(bottom: 6),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -1411,7 +1411,7 @@ Widget _candidatoRow(
 
 // ── Full HV bottom sheet (polished) ──────────────────────────────────────────
 
-void _showHV(BuildContext context, CandidatoConHV c) {
+void showCandidatoHV(BuildContext context, CandidatoConHV c) {
   final hv = c.hv;
 
   showModalBottomSheet(

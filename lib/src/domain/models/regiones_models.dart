@@ -1,19 +1,17 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-/// GUIDs whose stored photo file uses .jpeg extension instead of .jpg.
-const _jpegGuids = {
-  '251cd1c0-acc7-4338-bd8a-439ccb9238d0',
-  '789b7714-8633-4a59-a89b-7fab4646fef1',
-  '28a58063-8e4b-4dc5-b418-b84defcc0946',
-};
-
 /// Builds the photo URL: Netlify redirect proxy on web (avoids CORS), direct on native.
-String _jneFotoUrl(String guid) {
-  final suffix =
-      _jpegGuids.contains(guid.toLowerCase()) ? '.jpeg' : '';
-  return kIsWeb
-      ? '/foto-proxy/$guid$suffix'
-      : 'https://votoinformado.jne.gob.pe/VotoInformado/Informacion/GetFoto?guidFoto=$guid$suffix';
+/// isJpeg is derived from the strNombre field extension (.jpeg vs .jpg).
+/// JPEG photos use a separate proxy path (/foto-proxy-jpeg/) so Netlify appends
+/// .jpeg instead of .jpg.
+String _jneFotoUrl(String guid, {bool isJpeg = false}) {
+  if (kIsWeb) {
+    return isJpeg ? '/foto-proxy-jpeg/$guid' : '/foto-proxy/$guid';
+  }
+  if (isJpeg) {
+    return 'https://mpesije.jne.gob.pe/apidocs/$guid.jpeg';
+  }
+  return 'https://votoinformado.jne.gob.pe/VotoInformado/Informacion/GetFoto?guidFoto=$guid';
 }
 
 /// Maps JNE uppercase party names → standard names used in party_logo.dart assets.
@@ -180,14 +178,14 @@ class RegionCandidato {
       organizacionPolitica;
 
   /// Photo via proxy (web) or direct JNE URL (native).
-  /// strNombre = "uuid.jpg" → extract guid.
+  /// strNombre = "uuid.jpg" or "uuid.jpeg" → extension determines proxy path.
   String? get fotoUrl {
     if (strNombre.isEmpty) return null;
-    final guid = strNombre.contains('.')
-        ? strNombre.substring(0, strNombre.lastIndexOf('.'))
-        : strNombre;
+    final dotIdx = strNombre.lastIndexOf('.');
+    final guid = dotIdx >= 0 ? strNombre.substring(0, dotIdx) : strNombre;
     if (guid.isEmpty) return null;
-    return _jneFotoUrl(guid);
+    final ext = dotIdx >= 0 ? strNombre.substring(dotIdx + 1).toLowerCase() : 'jpg';
+    return _jneFotoUrl(guid, isJpeg: ext == 'jpeg');
   }
 
   /// DNI padded to 8 digits with leading zeros for display and URLs.

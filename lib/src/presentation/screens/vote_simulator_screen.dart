@@ -5,6 +5,7 @@ import '../../domain/models/hoja_vida_models.dart';
 import '../providers/new_providers.dart';
 import '../widgets/party_logo.dart';
 import 'credits_screen.dart';
+import 'resumen_general_screen.dart' show showCandidatoHV;
 
 // ── Party order (Secciones 2–5) ───────────────────────────────────────────────
 
@@ -18,19 +19,19 @@ const List<String> _kPartyOrder = [
   'Perú Acción',
   'PRIN',
   'Progresemos',
-  'SíCreo',
+  'Sí Creo',
   'País Para Todos',
-  'Frente de la Esperanza 2021',
+  'Frente de la Esperanza',
   'Perú Libre',
   'Ciudadanos por el Perú',
   'Primero La Gente',
-  'JPP',
+  'Juntos por el Perú',
   'Podemos Perú',
   'Partido Democrático Federal',
   'Fe en el Perú',
   'Integridad Democrática',
   'Fuerza Popular',
-  'APP',
+  'Alianza para el Progreso',
   'Cooperación Popular',
   'Ahora Nación',
   'Libertad Popular',
@@ -426,6 +427,42 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
               c.posicion == num;
         })
         .firstOrNull;
+  }
+
+  // ── Duplicate preference prevention ──────────────────────────────────────
+
+  void _checkDuplicatePref(int ctrlIdx, int partyIdx, int changedBoxIdx) {
+    final controllers = _ctrl[ctrlIdx][partyIdx];
+    final changedVal = controllers[changedBoxIdx].text.trim();
+    if (changedVal.isNotEmpty) {
+      for (int bi = 0; bi < controllers.length; bi++) {
+        if (bi != changedBoxIdx &&
+            controllers[bi].text.trim() == changedVal) {
+          controllers[changedBoxIdx].clear();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  'No puedes ingresar el mismo número de preferencia dos veces.'),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 2),
+            ),
+          );
+          break;
+        }
+      }
+    }
+    setState(() {});
+  }
+
+  // ── Find index of a party name in _kPartyOrder (fuzzy, accent-insensitive) ─
+
+  int _kPartyIdx(String partyName) {
+    final norm = _normSim(partyName);
+    for (int i = 0; i < _kPartyOrder.length; i++) {
+      final k = _normSim(_kPartyOrder[i]);
+      if (norm == k || norm.contains(k) || k.contains(norm)) return i;
+    }
+    return -1;
   }
 
   // ── Section explanation card ──────────────────────────────────────────────
@@ -945,59 +982,70 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
     final ctrlIdx = pageIdx - 1; // maps to _ctrl[0..3]
     final boxes = _ctrl[ctrlIdx][0].length;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-      child: _webSafe(Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _secCard(def),
-          _rulesCard(),
-          // Ballot card
-          Card(
-            elevation: 2,
-            margin: EdgeInsets.zero,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                // Header
+    // Use same party list & order as section 1 (derived from presidential data)
+    final presAsync = ref.watch(
+        candidatosConHVProcesoProvider(ProcesoElectoral.presidentes));
+
+    Widget buildBallotCard(List<CandidatoConHV> candidatos) {
+      final partyNamesSet = <String>{};
+      for (final c in candidatos) {
+        partyNamesSet.add(c.hv.partido);
+      }
+      final orderedParties = partyNamesSet.toList()
+        ..sort((a, b) {
+          final ai = _kPartyIdx(a);
+          final bi = _kPartyIdx(b);
+          if (ai < 0 && bi < 0) return a.compareTo(b);
+          if (ai < 0) return 1;
+          if (bi < 0) return -1;
+          return ai.compareTo(bi);
+        });
+
+      return Card(
+        elevation: 2,
+        margin: EdgeInsets.zero,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 12, vertical: 10),
+              color: def.color,
+              child: Row(children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 10),
-                  color: def.color,
-                  child: Row(children: [
-                    Container(
-                      width: 26,
-                      height: 26,
-                      decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.25),
-                          shape: BoxShape.circle),
-                      child: Center(
-                        child: Text('${def.number}',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14)),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(def.title,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
-                          maxLines: 2),
-                    ),
-                  ]),
+                  width: 26,
+                  height: 26,
+                  decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.25),
+                      shape: BoxShape.circle),
+                  child: Center(
+                    child: Text('${def.number}',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14)),
+                  ),
                 ),
-                // Party rows
-                ..._kPartyOrder.asMap().entries.map((entry) {
-                  final partyIdx = entry.key;
-                  final name = entry.value;
-                  final controllers = _ctrl[ctrlIdx][partyIdx];
-                  final selected = _selParty[ctrlIdx] == partyIdx;
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(def.title,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14),
+                      maxLines: 2),
+                ),
+              ]),
+            ),
+            // Party rows (same order & names as section 1)
+            ...orderedParties.map((name) {
+              final partyIdx = _kPartyIdx(name);
+              if (partyIdx < 0) return const SizedBox.shrink();
+              final controllers = _ctrl[ctrlIdx][partyIdx];
+              final selected = _selParty[ctrlIdx] == partyIdx;
                   return Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 7),
@@ -1069,7 +1117,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                           padding: EdgeInsets.only(left: bi == 0 ? 0 : 6),
                           child: _PrefBox(
                             controller: controllers[bi],
-                            onChanged: () => setState(() {}),
+                            onChanged: () => _checkDuplicatePref(ctrlIdx, partyIdx, bi),
                           ),
                         )),
                       ),
@@ -1079,11 +1127,32 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                 const SizedBox(height: 8),
               ],
             ),
-          ),
-        ],
-      )),
-    );
-  }
+          );
+        }
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+          child: _webSafe(Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _secCard(def),
+              _rulesCard(),
+              presAsync.when(
+                loading: () => const Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                error: (e, _) => Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text('Error al cargar: $e',
+                      style: const TextStyle(color: Colors.red)),
+                ),
+                data: buildBallotCard,
+              ),
+            ],
+          )),
+        );
+      }
 
   // ── Page 5: Results summary ───────────────────────────────────────────────
 
@@ -1346,7 +1415,12 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
               ...prefs.asMap().entries.map((e) {
                 final cand = _findCand(
                     sectionCandidates ?? [], partyName, e.value);
-                return Container(
+                return InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: cand != null
+                      ? () => showCandidatoHV(context, cand)
+                      : null,
+                  child: Container(
                   margin: const EdgeInsets.only(bottom: 6),
                   padding: const EdgeInsets.symmetric(
                       horizontal: 10, vertical: 7),
@@ -1409,6 +1483,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                     ] else
                       const Expanded(child: SizedBox()),
                   ]),
+                ),
                 );
               }),
             ],

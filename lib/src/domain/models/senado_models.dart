@@ -9,11 +9,13 @@ const _jpegGuids = {
 
 /// Builds the photo URL: Netlify redirect proxy on web (avoids CORS), direct on native.
 String _jneFotoUrl(String guid) {
-  final suffix =
-      _jpegGuids.contains(guid.toLowerCase()) ? '.jpeg' : '';
-  return kIsWeb
-      ? '/foto-proxy/$guid$suffix'
-      : 'https://votoinformado.jne.gob.pe/VotoInformado/Informacion/GetFoto?guidFoto=$guid$suffix';
+  final isJpeg = _jpegGuids.contains(guid.toLowerCase());
+  if (kIsWeb) {
+    return isJpeg
+        ? '/foto-proxy-jpeg/$guid'
+        : '/foto-proxy/$guid';
+  }
+  return 'https://votoinformado.jne.gob.pe/VotoInformado/Informacion/GetFoto?guidFoto=$guid${isJpeg ? '.jpeg' : ''}';
 }
 
 /// Modelo ligero de senadoNacional.json — solo los campos útiles para la app.
