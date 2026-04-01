@@ -19,19 +19,19 @@ const List<String> _kPartyOrder = [
   'Perú Acción',
   'PRIN',
   'Progresemos',
-  'Sí Creo',
+  'Partido Sí Creo',
   'País Para Todos',
-  'Frente de la Esperanza',
+  'Partido Frente de la Esperanza 2021',
   'Perú Libre',
   'Ciudadanos por el Perú',
   'Primero La Gente',
-  'Juntos por el Perú',
+  'JPP',
   'Podemos Perú',
   'Partido Democrático Federal',
   'Fe en el Perú',
   'Integridad Democrática',
   'Fuerza Popular',
-  'Alianza para el Progreso',
+  'APP',
   'Cooperación Popular',
   'Ahora Nación',
   'Libertad Popular',
@@ -45,10 +45,18 @@ const List<String> _kPartyOrder = [
   'Renovación Popular',
   'Partido Demócrata Unido Perú',
   'Fuerza y Libertad',
-  'Partido de los Trabajadores y Emprendedores',
   'Unidad Nacional',
   'Partido Morado',
 ];
+
+// Maps _kPartyOrder display names → JNE hv.partido values for names that don't
+// fuzzy-match directly (abbreviations and merged words).
+const _kPartyDataName = <String, String>{
+  'JPP':                          'JUNTOS POR EL PERU',
+  'APP':                          'ALIANZA PARA EL PROGRESO',
+  'Partido Sí Creo':              'PARTIDO SICREO',
+  'Partido Frente de la Esperanza 2021': 'PARTIDO FRENTE DE LA ESPERANZA 2021',
+};
 
 // ── Colors ────────────────────────────────────────────────────────────────────
 
@@ -419,6 +427,14 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
     if (partyName == null) return null;
     final num = int.tryParse(prefStr.trim());
     if (num == null || num <= 0) return null;
+    // Use _kPartyIdx so "JPP" matches "JUNTOS POR EL PERU" etc.
+    final targetIdx = _kPartyIdx(partyName);
+    if (targetIdx >= 0) {
+      return lista
+          .where((c) => _kPartyIdx(c.hv.partido) == targetIdx && c.posicion == num)
+          .firstOrNull;
+    }
+    // Fallback: direct fuzzy match
     final norm = _normSim(partyName);
     return lista
         .where((c) {
@@ -458,9 +474,19 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
 
   int _kPartyIdx(String partyName) {
     final norm = _normSim(partyName);
+    final normNS = norm.replaceAll(' ', ''); // no-spaces variant
     for (int i = 0; i < _kPartyOrder.length; i++) {
       final k = _normSim(_kPartyOrder[i]);
+      // Direct / contains match
       if (norm == k || norm.contains(k) || k.contains(norm)) return i;
+      // Space-stripped match (e.g. "PARTIDO SICREO" ↔ "PARTIDO SI CREO")
+      if (normNS == k.replaceAll(' ', '')) return i;
+      // Alias match (e.g. "JUNTOS POR EL PERU" ↔ "JPP")
+      final alias = _normSim(_kPartyDataName[_kPartyOrder[i]] ?? '');
+      if (alias.isNotEmpty &&
+          (norm == alias || norm.contains(alias) || alias.contains(norm))) {
+        return i;
+      }
     }
     return -1;
   }
@@ -775,24 +801,15 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
         for (final c in candidatos) {
           byParty.putIfAbsent(c.hv.partido, () => c);
         }
-        // Sort by _kPartyOrder
+        // Sort by mandatory _kPartyOrder (alias-aware via _kPartyIdx)
         final parties = byParty.entries.toList()
           ..sort((a, b) {
-            int idx(String name) {
-              final n = name.toUpperCase()
-                  .replaceAll('Á','A').replaceAll('É','E')
-                  .replaceAll('Í','I').replaceAll('Ó','O')
-                  .replaceAll('Ú','U').replaceAll('Ñ','N');
-              for (int i = 0; i < _kPartyOrder.length; i++) {
-                final k = _kPartyOrder[i].toUpperCase()
-                    .replaceAll('Á','A').replaceAll('É','E')
-                    .replaceAll('Í','I').replaceAll('Ó','O')
-                    .replaceAll('Ú','U').replaceAll('Ñ','N');
-                if (n.contains(k) || k.contains(n)) return i;
-              }
-              return 999;
-            }
-            return idx(a.key).compareTo(idx(b.key));
+            final ai = _kPartyIdx(a.key);
+            final bi = _kPartyIdx(b.key);
+            if (ai < 0 && bi < 0) return a.key.compareTo(b.key);
+            if (ai < 0) return 1;
+            if (bi < 0) return -1;
+            return ai.compareTo(bi);
           });
 
         return Card(
@@ -982,70 +999,59 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
     final ctrlIdx = pageIdx - 1; // maps to _ctrl[0..3]
     final boxes = _ctrl[ctrlIdx][0].length;
 
-    // Use same party list & order as section 1 (derived from presidential data)
-    final presAsync = ref.watch(
-        candidatosConHVProcesoProvider(ProcesoElectoral.presidentes));
-
-    Widget buildBallotCard(List<CandidatoConHV> candidatos) {
-      final partyNamesSet = <String>{};
-      for (final c in candidatos) {
-        partyNamesSet.add(c.hv.partido);
-      }
-      final orderedParties = partyNamesSet.toList()
-        ..sort((a, b) {
-          final ai = _kPartyIdx(a);
-          final bi = _kPartyIdx(b);
-          if (ai < 0 && bi < 0) return a.compareTo(b);
-          if (ai < 0) return 1;
-          if (bi < 0) return -1;
-          return ai.compareTo(bi);
-        });
-
-      return Card(
-        elevation: 2,
-        margin: EdgeInsets.zero,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          children: [
-            // Header
-            Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 12, vertical: 10),
-              color: def.color,
-              child: Row(children: [
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+      child: _webSafe(Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _secCard(def),
+          _rulesCard(),
+          // Ballot card
+          Card(
+            elevation: 2,
+            margin: EdgeInsets.zero,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: [
+                // Header
                 Container(
-                  width: 26,
-                  height: 26,
-                  decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.25),
-                      shape: BoxShape.circle),
-                  child: Center(
-                    child: Text('${def.number}',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14)),
-                  ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 10),
+                  color: def.color,
+                  child: Row(children: [
+                    Container(
+                      width: 26,
+                      height: 26,
+                      decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.25),
+                          shape: BoxShape.circle),
+                      child: Center(
+                        child: Text('${def.number}',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14)),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(def.title,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14),
+                          maxLines: 2),
+                    ),
+                  ]),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(def.title,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
-                      maxLines: 2),
-                ),
-              ]),
-            ),
-            // Party rows (same order & names as section 1)
-            ...orderedParties.map((name) {
-              final partyIdx = _kPartyIdx(name);
-              if (partyIdx < 0) return const SizedBox.shrink();
-              final controllers = _ctrl[ctrlIdx][partyIdx];
-              final selected = _selParty[ctrlIdx] == partyIdx;
+                // Party rows — mandatory order from _kPartyOrder
+                ..._kPartyOrder.asMap().entries.map((entry) {
+                  final partyIdx = entry.key;
+                  final name = entry.value;
+                  final controllers = _ctrl[ctrlIdx][partyIdx];
+                  final selected = _selParty[ctrlIdx] == partyIdx;
                   return Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 7),
@@ -1088,8 +1094,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                               height: 36,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.red
-                                    .withValues(alpha: 0.12),
+                                color: Colors.red.withValues(alpha: 0.12),
                               ),
                               alignment: Alignment.center,
                               child: const Text('✗',
@@ -1127,32 +1132,11 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                 const SizedBox(height: 8),
               ],
             ),
-          );
-        }
-
-        return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-          child: _webSafe(Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _secCard(def),
-              _rulesCard(),
-              presAsync.when(
-                loading: () => const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Center(child: CircularProgressIndicator()),
-                ),
-                error: (e, _) => Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text('Error al cargar: $e',
-                      style: const TextStyle(color: Colors.red)),
-                ),
-                data: buildBallotCard,
-              ),
-            ],
-          )),
-        );
-      }
+          ),
+        ],
+      )),
+    );
+  }
 
   // ── Page 5: Results summary ───────────────────────────────────────────────
 
