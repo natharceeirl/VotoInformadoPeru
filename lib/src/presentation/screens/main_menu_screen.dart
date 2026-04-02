@@ -51,7 +51,7 @@ class MainMenuScreen extends StatelessWidget {
               //const SizedBox(height: 24),
 
               // ── Section: Análisis ─────────────────────────────────────────
-              _SectionHeader(
+              /*_SectionHeader(
                 label: 'ANÁLISIS Y COMPARACIÓN',
                 icon: Icons.analytics_outlined,
               ),
@@ -88,7 +88,7 @@ class MainMenuScreen extends StatelessWidget {
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const ComparePartiesScreen())),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20),*/
 
               // ── Section: Gráficos ─────────────────────────────────────────
               _SectionHeader(
@@ -138,7 +138,7 @@ class MainMenuScreen extends StatelessWidget {
                 icon: Icons.people_alt_outlined,
               ),
               const SizedBox(height: 12),
-              _MenuCard(
+              /*_MenuCard(
                 title: 'Directorio de Candidatos',
                 subtitle: 'Busca entre 963+ candidatos al Senado Nacional',
                 detail: 'Filtro por partido · DNI · Nivel educativo',
@@ -159,7 +159,7 @@ class MainMenuScreen extends StatelessWidget {
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const RegionesScreen())),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 10),*/
               _MenuCard(
                 title: 'Candidatos Mineros (REINFO)',
                 subtitle: 'Alertas de minería informal',
@@ -173,7 +173,7 @@ class MainMenuScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // ── Section: Info ─────────────────────────────────────────────
-              _SectionHeader(
+              /*_SectionHeader(
                 label: 'INFORMACIÓN',
                 icon: Icons.info_outline_rounded,
               ),
@@ -187,7 +187,7 @@ class MainMenuScreen extends StatelessWidget {
                 badge: null,
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const DataSourcesScreen())),
-              ),
+              ),*/
 
               const SizedBox(height: 28),
               const CreditsFooter(),

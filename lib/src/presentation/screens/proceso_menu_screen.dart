@@ -3,6 +3,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../domain/models/hoja_vida_models.dart';
 import 'conoce_candidatos_screen.dart';
 import 'estadisticas_partido_screen.dart';
+import 'indicadores_proceso_screen.dart';
+import 'reinfo_proceso_screen.dart';
 import 'credits_screen.dart';
 
 // Re-export ProcesoElectoral so selection_screen.dart only needs to import this file
@@ -77,6 +79,24 @@ class ProcesoMenuScreen extends StatelessWidget {
                 subtitle: 'Ranking · Puntaje promedio · Comparación',
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => EstadisticasPartidoScreen(proceso: proceso))),
+              ),
+              const SizedBox(height: 10),
+              _ActionRow(
+                icon: Icons.bar_chart,
+                iconColor: const Color(0xFF6A1B9A),
+                title: 'Indicadores Interactivos',
+                subtitle: 'Sentencias · Preparación · Ingresos · REINFO · Radar',
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => IndicadoresProcesoScreen(proceso: proceso))),
+              ),
+              const SizedBox(height: 10),
+              _ActionRow(
+                icon: Icons.terrain_rounded,
+                iconColor: const Color(0xFF6D4C41),
+                title: 'Candidatos Mineros (REINFO)',
+                subtitle: 'Candidatos vinculados a minería informal · Por partido',
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => ReinfoProcesoScreen(proceso: proceso))),
               ),
               const SizedBox(height: 16),
               // JNE link (simple text button)
