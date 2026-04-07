@@ -150,6 +150,28 @@ class RegionCandidato {
   });
 
   factory RegionCandidato.fromJson(Map<String, dynamic> j) {
+    // ── Nuevo formato (bdActualizada_*.json) ──────────────────────────────
+    // Campos: txDocId, txNom, txApePat, txApeMat, txOrgPol, txNombre,
+    //         idOrgPol, nuPos, txEstCand, _region (inyectado al aplanar)
+    if (j.containsKey('txDocId')) {
+      return RegionCandidato(
+        ubigeo: 0,
+        departamento: j['_region'] as String? ?? '',
+        idOrganizacionPolitica: (j['idOrgPol'] as num?)?.toInt() ?? 0,
+        organizacionPolitica: j['txOrgPol'] as String? ?? '',
+        posicion: (j['nuPos'] as num?)?.toInt() ?? 0,
+        dni: (j['txDocId'] ?? '').toString(),
+        nombres: j['txNom'] as String? ?? '',
+        apellidoPaterno: j['txApePat'] as String? ?? '',
+        apellidoMaterno: j['txApeMat'] as String? ?? '',
+        sexo: '',
+        fechaNacimiento: '',
+        estadoCandidato: j['txEstCand'] as String? ?? '',
+        strNombre: j['txNombre'] as String? ?? '',
+        cargo: '',
+      );
+    }
+    // ── Formato antiguo (bd_*.json) ───────────────────────────────────────
     return RegionCandidato(
       ubigeo: (j['strUbigeo'] as num?)?.toInt() ?? 0,
       departamento: j['strDepartamento'] as String? ?? '',

@@ -306,41 +306,84 @@ final candidatosConHVProvider =
 
 // ─── Providers genéricos por proceso electoral (family) ──────────────────────
 
+/// Carga un archivo BD (nuevo o antiguo) y devuelve lista de [RegionCandidato].
+///
+/// Soporta tres formatos:
+///   A) Nuevo plano — lista con campos txDocId, txNom…
+///   B) Nuevo por región — lista de 1 dict {region → lista} (distritoMultiple)
+///   C) Antiguo — mapa {topKey → lista} con strDocumentoIdentidad…
+Future<List<RegionCandidato>> _loadBdFile(
+    String path, {String topKey = ''}) async {
+  String raw;
+  try {
+    raw = await rootBundle.loadString(path);
+  } catch (_) {
+    return [];
+  }
+
+  final decoded = jsonDecode(raw);
+
+  // ── B: Lista de 1 dict agrupado por región (distritoMultiple nuevo) ──────
+  if (decoded is List &&
+      decoded.length == 1 &&
+      decoded.first is Map &&
+      (decoded.first as Map).values.every((v) => v is List)) {
+    final regionMap = decoded.first as Map<String, dynamic>;
+    final result = <RegionCandidato>[];
+    for (final entry in regionMap.entries) {
+      for (final item in (entry.value as List).cast<Map<String, dynamic>>()) {
+        if ((item['txEstCand'] as String? ?? '').toUpperCase() == 'INSCRITO' ||
+            !item.containsKey('txEstCand')) {
+          result.add(RegionCandidato.fromJson({...item, '_region': entry.key}));
+        }
+      }
+    }
+    return result;
+  }
+
+  // ── A: Lista plana nueva ──────────────────────────────────────────────────
+  if (decoded is List) {
+    return decoded
+        .cast<Map<String, dynamic>>()
+        .where((j) =>
+            (j['txEstCand'] as String? ?? '').toUpperCase() == 'INSCRITO' ||
+            !j.containsKey('txEstCand'))
+        .map(RegionCandidato.fromJson)
+        .toList();
+  }
+
+  // ── C: Formato antiguo Map<topKey, List> ─────────────────────────────────
+  if (decoded is Map<String, dynamic>) {
+    List? items = decoded[topKey] as List?;
+    if (items == null && topKey.isNotEmpty) {
+      final normTarget = topKey.toUpperCase()
+          .replaceAll('Ú', 'U').replaceAll('Ó', 'O').replaceAll('É', 'E');
+      for (final k in decoded.keys) {
+        if (k.toUpperCase().replaceAll('Ú', 'U').replaceAll('Ó', 'O')
+                .replaceAll('É', 'E') == normTarget) {
+          items = decoded[k] as List?;
+          break;
+        }
+      }
+    }
+    items ??= decoded.values.whereType<List>().firstOrNull ?? [];
+    return items
+        .cast<Map<String, dynamic>>()
+        .map(RegionCandidato.fromJson)
+        .toList();
+  }
+
+  return [];
+}
+
 /// Carga el archivo BD del proceso y devuelve la lista de candidatos.
 final bdCandidatosProcesoProvider =
     FutureProvider.family<List<RegionCandidato>, ProcesoElectoral>((ref, proceso) async {
-      Future<List<RegionCandidato>> loadFile(String path, String topKey) async {
-        String raw;
-        try {
-          raw = await rootBundle.loadString(path);
-        } catch (_) {
-          return [];
-        }
-        final map = jsonDecode(raw) as Map<String, dynamic>;
-        // Key may have encoding differences — try exact then normalized
-        List? items = map[topKey] as List?;
-        if (items == null) {
-          final normTarget = topKey.toUpperCase()
-              .replaceAll('Ú', 'U').replaceAll('Ó', 'O').replaceAll('É', 'E');
-          for (final k in map.keys) {
-            if (k.toUpperCase().replaceAll('Ú', 'U').replaceAll('Ó', 'O')
-                    .replaceAll('É', 'E') == normTarget) {
-              items = map[k] as List?;
-              break;
-            }
-          }
-        }
-        return (items ?? [])
-            .cast<Map<String, dynamic>>()
-            .map(RegionCandidato.fromJson)
-            .toList();
-      }
-
-      final candidatos = await loadFile(proceso.bdFile, proceso.bdTopKey);
+      final candidatos = await _loadBdFile(proceso.bdFile, topKey: proceso.bdTopKey);
 
       // Senadores también tienen el archivo de Distrito Múltiple
       if (proceso == ProcesoElectoral.senadores && proceso.bdFileExtra.isNotEmpty) {
-        final extra = await loadFile(proceso.bdFileExtra, 'SENADORES DISTRITO MÚLTIPLE');
+        final extra = await _loadBdFile(proceso.bdFileExtra);
         return [...candidatos, ...extra];
       }
 
@@ -472,35 +515,8 @@ final candidatosConHVProcesoProvider =
 
       if (proceso == ProcesoElectoral.senadores) {
         // Load the two senadores files separately to correctly tag ÚNICO/MÚLTIPLE.
-        // Both files have strCargo="SENADOR" so we can't rely on the cargo field.
-        Future<List<RegionCandidato>> loadSen(String path, String topKey) async {
-          String raw;
-          try {
-            raw = await rootBundle.loadString(path);
-          } catch (_) {
-            return [];
-          }
-          final map = jsonDecode(raw) as Map<String, dynamic>;
-          List? items = map[topKey] as List?;
-          if (items == null) {
-            final norm = topKey.toUpperCase()
-                .replaceAll('Ú', 'U').replaceAll('Ó', 'O').replaceAll('É', 'E');
-            for (final k in map.keys) {
-              if (k.toUpperCase().replaceAll('Ú', 'U').replaceAll('Ó', 'O')
-                      .replaceAll('É', 'E') == norm) {
-                items = map[k] as List?;
-                break;
-              }
-            }
-          }
-          return (items ?? [])
-              .cast<Map<String, dynamic>>()
-              .map(RegionCandidato.fromJson)
-              .toList();
-        }
-
-        final unicos    = await loadSen(proceso.bdFile,      'SENADORES DISTRITO ÚNICO');
-        final multiples = await loadSen(proceso.bdFileExtra, 'SENADORES DISTRITO MÚLTIPLE');
+        final unicos    = await _loadBdFile(proceso.bdFile);
+        final multiples = await _loadBdFile(proceso.bdFileExtra);
         addCandidatos(unicos,    'ÚNICO');
         addCandidatos(multiples, 'MÚLTIPLE');
       } else {
@@ -646,3 +662,55 @@ final filteredDetailedCandidatesProvider =
         return matchQuery && matchParty && matchEdu;
       }).toList();
     });
+
+// ─── Indicadores adicionales candidatos presidenciales ────────────────────────
+
+/// Datos de postura ideológica/política de candidatos presidenciales.
+/// Fuente: entrevistas, historial político e inferencias ideológicas.
+/// Solo referencial — NO afecta el puntaje de integridad.
+class PresidenteIndicadores {
+  final String nombre;
+  final String partido;
+  final String aborto;
+  final String lgbt;
+  final String ideologia;
+
+  const PresidenteIndicadores({
+    required this.nombre,
+    required this.partido,
+    required this.aborto,
+    required this.lgbt,
+    required this.ideologia,
+  });
+
+  factory PresidenteIndicadores.fromJson(Map<String, dynamic> j) =>
+      PresidenteIndicadores(
+        nombre:    j['nombre']   as String? ?? '',
+        partido:   j['partido']  as String? ?? '',
+        aborto:    j['aborto']   as String? ?? 'unknown',
+        lgbt:      j['lgbt']     as String? ?? 'unknown',
+        ideologia: j['ideologia'] as String? ?? 'unknown',
+      );
+}
+
+String _normIdeo(String s) => s
+    .toLowerCase()
+    .replaceAll('á', 'a').replaceAll('é', 'e')
+    .replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u')
+    .replaceAll('ñ', 'n')
+    .trim();
+
+/// Carga el JSON de indicadores presidenciales y devuelve mapa
+/// {partido_normalizado → PresidenteIndicadores}.
+final presidenteIndicadoresProvider =
+    FutureProvider<Map<String, PresidenteIndicadores>>((ref) async {
+  final jsonStr = await rootBundle.loadString(
+      'assets/baseDatos/candidatos_presidenciales.json');
+  final list = jsonDecode(jsonStr) as List<dynamic>;
+  final map = <String, PresidenteIndicadores>{};
+  for (final item in list) {
+    final pi = PresidenteIndicadores.fromJson(item as Map<String, dynamic>);
+    map[_normIdeo(pi.partido)] = pi;
+  }
+  return map;
+});

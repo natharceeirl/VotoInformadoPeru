@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py -c ':*)",
+      "Bash(py -m py_compile descargar_hojas_vida_v3.py)"
+    ]
+  }
+}

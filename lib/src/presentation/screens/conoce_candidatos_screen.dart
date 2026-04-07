@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/models/hoja_vida_models.dart';
 import '../providers/new_providers.dart';
 import '../widgets/party_logo.dart';
+
+String _normIndicador(String s) => s
+    .toLowerCase()
+    .replaceAll('á', 'a').replaceAll('é', 'e')
+    .replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u')
+    .replaceAll('ñ', 'n')
+    .trim();
 
 // ─── Pantalla principal "Conoce a tus Candidatos" ─────────────────────────────
 
@@ -819,7 +827,7 @@ class _ListHeader extends StatelessWidget {
 
 // ─── Tarjeta de candidato ─────────────────────────────────────────────────────
 
-class _CandidatoCard extends StatelessWidget {
+class _CandidatoCard extends ConsumerWidget {
   final CandidatoConHV c;
   final int rank;
   final ProcesoElectoral proceso;
@@ -827,7 +835,7 @@ class _CandidatoCard extends StatelessWidget {
   const _CandidatoCard({required this.c, required this.rank, required this.proceso});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final hv    = c.hv;
     final theme = Theme.of(context);
     final cs    = theme.colorScheme;
@@ -840,7 +848,24 @@ class _CandidatoCard extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () => _showDetalle(context, c, proceso),
+        onTap: () {
+          PresidenteIndicadores? pi;
+          if (proceso == ProcesoElectoral.presidentes) {
+            final Map<String, PresidenteIndicadores>? indMap = switch (
+                ref.read(presidenteIndicadoresProvider)) {
+              AsyncData(:final value) => value,
+              _ => null,
+            };
+            if (indMap != null) {
+              final key = _normIndicador(c.hv.partido);
+              pi = indMap[key] ?? indMap.entries
+                  .where((e) => key.contains(e.key) || e.key.contains(key))
+                  .map((e) => e.value)
+                  .firstOrNull;
+            }
+          }
+          _showDetalle(context, c, proceso, indicadores: pi);
+        },
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Row(
@@ -1130,7 +1155,8 @@ class _NoDataWidget extends StatelessWidget {
 
 // ─── Diálogo de detalle ───────────────────────────────────────────────────────
 
-void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proceso) {
+void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proceso,
+    {PresidenteIndicadores? indicadores}) {
   final hv    = c.hv;
   final theme = Theme.of(context);
   final cs    = theme.colorScheme;
@@ -1395,8 +1421,15 @@ void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proce
               const Divider(height: 20),
             ],
 
+            // ── Indicadores político-ideológicos (solo presidentes) ────────
+            if (indicadores != null) ...[
+              _SectionTitle('PERSPECTIVA POLÍTICO-IDEOLÓGICA', const Color(0xFF4A148C)),
+              _IndicadoresPresidenteCard(ind: indicadores, theme: theme, cs: cs),
+              const Divider(height: 20),
+            ],
+
             // ── Ingresos declarados ────────────────────────────────────────
-            _SectionTitle('INGRESOS DECLARADOS${hv.anioIngresos.isNotEmpty ? " (${hv.anioIngresos})" : ""}', const Color(0xFF1565C0)),
+            _SectionTitle('INGRESOS DECLARADOS ANUALES${hv.anioIngresos.isNotEmpty ? " — ${hv.anioIngresos}" : ""}', const Color(0xFF1565C0)),
             _IngresosBienesCard(hv: hv, cs: cs, theme: theme),
             const Divider(height: 20),
 
@@ -1611,9 +1644,7 @@ class _IngresosBienesCard extends StatelessWidget {
 
   String _formatMoney(double v) {
     if (v == 0) return 'S/ 0';
-    if (v >= 1000000) return 'S/ ${(v / 1000000).toStringAsFixed(2)}M';
-    if (v >= 1000)    return 'S/ ${(v / 1000).toStringAsFixed(1)}K';
-    return 'S/ ${v.toStringAsFixed(2)}';
+    return NumberFormat.currency(locale: 'es_PE', symbol: 'S/ ', decimalDigits: 2).format(v);
   }
 
   @override
@@ -1634,7 +1665,7 @@ class _IngresosBienesCard extends StatelessWidget {
               const Icon(Icons.attach_money_rounded, size: 14,
                   color: Color(0xFF1565C0)),
               const SizedBox(width: 6),
-              Text('Ingreso total declarado',
+              Text('Ingreso total declarado (anual)',
                 style: theme.textTheme.bodySmall?.copyWith(
                     color: cs.onSurface.withValues(alpha: 0.55))),
               const Spacer(),
@@ -1787,6 +1818,239 @@ class _JneLink extends StatelessWidget {
                 color: Colors.blue),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// ─── Indicadores político-ideológicos presidenciales ─────────────────────────
+
+class _IndicadoresPresidenteCard extends StatelessWidget {
+  final PresidenteIndicadores ind;
+  final ThemeData theme;
+  final ColorScheme cs;
+
+  const _IndicadoresPresidenteCard({
+    required this.ind,
+    required this.theme,
+    required this.cs,
+  });
+
+  // ── Traducciones de valores ──────────────────────────────────────────────
+
+  static const _abortoLabel = {
+    'pro_vida':     'Pro-vida (rechazo al aborto)',
+    'conservador':  'Conservador (en contra)',
+    'pro_parcial':  'Casos específicos (violación, etc.)',
+    'parcial':      'Casos específicos (violación, etc.)',
+    'moderado':     'Postura moderada',
+    'progresivo':   'Progresivo (favorable)',
+    'pro':          'Favorable al acceso al aborto',
+    'neutral':      'Neutral / no es una prioridad declarada',
+    'unknown':      'Sin datos públicos confiables',
+  };
+
+  static const _lgbtLabel = {
+    'pro':          'Apoyo amplio a derechos LGBT+',
+    'parcial':      'Apoyo parcial o condicional',
+    'neutral':      'Neutral / ambiguo',
+    'conservador':  'Postura conservadora (en contra)',
+    'anti':         'En contra de derechos LGBT+',
+    'unknown':      'Sin datos públicos confiables',
+  };
+
+  static const _ideologiaLabel = {
+    'izquierda':           'Izquierda',
+    'centro_progresista':  'Centro-progresista',
+    'centro_liberal':      'Centro-liberal',
+    'centro':              'Centro',
+    'centro_derecha':      'Centro-derecha',
+    'derecha':             'Derecha',
+    'derecha_conservadora':'Derecha conservadora',
+    'populista':           'Populista',
+    'nacionalista':        'Nacionalista',
+    'federalista':         'Federalista',
+    'tecnico':             'Tecnocrático',
+    'liberal':             'Liberal',
+    'unknown':             'Sin datos públicos confiables',
+  };
+
+  Color _colorAborto(String v) {
+    if (v == 'pro_vida' || v == 'conservador') return Colors.orange.shade800;
+    if (v == 'pro_parcial' || v == 'parcial' || v == 'moderado') return Colors.amber.shade700;
+    if (v == 'progresivo' || v == 'pro') return Colors.teal.shade600;
+    return Colors.grey.shade500;
+  }
+
+  Color _colorLgbt(String v) {
+    if (v == 'pro') return Colors.teal.shade600;
+    if (v == 'parcial' || v == 'neutral') return Colors.amber.shade700;
+    if (v == 'conservador') return Colors.orange.shade700;
+    if (v == 'anti') return Colors.red.shade700;
+    return Colors.grey.shade500;
+  }
+
+  Color _colorIdeologia(String v) {
+    if (v.startsWith('izquierda')) return Colors.red.shade700;
+    if (v.startsWith('centro_prog') || v == 'centro_liberal') return Colors.teal;
+    if (v == 'centro') return Colors.blueGrey.shade600;
+    if (v.startsWith('centro_der')) return Colors.indigo.shade400;
+    if (v == 'derecha_conservadora') return Colors.indigo.shade800;
+    if (v == 'derecha') return Colors.indigo.shade600;
+    if (v == 'populista') return Colors.deepOrange.shade400;
+    return Colors.blueGrey.shade400;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final abortoTxt = _abortoLabel[ind.aborto]   ?? ind.aborto;
+    final lgbtTxt   = _lgbtLabel[ind.lgbt]        ?? ind.lgbt;
+    final ideoTxt   = _ideologiaLabel[ind.ideologia] ?? ind.ideologia;
+
+    final cAborto  = _colorAborto(ind.aborto);
+    final cLgbt    = _colorLgbt(ind.lgbt);
+    final cIdeo    = _colorIdeologia(ind.ideologia);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Disclaimer
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: const Color(0xFF4A148C).withValues(alpha: 0.06),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+                color: const Color(0xFF4A148C).withValues(alpha: 0.18)),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(Icons.info_outline, size: 14,
+                  color: Color(0xFF4A148C)),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  'Información referencial basada en entrevistas, historial '
+                  'político e inferencias ideológicas. No afecta el puntaje '
+                  'de integridad del candidato.',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: const Color(0xFF4A148C).withValues(alpha: 0.75),
+                    fontSize: 10,
+                    height: 1.4,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        // Aborto
+        _IndRow(
+          icon: Icons.health_and_safety_outlined,
+          label: 'Postura sobre el aborto',
+          value: abortoTxt,
+          color: cAborto,
+          isUnknown: ind.aborto == 'unknown',
+          theme: theme,
+        ),
+        const SizedBox(height: 6),
+
+        // LGBT
+        _IndRow(
+          icon: Icons.diversity_3_outlined,
+          label: 'Derechos LGBT+',
+          value: lgbtTxt,
+          color: cLgbt,
+          isUnknown: ind.lgbt == 'unknown',
+          theme: theme,
+        ),
+        const SizedBox(height: 6),
+
+        // Ideología
+        _IndRow(
+          icon: Icons.account_balance_outlined,
+          label: 'Posición ideológica',
+          value: ideoTxt,
+          color: cIdeo,
+          isUnknown: ind.ideologia == 'unknown',
+          theme: theme,
+        ),
+      ],
+    );
+  }
+}
+
+class _IndRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+  final bool isUnknown;
+  final ThemeData theme;
+
+  const _IndRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.color,
+    required this.isUnknown,
+    required this.theme,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: isUnknown
+            ? Colors.grey.withValues(alpha: 0.05)
+            : color.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+            color: isUnknown
+                ? Colors.grey.withValues(alpha: 0.2)
+                : color.withValues(alpha: 0.25)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 16,
+              color: isUnknown ? Colors.grey.shade400 : color),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: isUnknown
+                        ? Colors.grey.shade400
+                        : color.withValues(alpha: 0.75),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: isUnknown
+                        ? Colors.grey.shade500
+                        : color,
+                    fontWeight:
+                        isUnknown ? FontWeight.normal : FontWeight.bold,
+                    fontStyle: isUnknown ? FontStyle.italic : FontStyle.normal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -19,21 +19,22 @@ enum ProcesoElectoral {
 
   String get bdFile {
     switch (this) {
-      case ProcesoElectoral.presidentes:    return 'assets/baseDatos/bd_presidentes_vicepresidentes.json';
-      case ProcesoElectoral.diputados:      return 'assets/baseDatos/bd_diputados.json';
-      case ProcesoElectoral.senadores:      return 'assets/baseDatos/bd_senadoresDistritoUnico.json';
-      case ProcesoElectoral.parlamentoAndino: return 'assets/baseDatos/bd_parlamentoAndino.json';
+      case ProcesoElectoral.presidentes:    return 'assets/baseDatos/bdActualizada_presidentes.json';
+      case ProcesoElectoral.diputados:      return 'assets/baseDatos/bdActualizada_diputados.json';
+      case ProcesoElectoral.senadores:      return 'assets/baseDatos/bdActualizada_senadores_distritoUnico.json';
+      case ProcesoElectoral.parlamentoAndino: return 'assets/baseDatos/bdActualizada_parlamentoAndino.json';
     }
   }
 
   String get bdFileExtra {
-    // For senadores we also have the multiple district file
     if (this == ProcesoElectoral.senadores) {
-      return 'assets/baseDatos/bd_senadoresDistritoMultiple.json';
+      return 'assets/baseDatos/bdActualizada_senadores_distritoMultiple.json';
     }
     return '';
   }
 
+  // bdTopKey no longer used (new BD files are flat lists, not keyed maps).
+  // Kept for backwards compatibility if any old code references it.
   String get bdTopKey {
     switch (this) {
       case ProcesoElectoral.presidentes:    return 'PRESIDENCIAL';
