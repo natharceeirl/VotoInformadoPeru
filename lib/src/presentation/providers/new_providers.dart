@@ -434,24 +434,42 @@ final candidatosConHVProcesoProvider =
           HojaVida? hv = hojas[c.dni] ?? hojas[c.paddedDni];
           if (hv == null) continue;
           // Penalización pro-crimen (por nombre del candidato y por partido)
-          final normNombre       = _normName(hv.nombre);
-          final numLeyes         = proCrimen[normNombre] ?? 0;
+          // ── Rellenar partido e idOrg desde la BD cuando el HV los tiene vacíos ──
+          // (Los nuevos archivos bdActualizada_*.json tienen el partido en txOrgPol
+          // pero parse_hojavida/parse_consolidado no siempre lo captura correctamente.)
+          if (hv.partido.isEmpty && c.organizacionPolitica.isNotEmpty) {
+            hv = hv.copyWith(
+              partido: c.organizacionPolitica,
+              idOrg:   c.idOrganizacionPolitica,
+            );
+          }
+
+          final normNombre  = _normName(hv.nombre);
+          final numLeyes    = proCrimen[normNombre] ?? 0;
+
           // Partial match for party: "PARTIDO POLITICO NACIONAL PERU LIBRE"
           // must match proCrimenPartido key "PERU LIBRE"
           final normPartido = _normName(hv.partido);
           int numLeyesPartido = proCrimenPartido[normPartido] ?? 0;
           if (numLeyesPartido == 0) {
             for (final e in proCrimenPartido.entries) {
-              if (normPartido.contains(e.key) && e.value > numLeyesPartido) {
+              if (normPartido.isNotEmpty &&
+                  normPartido.contains(e.key) &&
+                  e.value > numLeyesPartido) {
                 numLeyesPartido = e.value;
               }
             }
           }
-          // Investigaciones: solo aplican al PRESIDENTE, no a vicepresidentes
-          final esPresidente = c.cargo.toUpperCase().contains('PRESIDENTE DE LA REP') &&
-              !c.cargo.toUpperCase().contains('VICE');
+
+          // Investigaciones: aplican solo al candidato PRESIDENTE (posición 1,
+          // o cargo que contenga PRESIDENTE pero no VICE). En el nuevo formato
+          // el campo cargo puede estar vacío, así que usamos posicion == 1.
+          final cargoUpper = c.cargo.toUpperCase();
+          final esPresidente = proceso == ProcesoElectoral.presidentes &&
+              (cargoUpper.contains('PRESIDENTE') && !cargoUpper.contains('VICE') ||
+               (cargoUpper.isEmpty && c.posicion == 1));
           final inv = (esPresidente && investigaciones.isNotEmpty)
-              ? investigaciones[_normName(hv.partido)] ?? ''
+              ? investigaciones[normPartido] ?? ''
               : '';
           // REINFO check
           final reinfoMatch = reinfoCandidatos
@@ -701,7 +719,9 @@ String _normIdeo(String s) => s
     .trim();
 
 /// Carga el JSON de indicadores presidenciales y devuelve mapa
-/// {partido_normalizado → PresidenteIndicadores}.
+/// {nombre_candidato_normalizado → PresidenteIndicadores}.
+/// Se indexa por NOMBRE (no por partido) para aplicar solo al candidato
+/// presidencial correcto, no a todos los candidatos del mismo partido.
 final presidenteIndicadoresProvider =
     FutureProvider<Map<String, PresidenteIndicadores>>((ref) async {
   final jsonStr = await rootBundle.loadString(
@@ -710,7 +730,7 @@ final presidenteIndicadoresProvider =
   final map = <String, PresidenteIndicadores>{};
   for (final item in list) {
     final pi = PresidenteIndicadores.fromJson(item as Map<String, dynamic>);
-    map[_normIdeo(pi.partido)] = pi;
+    map[_normIdeo(pi.nombre)] = pi;
   }
   return map;
 });

@@ -12,7 +12,32 @@ String _normIndicador(String s) => s
     .replaceAll('á', 'a').replaceAll('é', 'e')
     .replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u')
     .replaceAll('ñ', 'n')
+    .replaceAll(',', ' ')
     .trim();
+
+/// Busca en [map] la entrada cuyas palabras del key (nombre del candidato
+/// presidencial) están TODAS presentes en [hvNombre] normalizado.
+/// HV nombre viene como "APELLIDO APELLIDO , NOMBRES"; el key del mapa
+/// viene como "nombre apellido" (del JSON candidatos_presidenciales.json).
+PresidenteIndicadores? _buscarIndicadorPorNombre(
+    Map<String, PresidenteIndicadores> map, String hvNombre) {
+  if (hvNombre.isEmpty) return null;
+  final normHv = _normIndicador(hvNombre);
+  final wordsHv = normHv.split(' ').where((w) => w.length > 2).toSet();
+  PresidenteIndicadores? mejor;
+  int mejorScore = 0;
+  for (final entry in map.entries) {
+    final keyWords = entry.key.split(' ').where((w) => w.length > 2).toList();
+    if (keyWords.isEmpty) continue;
+    final matches = keyWords.where((w) => wordsHv.contains(w)).length;
+    // Debe coincidir al menos el 50% de las palabras del key
+    if (matches > 0 && matches >= (keyWords.length / 2).ceil() && matches > mejorScore) {
+      mejorScore = matches;
+      mejor = entry.value;
+    }
+  }
+  return mejor;
+}
 
 // ─── Pantalla principal "Conoce a tus Candidatos" ─────────────────────────────
 
@@ -850,18 +875,16 @@ class _CandidatoCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(12),
         onTap: () {
           PresidenteIndicadores? pi;
-          if (proceso == ProcesoElectoral.presidentes) {
+          // Solo mostrar indicadores al candidato PRESIDENCIAL (posición 1),
+          // nunca a vicepresidentes ni candidatos de otros procesos.
+          if (proceso == ProcesoElectoral.presidentes && c.posicion == 1) {
             final Map<String, PresidenteIndicadores>? indMap = switch (
                 ref.read(presidenteIndicadoresProvider)) {
               AsyncData(:final value) => value,
               _ => null,
             };
             if (indMap != null) {
-              final key = _normIndicador(c.hv.partido);
-              pi = indMap[key] ?? indMap.entries
-                  .where((e) => key.contains(e.key) || e.key.contains(key))
-                  .map((e) => e.value)
-                  .firstOrNull;
+              pi = _buscarIndicadorPorNombre(indMap, c.hv.nombre);
             }
           }
           _showDetalle(context, c, proceso, indicadores: pi);

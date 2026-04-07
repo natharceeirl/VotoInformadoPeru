@@ -354,6 +354,8 @@ class HojaVida {
   // ── Copy with pro-crime count ──────────────────────────────────────────────
 
   HojaVida copyWith({
+    String? partido,
+    int?    idOrg,
     int?    numLeyesProCrimen,
     int?    numLeyesProCrimenPartido,
     String? investigacionesConocidas,
@@ -365,8 +367,8 @@ class HojaVida {
     dni:    dni,
     idHojaVida: idHojaVida,
     nombre: nombre,
-    partido: partido,
-    idOrg:  idOrg,
+    partido: partido ?? this.partido,
+    idOrg:  idOrg   ?? this.idOrg,
     nivelEducacion: nivelEducacion,
     esDoctor:  esDoctor,
     esMaestro: esMaestro,
