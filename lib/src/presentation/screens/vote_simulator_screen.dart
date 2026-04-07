@@ -45,6 +45,7 @@ const List<String> _kPartyOrder = [
   'Renovación Popular',
   'Partido Demócrata Unido Perú',
   'Fuerza y Libertad',
+  'PTE',
   'Unidad Nacional',
   'Partido Morado',
 ];
@@ -56,6 +57,7 @@ const _kPartyDataName = <String, String>{
   'APP':                          'ALIANZA PARA EL PROGRESO',
   'Partido Sí Creo':              'PARTIDO SICREO',
   'Partido Frente de la Esperanza 2021': 'PARTIDO FRENTE DE LA ESPERANZA 2021',
+  'PTE':                          'PARTIDO DE LOS TRABAJADORES Y EMPRENDEDORES PTE - PERU',
 };
 
 // ── Colors ────────────────────────────────────────────────────────────────────

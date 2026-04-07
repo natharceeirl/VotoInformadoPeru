@@ -1794,10 +1794,7 @@ class _JneLink extends StatelessWidget {
   const _JneLink({required this.hv, required this.proceso});
 
   Future<void> _open(BuildContext context) async {
-    final url = proceso == ProcesoElectoral.presidentes
-        ? 'https://votoinformado.jne.gob.pe/presidente-vicepresidentes'
-        : hv.jneHvUrl;
-    final uri = Uri.parse(url);
+    final uri = Uri.parse(proceso.jnePortalUrl);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

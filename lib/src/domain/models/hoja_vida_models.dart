@@ -81,8 +81,18 @@ enum ProcesoElectoral {
     }
   }
 
-  String get jnePortalUrl =>
-      'https://votoinformado.jne.gob.pe/home';
+  String get jnePortalUrl {
+    switch (this) {
+      case ProcesoElectoral.presidentes:
+        return 'https://votoinformado.jne.gob.pe/presidente-vicepresidentes';
+      case ProcesoElectoral.diputados:
+        return 'https://votoinformado.jne.gob.pe/diputados';
+      case ProcesoElectoral.senadores:
+        return 'https://votoinformado.jne.gob.pe/senadores';
+      case ProcesoElectoral.parlamentoAndino:
+        return 'https://votoinformado.jne.gob.pe/parlamento-andino';
+    }
+  }
 }
 
 // ─── Experiencia Laboral ──────────────────────────────────────────────────────

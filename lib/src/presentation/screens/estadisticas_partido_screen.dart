@@ -1975,10 +1975,7 @@ class _JneButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
       onPressed: () async {
-        final url = proceso == ProcesoElectoral.presidentes
-            ? 'https://votoinformado.jne.gob.pe/presidente-vicepresidentes'
-            : hv.jneHvUrl;
-        final uri = Uri.parse(url);
+        final uri = Uri.parse(proceso.jnePortalUrl);
         if (await canLaunchUrl(uri)) await launchUrl(uri);
       },
       icon: const Icon(Icons.open_in_new_rounded, size: 14),

@@ -306,6 +306,23 @@ final candidatosConHVProvider =
 
 // ─── Providers genéricos por proceso electoral (family) ──────────────────────
 
+/// Mapa suplementario DNI → departamento para diputados.
+/// El archivo bdActualizada_diputados.json solo contiene candidatos de Lima
+/// (ubigeo 140100). diputados_region.json pre-computa la región correcta
+/// a partir del antiguo bd_diputados.json.
+final diputadosRegionProvider =
+    FutureProvider<Map<String, String>>((ref) async {
+  String raw;
+  try {
+    raw = await rootBundle.loadString(
+        'assets/baseDatos/diputados_region.json');
+  } catch (_) {
+    return {};
+  }
+  final map = jsonDecode(raw) as Map<String, dynamic>;
+  return map.map((k, v) => MapEntry(k, (v as String)));
+});
+
 /// Carga un archivo BD (nuevo o antiguo) y devuelve lista de [RegionCandidato].
 ///
 /// Soporta tres formatos:
@@ -425,8 +442,12 @@ final candidatosConHVProcesoProvider =
       final investigaciones = proceso == ProcesoElectoral.presidentes
           ? await ref.watch(investigacionesPresidentesProvider.future)
           : <String, String>{};
-      final reinfoCandidatos = await ref.watch(reinfoCandidatesRawProvider.future);
-      final universidades    = await ref.watch(universidadesProvider.future);
+      final reinfoCandidatos  = await ref.watch(reinfoCandidatesRawProvider.future);
+      final universidades     = await ref.watch(universidadesProvider.future);
+      // Mapa suplementario DNI→región para diputados (el BD nuevo solo tiene Lima).
+      final dipRegion = proceso == ProcesoElectoral.diputados
+          ? await ref.watch(diputadosRegionProvider.future)
+          : <String, String>{};
       final result = <CandidatoConHV>[];
 
       void addCandidatos(List<RegionCandidato> bd, String tipoDistrito) {
@@ -526,14 +547,20 @@ final candidatosConHVProcesoProvider =
               _ => '',
             };
           }
+          // Determinar departamento:
+          // 1. Si la BD trae departamento explícito, usarlo.
+          // 2. Para diputados, consultar mapa suplementario (DNI → región).
+          // 3. Fallback: primera experiencia laboral del HV.
+          String dpto = c.departamento;
+          if (dpto.isEmpty && dipRegion.isNotEmpty) {
+            dpto = dipRegion[c.paddedDni] ?? dipRegion[c.dni] ?? '';
+          }
+          if (dpto.isEmpty) dpto = hv.departamentoHv;
+
           result.add(CandidatoConHV(
             hv:           hv,
             tipoDistrito: tipoDistrito,
-            // Parlamento Andino has no strDepartamento in the BD file;
-            // fall back to the departamento of the first labor entry in the HV.
-            departamento: c.departamento.isNotEmpty
-                ? c.departamento
-                : hv.departamentoHv,
+            departamento: dpto,
             posicion:     c.posicion,
             fotoUrl:      c.fotoUrl,
             strNombre:    c.strNombre,
