@@ -1512,7 +1512,7 @@ void _showDetalle(BuildContext context, CandidatoConHV c, ProcesoElectoral proce
             const SizedBox(height: 16),
 
             // ── Enlace al JNE ──────────────────────────────────────────────
-            _JneLink(hv: hv),
+            _JneLink(hv: hv, proceso: proceso),
             const SizedBox(height: 12),
 
             // ── Nota legal ─────────────────────────────────────────────────
@@ -1790,10 +1790,14 @@ class _IngresosBienesCard extends StatelessWidget {
 
 class _JneLink extends StatelessWidget {
   final HojaVida hv;
-  const _JneLink({required this.hv});
+  final ProcesoElectoral proceso;
+  const _JneLink({required this.hv, required this.proceso});
 
   Future<void> _open(BuildContext context) async {
-    final uri = Uri.parse(hv.jneHvUrl);
+    final url = proceso == ProcesoElectoral.presidentes
+        ? 'https://votoinformado.jne.gob.pe/presidente-vicepresidentes'
+        : hv.jneHvUrl;
+    final uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -6,6 +6,37 @@ import '../../domain/models/hoja_vida_models.dart';
 import '../providers/new_providers.dart';
 import '../widgets/party_logo.dart';
 
+// ─── Indicator helpers (presidential candidates) ─────────────────────────────
+
+String _normIndEst(String s) => s
+    .toLowerCase()
+    .replaceAll('á', 'a').replaceAll('é', 'e')
+    .replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u')
+    .replaceAll('ñ', 'n')
+    .replaceAll(',', ' ')
+    .trim();
+
+PresidenteIndicadores? _buscarIndicadorPorNombreEst(
+    Map<String, PresidenteIndicadores> map, String hvNombre) {
+  if (hvNombre.isEmpty) return null;
+  final normHv  = _normIndEst(hvNombre);
+  final wordsHv = normHv.split(' ').where((w) => w.length > 2).toSet();
+  PresidenteIndicadores? mejor;
+  int mejorScore = 0;
+  for (final entry in map.entries) {
+    final keyWords = entry.key.split(' ').where((w) => w.length > 2).toList();
+    if (keyWords.isEmpty) continue;
+    final matches = keyWords.where((w) => wordsHv.contains(w)).length;
+    if (matches > 0 &&
+        matches >= (keyWords.length / 2).ceil() &&
+        matches > mejorScore) {
+      mejorScore = matches;
+      mejor = entry.value;
+    }
+  }
+  return mejor;
+}
+
 // ─── Pantalla: Estadísticas por Partido ──────────────────────────────────────
 
 class EstadisticasPartidoScreen extends ConsumerStatefulWidget {
@@ -631,7 +662,7 @@ class _PlanchaCard extends StatelessWidget {
   }
 }
 
-class _MiembroRow extends StatelessWidget {
+class _MiembroRow extends ConsumerWidget {
   final CandidatoConHV c;
   final ProcesoElectoral proceso;
   const _MiembroRow({required this.c, required this.proceso});
@@ -644,15 +675,26 @@ class _MiembroRow extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final hv = c.hv;
     return InkWell(
       borderRadius: BorderRadius.circular(6),
-      onTap: () => _showCandidatoDetalle(context, c, proceso),
+      onTap: () {
+        PresidenteIndicadores? indicadores;
+        if (proceso == ProcesoElectoral.presidentes && c.posicion == 1) {
+          final indMap = ref.read(presidenteIndicadoresProvider).asData?.value;
+          if (indMap != null) {
+            indicadores = _buscarIndicadorPorNombreEst(indMap, hv.nombre);
+          }
+        }
+        _showCandidatoDetalle(context, c, proceso, indicadores: indicadores);
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
         child: Row(
           children: [
+            _PhotoCircle(fotoUrl: c.fotoUrl, nombre: hv.nombre, size: 30),
+            const SizedBox(width: 6),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               decoration: BoxDecoration(
@@ -1107,7 +1149,7 @@ class _ScoreLeaderboard extends StatelessWidget {
 // ─── Detalle del candidato (bottom sheet) ─────────────────────────────────────
 
 void _showCandidatoDetalle(BuildContext context, CandidatoConHV c,
-    ProcesoElectoral proceso) {
+    ProcesoElectoral proceso, {PresidenteIndicadores? indicadores}) {
   final hv    = c.hv;
   final color = proceso.color;
 
@@ -1322,8 +1364,16 @@ void _showCandidatoDetalle(BuildContext context, CandidatoConHV c,
             ),
             const SizedBox(height: 14),
 
+            // ── Indicadores político-ideológicos (solo presidentes) ──────────
+            if (indicadores != null) ...[
+              _SheetSection('PERSPECTIVA POLÍTICO-IDEOLÓGICA',
+                  const Color(0xFF4A148C)),
+              _IndicadoresPresidenteSection(ind: indicadores),
+              const SizedBox(height: 14),
+            ],
+
             // ── JNE link ────────────────────────────────────────────────────
-            _JneButton(hv: hv),
+            _JneButton(hv: hv, proceso: proceso),
             const SizedBox(height: 12),
 
             // Nota legal
@@ -1507,7 +1557,7 @@ void _showPlanchaDetalle(
 
 // ─── Plancha miembro card (for detail sheet) ──────────────────────────────────
 
-class _PlanchaMiembroCard extends StatelessWidget {
+class _PlanchaMiembroCard extends ConsumerWidget {
   final CandidatoConHV c;
   final ProcesoElectoral proceso;
   const _PlanchaMiembroCard({required this.c, required this.proceso});
@@ -1520,14 +1570,23 @@ class _PlanchaMiembroCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final hv = c.hv;
     final scoreColor = _scoreColor(hv.scoreFinal.toDouble());
     final scoreBg = _scoreBg(hv.scoreFinal.toDouble());
 
     return InkWell(
       borderRadius: BorderRadius.circular(10),
-      onTap: () => _showCandidatoDetalle(context, c, proceso),
+      onTap: () {
+        PresidenteIndicadores? indicadores;
+        if (proceso == ProcesoElectoral.presidentes && c.posicion == 1) {
+          final indMap = ref.read(presidenteIndicadoresProvider).asData?.value;
+          if (indMap != null) {
+            indicadores = _buscarIndicadorPorNombreEst(indMap, hv.nombre);
+          }
+        }
+        _showCandidatoDetalle(context, c, proceso, indicadores: indicadores);
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(10),
@@ -1909,13 +1968,17 @@ class _ScoreRow extends StatelessWidget {
 
 class _JneButton extends StatelessWidget {
   final HojaVida hv;
-  const _JneButton({required this.hv});
+  final ProcesoElectoral proceso;
+  const _JneButton({required this.hv, required this.proceso});
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
       onPressed: () async {
-        final uri = Uri.parse(hv.jneHvUrl);
+        final url = proceso == ProcesoElectoral.presidentes
+            ? 'https://votoinformado.jne.gob.pe/presidente-vicepresidentes'
+            : hv.jneHvUrl;
+        final uri = Uri.parse(url);
         if (await canLaunchUrl(uri)) await launchUrl(uri);
       },
       icon: const Icon(Icons.open_in_new_rounded, size: 14),
@@ -1924,6 +1987,174 @@ class _JneButton extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         minimumSize: const Size.fromHeight(40),
       ),
+    );
+  }
+}
+
+// ─── Indicadores político-ideológicos presidenciales ─────────────────────────
+
+class _IndicadoresPresidenteSection extends StatelessWidget {
+  final PresidenteIndicadores ind;
+  const _IndicadoresPresidenteSection({required this.ind});
+
+  static const _abortoLabel = {
+    'pro_vida': 'Pro-vida (rechazo al aborto)',
+    'conservador': 'Conservador (en contra)',
+    'pro_parcial': 'Casos específicos (violación, etc.)',
+    'parcial': 'Casos específicos (violación, etc.)',
+    'moderado': 'Postura moderada',
+    'progresivo': 'Progresivo (favorable)',
+    'pro': 'Favorable al acceso al aborto',
+    'neutral': 'Neutral / no es una prioridad declarada',
+    'unknown': 'Sin datos públicos confiables',
+  };
+
+  static const _lgbtLabel = {
+    'pro': 'Apoyo amplio a derechos LGBT+',
+    'parcial': 'Apoyo parcial o condicional',
+    'neutral': 'Neutral / ambiguo',
+    'conservador': 'Postura conservadora (en contra)',
+    'anti': 'En contra de derechos LGBT+',
+    'unknown': 'Sin datos públicos confiables',
+  };
+
+  static const _ideologiaLabel = {
+    'izquierda': 'Izquierda',
+    'centro_progresista': 'Centro-progresista',
+    'centro_liberal': 'Centro-liberal',
+    'centro': 'Centro',
+    'centro_derecha': 'Centro-derecha',
+    'derecha': 'Derecha',
+    'derecha_conservadora': 'Derecha conservadora',
+    'populista': 'Populista',
+    'nacionalista': 'Nacionalista',
+    'federalista': 'Federalista',
+    'tecnico': 'Tecnocrático',
+    'liberal': 'Liberal',
+    'unknown': 'Sin datos públicos confiables',
+  };
+
+  Color _colorAborto(String v) {
+    if (v == 'pro_vida' || v == 'conservador') return Colors.orange.shade800;
+    if (v == 'pro_parcial' || v == 'parcial' || v == 'moderado') return Colors.amber.shade700;
+    if (v == 'progresivo' || v == 'pro') return Colors.teal.shade600;
+    return Colors.grey.shade500;
+  }
+
+  Color _colorLgbt(String v) {
+    if (v == 'pro') return Colors.teal.shade600;
+    if (v == 'parcial' || v == 'neutral') return Colors.amber.shade700;
+    if (v == 'conservador') return Colors.orange.shade700;
+    if (v == 'anti') return Colors.red.shade700;
+    return Colors.grey.shade500;
+  }
+
+  Color _colorIdeologia(String v) {
+    if (v.startsWith('izquierda')) return Colors.red.shade700;
+    if (v.startsWith('centro_prog') || v == 'centro_liberal') return Colors.teal;
+    if (v == 'centro') return Colors.blueGrey.shade600;
+    if (v.startsWith('centro_der')) return Colors.indigo.shade400;
+    if (v == 'derecha_conservadora') return Colors.indigo.shade800;
+    if (v == 'derecha') return Colors.indigo.shade600;
+    if (v == 'populista') return Colors.deepOrange.shade400;
+    return Colors.blueGrey.shade400;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final items = [
+      (Icons.health_and_safety_outlined, 'Postura sobre el aborto',
+          _abortoLabel[ind.aborto] ?? ind.aborto, _colorAborto(ind.aborto),
+          ind.aborto == 'unknown'),
+      (Icons.diversity_3_outlined, 'Derechos LGBT+',
+          _lgbtLabel[ind.lgbt] ?? ind.lgbt, _colorLgbt(ind.lgbt),
+          ind.lgbt == 'unknown'),
+      (Icons.account_balance_outlined, 'Posición ideológica',
+          _ideologiaLabel[ind.ideologia] ?? ind.ideologia, _colorIdeologia(ind.ideologia),
+          ind.ideologia == 'unknown'),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: const Color(0xFF4A148C).withValues(alpha: 0.06),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFF4A148C).withValues(alpha: 0.18)),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(Icons.info_outline, size: 14, color: Color(0xFF4A148C)),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  'Información referencial basada en entrevistas, historial '
+                  'político e inferencias ideológicas. No afecta el puntaje.',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: const Color(0xFF4A148C).withValues(alpha: 0.75),
+                    fontSize: 10, fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        ...items.map((item) {
+          final (icon, label, value, color, isUnknown) = item;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                color: isUnknown
+                    ? Colors.grey.withValues(alpha: 0.05)
+                    : color.withValues(alpha: 0.07),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                    color: isUnknown
+                        ? Colors.grey.withValues(alpha: 0.2)
+                        : color.withValues(alpha: 0.25)),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(icon, size: 16,
+                      color: isUnknown ? Colors.grey.shade400 : color),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(label,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: isUnknown
+                                ? Colors.grey.shade400
+                                : color.withValues(alpha: 0.75),
+                            fontSize: 10, fontWeight: FontWeight.w600,
+                          )),
+                        const SizedBox(height: 2),
+                        Text(value,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: isUnknown ? Colors.grey.shade500 : color,
+                            fontWeight: isUnknown
+                                ? FontWeight.normal : FontWeight.bold,
+                            fontStyle: isUnknown
+                                ? FontStyle.italic : FontStyle.normal,
+                          )),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+      ],
     );
   }
 }

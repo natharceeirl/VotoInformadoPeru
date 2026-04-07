@@ -515,6 +515,17 @@ final candidatosConHVProcesoProvider =
               universidadElite:       uniElite               ? true            : null,
             );
           }
+          // Derive cargo from posicion for presidentes when the new BD format
+          // does not include a strCargo equivalent.
+          String cargoEffective = c.cargo;
+          if (cargoEffective.isEmpty && proceso == ProcesoElectoral.presidentes) {
+            cargoEffective = switch (c.posicion) {
+              1 => 'PRESIDENTE DE LA REPÚBLICA',
+              2 => 'PRIMER VICEPRESIDENTE DE LA REPÚBLICA',
+              3 => 'SEGUNDO VICEPRESIDENTE DE LA REPÚBLICA',
+              _ => '',
+            };
+          }
           result.add(CandidatoConHV(
             hv:           hv,
             tipoDistrito: tipoDistrito,
@@ -526,7 +537,7 @@ final candidatosConHVProcesoProvider =
             posicion:     c.posicion,
             fotoUrl:      c.fotoUrl,
             strNombre:    c.strNombre,
-            cargo:        c.cargo,
+            cargo:        cargoEffective,
           ));
         }
       }
