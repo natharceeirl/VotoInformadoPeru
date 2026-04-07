@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:intl/intl.dart';
 import '../providers/new_providers.dart';
 import '../../domain/models/hoja_vida_models.dart';
 import '../widgets/party_logo.dart';
@@ -73,6 +74,7 @@ class _IndicadoresProcesoScreenState
   _Sort _sortReinfo = _Sort.descValor;
   _Sort _sortFinal  = _Sort.descValor;
   String? _selectedPartyRadar;
+  String? _regionFilter;
 
   static const _tabs = [
     'Sentencias',
@@ -109,61 +111,27 @@ class _IndicadoresProcesoScreenState
     return list;
   }
 
-  void _showDetail(BuildContext context, String partyName, _PStats? ps) {
-    showDialog(
+  void _showDetail(
+    BuildContext context,
+    String partyName,
+    _PStats? ps,
+    List<CandidatoConHV> allCandidatos,
+  ) {
+    final partyCandidatos = allCandidatos
+        .where((c) => c.hv.partido == partyName)
+        .toList()
+      ..sort((a, b) => b.hv.scoreFinal.compareTo(a.hv.scoreFinal));
+
+    showModalBottomSheet(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Row(
-          children: [
-            PartyLogo(partyName: partyName, size: 32),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                partyName,
-                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
-        content: ps == null
-            ? const Text('Sin datos para este partido.',
-                style: TextStyle(color: Colors.grey))
-            : SizedBox(
-                width: 320,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _dRow(Icons.groups, 'Total candidatos', ps.total.toString()),
-                      _dRow(Icons.gavel, '% con sentencia',
-                          '${ps.pctSentencia.toStringAsFixed(1)}%'),
-                      _dRow(Icons.gavel_outlined, 'Candidatos sentenciados',
-                          ps.conSentencia.toString()),
-                      const Divider(height: 16),
-                      _dRow(Icons.school, 'Score edu. promedio',
-                          ps.avgScoreEdu.toStringAsFixed(1)),
-                      _dRow(Icons.star, 'Score final promedio',
-                          ps.avgScoreFinal.toStringAsFixed(1)),
-                      const Divider(height: 16),
-                      _dRow(Icons.money_off, '% con ingresos S/0',
-                          '${ps.pctIngresoCero.toStringAsFixed(1)}%'),
-                      _dRow(Icons.payments, 'Ingreso promedio (activos)',
-                          'S/ ${ps.avgIngreso.toStringAsFixed(0)}'),
-                      const Divider(height: 16),
-                      _dRow(Icons.terrain_rounded, 'En REINFO',
-                          ps.enReinfo.toString()),
-                      _dRow(Icons.warning_amber_rounded, 'Leyes pro-crimen',
-                          ps.conProCrimen.toString()),
-                    ],
-                  ),
-                ),
-              ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cerrar'),
-          ),
-        ],
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _PartyDetailSheet(
+        partyName: partyName,
+        ps: ps,
+        candidatos: partyCandidatos,
+        proceso: widget.proceso,
       ),
     );
   }
@@ -192,7 +160,17 @@ class _IndicadoresProcesoScreenState
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (candidatos) {
-          final statsMap = _computeStats(candidatos);
+          // ── Region filter (Diputados / Parlamento Andino) ──────────────────
+          final hasRegion = widget.proceso == ProcesoElectoral.diputados ||
+              widget.proceso == ProcesoElectoral.parlamentoAndino;
+          final regiones = hasRegion
+              ? (candidatos.map((c) => c.departamento).where((d) => d.isNotEmpty).toSet().toList()..sort())
+              : <String>[];
+          final filtered = (hasRegion && _regionFilter != null)
+              ? candidatos.where((c) => c.departamento == _regionFilter).toList()
+              : candidatos;
+
+          final statsMap = _computeStats(filtered);
           final parties = statsMap.values.toList();
 
           // Pre-build bar lists
@@ -240,9 +218,71 @@ class _IndicadoresProcesoScreenState
           _selectedPartyRadar ??=
               radarParties.isNotEmpty ? radarParties.first : null;
 
-          return TabBarView(
-            controller: _tabController,
+          return Column(
             children: [
+              // ── Region filter bar (Diputados / Parlamento Andino) ───────────
+              if (hasRegion && regiones.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                  child: Container(
+                    height: 40,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButton<String?>(
+                      value: _regionFilter,
+                      isExpanded: true,
+                      underline: const SizedBox.shrink(),
+                      hint: const Row(children: [
+                        Icon(Icons.map_outlined, size: 15, color: Colors.grey),
+                        SizedBox(width: 6),
+                        Text('Todas las regiones', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      ]),
+                      items: [
+                        const DropdownMenuItem<String?>(
+                          value: null,
+                          child: Text('Todas las regiones', style: TextStyle(fontSize: 12)),
+                        ),
+                        ...regiones.map((r) => DropdownMenuItem<String?>(
+                              value: r,
+                              child: Text(r, style: const TextStyle(fontSize: 12)),
+                            )),
+                      ],
+                      onChanged: (v) => setState(() {
+                        _regionFilter = v;
+                        _selectedPartyRadar = null; // reset radar on region change
+                      }),
+                    ),
+                  ),
+                ),
+              if (hasRegion && _regionFilter != null)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.filter_list_rounded, size: 13, color: Colors.indigo),
+                      const SizedBox(width: 4),
+                      Text('Región: $_regionFilter · ${filtered.length} candidatos',
+                          style: const TextStyle(fontSize: 11, color: Colors.indigo)),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          _regionFilter = null;
+                          _selectedPartyRadar = null;
+                        }),
+                        child: const Text('Limpiar', style: TextStyle(fontSize: 11, color: Colors.indigo)),
+                      ),
+                    ],
+                  ),
+                ),
+              // ── Charts ───────────────────────────────────────────────────────
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
               // ── Sentencias ────────────────────────────────────────────────
               _TabScrollable(children: [
                 _ChartSection(
@@ -264,7 +304,7 @@ class _IndicadoresProcesoScreenState
                           ? Colors.orange
                           : Colors.red,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label]),
+                      _showDetail(context, b.label, statsMap[b.label], candidatos),
                 ),
               ]),
 
@@ -289,7 +329,7 @@ class _IndicadoresProcesoScreenState
                           ? Colors.blue.shade400
                           : Colors.blueGrey,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label]),
+                      _showDetail(context, b.label, statsMap[b.label], candidatos),
                 ),
               ]),
 
@@ -314,7 +354,7 @@ class _IndicadoresProcesoScreenState
                           ? Colors.orange
                           : Colors.red,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label]),
+                      _showDetail(context, b.label, statsMap[b.label], candidatos),
                 ),
               ]),
 
@@ -339,7 +379,7 @@ class _IndicadoresProcesoScreenState
                   },
                   colorOf: (_) => Colors.teal,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label]),
+                      _showDetail(context, b.label, statsMap[b.label], candidatos),
                 ),
               ]),
 
@@ -364,7 +404,7 @@ class _IndicadoresProcesoScreenState
                           ? Colors.deepOrange
                           : Colors.red,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label]),
+                      _showDetail(context, b.label, statsMap[b.label], candidatos),
                 ),
               ]),
 
@@ -389,7 +429,7 @@ class _IndicadoresProcesoScreenState
                           ? Colors.indigo
                           : Colors.grey.shade600,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label]),
+                      _showDetail(context, b.label, statsMap[b.label], candidatos),
                 ),
               ]),
 
@@ -403,6 +443,9 @@ class _IndicadoresProcesoScreenState
                       onPartyChanged: (p) =>
                           setState(() => _selectedPartyRadar = p),
                     ),
+                  ],
+                ),
+              ),
             ],
           );
         },
@@ -418,24 +461,691 @@ class _Bar {
   const _Bar(this.label, this.value);
 }
 
-// ─── Dialog row helper ────────────────────────────────────────────────────────
-Widget _dRow(IconData icon, String label, String value) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 3),
-    child: Row(
-      children: [
-        Icon(icon, size: 14, color: Colors.grey.shade600),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(label,
-              style: const TextStyle(fontSize: 12, color: Colors.grey)),
+// ─── Party Detail Bottom Sheet ────────────────────────────────────────────────
+class _PartyDetailSheet extends StatelessWidget {
+  final String partyName;
+  final _PStats? ps;
+  final List<CandidatoConHV> candidatos;
+  final ProcesoElectoral proceso;
+
+  const _PartyDetailSheet({
+    required this.partyName,
+    required this.ps,
+    required this.candidatos,
+    required this.proceso,
+  });
+
+  String _fmt(double v) =>
+      NumberFormat.currency(locale: 'es_PE', symbol: 'S/ ', decimalDigits: 0)
+          .format(v);
+
+  Widget _statCard(IconData icon, String label, String value, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color, size: 20),
+          const SizedBox(height: 4),
+          Text(value,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 14, color: color)),
+          const SizedBox(height: 2),
+          Text(label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 9, color: Colors.grey)),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color = proceso.color;
+
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.82,
+      minChildSize: 0.4,
+      maxChildSize: 0.96,
+      builder: (_, ctrl) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        Text(value,
-            style:
-                const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-      ],
+        child: Column(
+          children: [
+            // ── Handle + header ──────────────────────────────────────────────
+            Container(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 14),
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Column(
+                children: [
+                  Center(
+                    child: Container(
+                      width: 36, height: 4,
+                      margin: const EdgeInsets.only(bottom: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      PartyLogo(partyName: partyName, size: 44, withBorder: true),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(partyName,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14)),
+                            if (ps != null)
+                              Text(
+                                '${ps!.total} candidatos · Score final prom. ${ps!.avgScoreFinal.toStringAsFixed(1)}/105',
+                                style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.8),
+                                    fontSize: 11),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: ListView(
+                controller: ctrl,
+                padding: const EdgeInsets.fromLTRB(14, 14, 14, 28),
+                children: [
+                  if (ps != null) ...[
+                    // ── Stats grid ─────────────────────────────────────────
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 3,
+                      childAspectRatio: 1.1,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      children: [
+                        _statCard(Icons.groups_rounded,
+                            'Candidatos', '${ps!.total}', Colors.blueGrey),
+                        _statCard(Icons.gavel_rounded, 'Con sentencia',
+                            '${ps!.conSentencia}',
+                            ps!.conSentencia == 0
+                                ? Colors.green
+                                : Colors.red),
+                        _statCard(Icons.school_rounded, 'Score edu.',
+                            ps!.avgScoreEdu.toStringAsFixed(1),
+                            Colors.blue),
+                        _statCard(Icons.star_rate_rounded, 'Score final',
+                            ps!.avgScoreFinal.toStringAsFixed(1),
+                            ps!.avgScoreFinal >= 50
+                                ? Colors.green.shade700
+                                : Colors.indigo),
+                        _statCard(Icons.money_off_rounded, 'Ingreso S/0',
+                            '${ps!.pctIngresoCero.toStringAsFixed(0)}%',
+                            ps!.pctIngresoCero < 20
+                                ? Colors.green
+                                : Colors.deepOrange),
+                        _statCard(Icons.terrain_rounded, 'En REINFO',
+                            '${ps!.enReinfo}',
+                            ps!.enReinfo == 0
+                                ? Colors.green
+                                : Colors.brown),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    // ── Ingreso promedio ───────────────────────────────────
+                    if (ps!.avgIngreso > 0)
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.teal.withValues(alpha: 0.07),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                              color: Colors.teal.withValues(alpha: 0.25)),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.payments_rounded,
+                                color: Colors.teal, size: 18),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text('Ingreso anual promedio (candidatos con ingresos)',
+                                      style: TextStyle(
+                                          fontSize: 11, color: Colors.grey)),
+                                  Text(_fmt(ps!.avgIngreso),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: Colors.teal)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    // ── Pro-crimen alert ───────────────────────────────────
+                    if (ps!.conProCrimen > 0)
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.deepOrange.withValues(alpha: 0.07),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                              color: Colors.deepOrange.withValues(alpha: 0.3)),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.dangerous_rounded,
+                                color: Colors.deepOrange, size: 18),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                '${ps!.conProCrimen} candidato(s) votaron a favor '
+                                'de leyes pro-crimen en el Congreso anterior.',
+                                style: const TextStyle(
+                                    fontSize: 11, color: Colors.deepOrange),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    const Divider(height: 20),
+                  ],
+
+                  // ── Candidate list ─────────────────────────────────────────
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        Icon(Icons.people_rounded, size: 16, color: color),
+                        const SizedBox(width: 6),
+                        Text('CANDIDATOS (${candidatos.length})',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                                fontWeight: FontWeight.bold, color: color,
+                                letterSpacing: 0.8)),
+                        const Spacer(),
+                        Text('ordenados por perfil de integridad',
+                            style: const TextStyle(
+                                fontSize: 9, color: Colors.grey)),
+                      ],
+                    ),
+                  ),
+
+                  if (candidatos.isEmpty)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Center(
+                          child: Text('Sin candidatos con hoja de vida.',
+                              style: TextStyle(color: Colors.grey))),
+                    )
+                  else
+                    ...candidatos.map((c) => _CandidatoTile(
+                          c: c,
+                          proceso: proceso,
+                          color: color,
+                        )),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Candidate tile inside detail sheet ──────────────────────────────────────
+class _CandidatoTile extends StatelessWidget {
+  final CandidatoConHV c;
+  final ProcesoElectoral proceso;
+  final Color color;
+
+  const _CandidatoTile({
+    required this.c,
+    required this.proceso,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final hv = c.hv;
+    final hasAlert = hv.totalSentenciasPenales > 0 ||
+        hv.totalSentenciasObligaciones > 0 ||
+        hv.numLeyesProCrimen > 0 ||
+        hv.esReinfo;
+
+    return InkWell(
+      onTap: () => _showCandidatoDetalleInd(context, c, proceso),
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+              color: hasAlert
+                  ? Colors.red.withValues(alpha: 0.25)
+                  : Colors.grey.shade200),
+        ),
+        child: Row(
+          children: [
+            // Photo
+            CircleAvatar(
+              radius: 22,
+              backgroundColor: color.withValues(alpha: 0.12),
+              backgroundImage:
+                  c.fotoUrl != null ? NetworkImage(c.fotoUrl!) : null,
+              onBackgroundImageError: c.fotoUrl != null ? (_, __) {} : null,
+              child: c.fotoUrl == null
+                  ? Text(
+                      hv.nombre.isNotEmpty ? hv.nombre[0] : '?',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: color),
+                    )
+                  : null,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(hv.nombre,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: 12),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis),
+                  const SizedBox(height: 2),
+                  Wrap(
+                    spacing: 4, runSpacing: 2,
+                    children: [
+                      // Cargo
+                      if (c.cargo.isNotEmpty)
+                        _MiniChip(c.cargo.split(' ').take(2).join(' '),
+                            color.withValues(alpha: 0.8)),
+                      // Posicion
+                      _MiniChip('#${c.posicion}', Colors.blueGrey),
+                      // Departamento
+                      if (c.departamento.isNotEmpty)
+                        _MiniChip(c.departamento, Colors.teal),
+                      // Alerts
+                      if (hv.totalSentenciasPenales > 0)
+                        _MiniChip(
+                            '${hv.totalSentenciasPenales} penal(es)',
+                            Colors.red),
+                      if (hv.numLeyesProCrimen > 0)
+                        _MiniChip('Pro-crimen', Colors.deepOrange),
+                      if (hv.esReinfo)
+                        _MiniChip('REINFO', Colors.brown),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 6),
+            // Score badge
+            Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 7, vertical: 4),
+              decoration: BoxDecoration(
+                color: hv.scoreBgColor,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: hv.scoreColor),
+              ),
+              child: Text('${hv.scoreFinal}',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: hv.scoreColor)),
+            ),
+            const SizedBox(width: 4),
+            Icon(Icons.chevron_right_rounded,
+                size: 16, color: Colors.grey.shade400),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MiniChip extends StatelessWidget {
+  final String label;
+  final Color color;
+  const _MiniChip(this.label, this.color);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+      ),
+      child: Text(label,
+          style: TextStyle(
+              fontSize: 9, color: color, fontWeight: FontWeight.w600)),
+    );
+  }
+}
+
+// ─── Show candidate detail from indicadores screen ────────────────────────────
+void _showCandidatoDetalleInd(
+    BuildContext context, CandidatoConHV c, ProcesoElectoral proceso) {
+  final hv = c.hv;
+  final color = proceso.color;
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (_) => DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.78,
+      minChildSize: 0.4,
+      maxChildSize: 0.95,
+      builder: (_, ctrl) => SingleChildScrollView(
+        controller: ctrl,
+        padding: const EdgeInsets.fromLTRB(18, 8, 18, 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Handle
+            Center(
+              child: Container(
+                width: 36, height: 4,
+                margin: const EdgeInsets.only(bottom: 14),
+                decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(2)),
+              ),
+            ),
+            // Header
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: color.withValues(alpha: 0.12),
+                  backgroundImage:
+                      c.fotoUrl != null ? NetworkImage(c.fotoUrl!) : null,
+                  onBackgroundImageError:
+                      c.fotoUrl != null ? (_, __) {} : null,
+                  child: c.fotoUrl == null
+                      ? Text(hv.nombre.isNotEmpty ? hv.nombre[0] : '?',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: color))
+                      : null,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(hv.nombre,
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                      Text(hv.partido,
+                          style: TextStyle(
+                              fontSize: 12, color: Colors.grey.shade600)),
+                      if (c.cargo.isNotEmpty)
+                        Text(c.cargo,
+                            style: TextStyle(
+                                fontSize: 11,
+                                color: color,
+                                fontWeight: FontWeight.w600)),
+                      if (c.departamento.isNotEmpty)
+                        Text(c.departamento,
+                            style: const TextStyle(
+                                fontSize: 11, color: Colors.teal)),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: hv.scoreBgColor,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: hv.scoreColor, width: 1.5),
+                  ),
+                  child: Column(
+                    children: [
+                      Text('${hv.scoreFinal}',
+                          style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: hv.scoreColor,
+                              height: 1)),
+                      Text(hv.scoreLabel,
+                          style: TextStyle(
+                              fontSize: 8,
+                              color: hv.scoreColor,
+                              fontWeight: FontWeight.w600)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 20),
+
+            // Educación
+            _indSection('EDUCACIÓN', color),
+            _indRow2(hv.educacionIcon, hv.educacionLabel, hv.educacionColor),
+            if (hv.universidades.isNotEmpty)
+              ...hv.universidades.map((u) => _indBullet(u)),
+            if (hv.posgrados.isNotEmpty)
+              ...hv.posgrados.map((p) => _indBullet(p)),
+            const Divider(height: 20),
+
+            // Integridad judicial
+            _indSection('INTEGRIDAD JUDICIAL', color),
+            _indRow2(
+              hv.totalSentenciasPenales == 0
+                  ? Icons.check_circle_rounded
+                  : Icons.gavel_rounded,
+              hv.totalSentenciasPenales == 0
+                  ? 'Sin sentencias penales'
+                  : '${hv.totalSentenciasPenales} sentencia(s) penal(es)',
+              hv.totalSentenciasPenales == 0
+                  ? const Color(0xFF2E7D32)
+                  : const Color(0xFFC62828),
+            ),
+            _indRow2(
+              hv.totalSentenciasObligaciones == 0
+                  ? Icons.check_circle_rounded
+                  : Icons.warning_amber_rounded,
+              hv.totalSentenciasObligaciones == 0
+                  ? 'Sin sentencias de obligación'
+                  : '${hv.totalSentenciasObligaciones} sentencia(s) de obligación',
+              hv.totalSentenciasObligaciones == 0
+                  ? const Color(0xFF2E7D32)
+                  : Colors.orange,
+            ),
+
+            // Alertas
+            if (hv.numLeyesProCrimen > 0 ||
+                hv.esReinfo ||
+                hv.investigacionesConocidas.isNotEmpty) ...[
+              const Divider(height: 20),
+              _indSection('ALERTAS DE INTEGRIDAD', Colors.red.shade700),
+              if (hv.numLeyesProCrimen > 0)
+                _indRow2(Icons.dangerous_rounded,
+                    'Votó a favor de ${hv.numLeyesProCrimen} ley(es) pro-crimen',
+                    Colors.deepOrange),
+              if (hv.esReinfo)
+                _indRow2(Icons.terrain_rounded,
+                    'Registrado en REINFO (minería informal) — ${hv.cantidadMineras} concesión(es)',
+                    Colors.brown),
+              if (hv.investigacionesConocidas.isNotEmpty)
+                _indRow2(Icons.report_rounded,
+                    hv.investigacionesConocidas, Colors.red.shade700),
+            ],
+
+            // Ingresos
+            const Divider(height: 20),
+            _indSection(
+                'INGRESOS DECLARADOS${hv.anioIngresos.isNotEmpty ? " — ${hv.anioIngresos}" : ""}',
+                const Color(0xFF1565C0)),
+            _indRow2(
+              Icons.attach_money_rounded,
+              'Ingreso total anual: ${hv.ingresoTotal > 0 ? NumberFormat.currency(locale: "es_PE", symbol: "S/ ", decimalDigits: 2).format(hv.ingresoTotal) : "S/ 0 declarado"}',
+              const Color(0xFF1565C0),
+            ),
+            if (hv.numInmuebles > 0)
+              _indRow2(Icons.home_rounded,
+                  '${hv.numInmuebles} inmueble(s) declarado(s)', Colors.teal),
+
+            // Score
+            const Divider(height: 20),
+            _indSection('DESGLOSE DEL PUNTAJE', color),
+            _ScoreBar('Educación', hv.scoreEducacion, 40, hv.educacionColor),
+            _ScoreBar('Integridad penal', hv.scoreIntegridadPenal, 35,
+                hv.scoreIntegridadPenal >= 30
+                    ? const Color(0xFF2E7D32)
+                    : const Color(0xFFC62828)),
+            _ScoreBar('Cumpl. obligaciones', hv.scoreIntegridadOblig, 25,
+                hv.scoreIntegridadOblig >= 20
+                    ? const Color(0xFF2E7D32)
+                    : Colors.orange),
+            const SizedBox(height: 6),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: hv.scoreBgColor,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                    color: hv.scoreColor.withValues(alpha: 0.4)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Puntaje total',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('${hv.scoreFinal} / 105',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: hv.scoreColor)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     ),
   );
+}
+
+Widget _indSection(String text, Color color) => Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(text,
+          style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              color: color,
+              letterSpacing: 0.8)),
+    );
+
+Widget _indRow2(IconData icon, String text, Color color) => Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 13, color: color),
+          const SizedBox(width: 7),
+          Expanded(
+              child: Text(text,
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: color,
+                      fontWeight: FontWeight.w500))),
+        ],
+      ),
+    );
+
+Widget _indBullet(String text) => Padding(
+      padding: const EdgeInsets.only(left: 20, bottom: 3),
+      child: Text('• $text',
+          style: TextStyle(
+              fontSize: 11,
+              color: Colors.grey.shade700)),
+    );
+
+class _ScoreBar extends StatelessWidget {
+  final String label;
+  final int score;
+  final int max;
+  final Color color;
+  const _ScoreBar(this.label, this.score, this.max, this.color);
+
+  @override
+  Widget build(BuildContext context) {
+    final pct = max > 0 ? score / max : 0.0;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Expanded(flex: 4, child: Text(label,
+              style: Theme.of(context).textTheme.bodySmall)),
+          Expanded(
+            flex: 5,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: pct,
+                backgroundColor: color.withValues(alpha: 0.12),
+                valueColor: AlwaysStoppedAnimation<Color>(color),
+                minHeight: 8,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text('$score/$max',
+              style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: color)),
+        ],
+      ),
+    );
+  }
 }
 
 // ─── Tab scrollable wrapper ───────────────────────────────────────────────────

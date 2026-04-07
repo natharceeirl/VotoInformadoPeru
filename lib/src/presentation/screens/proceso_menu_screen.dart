@@ -90,14 +90,17 @@ class ProcesoMenuScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => IndicadoresProcesoScreen(proceso: proceso))),
               ),
               const SizedBox(height: 10),
-              _ActionRow(
-                icon: Icons.terrain_rounded,
-                iconColor: const Color(0xFF6D4C41),
-                title: 'Candidatos Mineros (REINFO)',
-                subtitle: 'Candidatos vinculados a minería informal · Por partido',
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => ReinfoProcesoScreen(proceso: proceso))),
-              ),
+              if (proceso != ProcesoElectoral.presidentes) ...[
+                const SizedBox(height: 10),
+                _ActionRow(
+                  icon: Icons.terrain_rounded,
+                  iconColor: const Color(0xFF6D4C41),
+                  title: 'Candidatos Mineros (REINFO)',
+                  subtitle: 'Candidatos vinculados a minería informal · Por partido',
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => ReinfoProcesoScreen(proceso: proceso))),
+                ),
+              ],
               const SizedBox(height: 16),
               // JNE link (simple text button)
               Center(

@@ -687,7 +687,7 @@ class _MiembroRow extends ConsumerWidget {
             indicadores = _buscarIndicadorPorNombreEst(indMap, hv.nombre);
           }
         }
-        _showCandidatoDetalle(context, c, proceso, indicadores: indicadores);
+        showCandidatoDetalle(context, c, proceso, indicadores: indicadores);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
@@ -1001,7 +1001,7 @@ class _CandidatoRow extends StatelessWidget {
     final hv = c.hv;
     return InkWell(
       borderRadius: BorderRadius.circular(6),
-      onTap: () => _showCandidatoDetalle(context, c, proceso),
+      onTap: () => showCandidatoDetalle(context, c, proceso),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
         child: Row(
@@ -1148,7 +1148,7 @@ class _ScoreLeaderboard extends StatelessWidget {
 
 // ─── Detalle del candidato (bottom sheet) ─────────────────────────────────────
 
-void _showCandidatoDetalle(BuildContext context, CandidatoConHV c,
+void showCandidatoDetalle(BuildContext context, CandidatoConHV c,
     ProcesoElectoral proceso, {PresidenteIndicadores? indicadores}) {
   final hv    = c.hv;
   final color = proceso.color;
@@ -1585,7 +1585,7 @@ class _PlanchaMiembroCard extends ConsumerWidget {
             indicadores = _buscarIndicadorPorNombreEst(indMap, hv.nombre);
           }
         }
-        _showCandidatoDetalle(context, c, proceso, indicadores: indicadores);
+        showCandidatoDetalle(context, c, proceso, indicadores: indicadores);
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),

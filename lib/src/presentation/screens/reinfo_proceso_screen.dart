@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/new_providers.dart';
 import '../../domain/models/hoja_vida_models.dart';
 import '../widgets/party_logo.dart';
+import 'estadisticas_partido_screen.dart' show showCandidatoDetalle;
 
 /// Pantalla de candidatos en REINFO filtrada por proceso electoral.
 /// Usa [candidatosConHVProcesoProvider] y filtra por [c.hv.esReinfo].
@@ -234,7 +235,7 @@ class _ReinfoProcesoScreenState extends ConsumerState<ReinfoProcesoScreen> {
                         itemCount: filtered.length,
                         itemBuilder: (context, index) {
                           final c = filtered[index];
-                          return _CandidatoCard(c: c);
+                          return _CandidatoCard(c: c, proceso: widget.proceso);
                         },
                       ),
               ),
@@ -249,7 +250,8 @@ class _ReinfoProcesoScreenState extends ConsumerState<ReinfoProcesoScreen> {
 // ─── Candidate card ───────────────────────────────────────────────────────────
 class _CandidatoCard extends StatelessWidget {
   final CandidatoConHV c;
-  const _CandidatoCard({required this.c});
+  final ProcesoElectoral proceso;
+  const _CandidatoCard({required this.c, required this.proceso});
 
   @override
   Widget build(BuildContext context) {
@@ -267,96 +269,145 @@ class _CandidatoCard extends StatelessWidget {
         side: BorderSide(color: Colors.orange.shade300, width: 1.5),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Photo or party logo fallback
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: c.fotoUrl != null
-                  ? Image.network(
-                      c.fotoUrl!,
-                      width: 52,
-                      height: 52,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) =>
-                          PartyLogo(partyName: h.partido, size: 52, withBorder: true),
-                    )
-                  : PartyLogo(partyName: h.partido, size: 52, withBorder: true),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => showCandidatoDetalle(context, c, proceso),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Photo
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: c.fotoUrl != null
+                    ? Image.network(
+                        c.fotoUrl!,
+                        width: 52,
+                        height: 52,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => _avatarFallback(h),
+                      )
+                    : _avatarFallback(h),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      h.nombre,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14),
+                    ),
+                    const SizedBox(height: 4),
+                    // Party row: logo + name chip
+                    Row(
+                      children: [
+                        PartyLogo(partyName: h.partido, size: 18),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.indigo.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: Colors.indigo.withValues(alpha: 0.25)),
+                            ),
+                            child: Text(
+                              h.partido,
+                              style: const TextStyle(
+                                color: Colors.indigo,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: [
+                        if (c.posicion > 0)
+                          _Chip(
+                            icon: Icons.format_list_numbered,
+                            label: 'N° ${c.posicion}',
+                            color: Colors.blue,
+                          ),
+                        if (c.departamento.isNotEmpty)
+                          _Chip(
+                            icon: Icons.location_on_outlined,
+                            label: c.departamento,
+                            color: Colors.teal,
+                          ),
+                        _Chip(
+                          icon: Icons.terrain_rounded,
+                          label: '${h.cantidadMineras} concesión(es)',
+                          color: mineColor,
+                        ),
+                        if (h.totalSentenciasPenales > 0)
+                          _Chip(
+                            icon: Icons.gavel,
+                            label:
+                                '${h.totalSentenciasPenales} sentencia(s) penal',
+                            color: Colors.red,
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Score badge + chevron
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    h.nombre,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 14),
-                  ),
-                  const SizedBox(height: 4),
-                  // Party chip
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 2),
+                        horizontal: 6, vertical: 3),
                     decoration: BoxDecoration(
-                      color: Colors.indigo.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                          color: Colors.indigo.withValues(alpha: 0.3)),
+                      color: h.scoreBgColor,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: h.scoreColor),
                     ),
-                    child: Text(
-                      h.partido,
-                      style: const TextStyle(
-                        color: Colors.indigo,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    child: Text('${h.scoreFinal}',
+                        style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: h.scoreColor)),
                   ),
-                  const SizedBox(height: 6),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 4,
-                    children: [
-                      // Ballot position
-                      if (c.posicion > 0)
-                        _Chip(
-                          icon: Icons.format_list_numbered,
-                          label: 'N° ${c.posicion}',
-                          color: Colors.blue,
-                        ),
-                      // Department
-                      if (c.departamento.isNotEmpty)
-                        _Chip(
-                          icon: Icons.location_on_outlined,
-                          label: c.departamento,
-                          color: Colors.teal,
-                        ),
-                      // Mining concessions
-                      _Chip(
-                        icon: Icons.terrain_rounded,
-                        label: '${h.cantidadMineras} concesión(es)',
-                        color: mineColor,
-                      ),
-                      // Sentencias
-                      if (h.totalSentenciasPenales > 0)
-                        _Chip(
-                          icon: Icons.gavel,
-                          label:
-                              '${h.totalSentenciasPenales} sentencia(s) penal',
-                          color: Colors.red,
-                        ),
-                    ],
-                  ),
+                  const SizedBox(height: 4),
+                  Icon(Icons.chevron_right_rounded,
+                      size: 16, color: Colors.grey.shade400),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _avatarFallback(HojaVida h) {
+    final initials = h.nombre.isNotEmpty ? h.nombre[0] : '?';
+    return Container(
+      width: 52,
+      height: 52,
+      decoration: BoxDecoration(
+        color: Colors.orange.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Center(
+        child: Text(initials,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+                color: Colors.orange)),
       ),
     );
   }

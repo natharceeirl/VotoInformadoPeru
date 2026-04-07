@@ -64,6 +64,21 @@ const _kPartyDataName = <String, String>{
 
 const _navy = Color(0xFF1E3A5F);
 
+// ── Simulation integrity warning data class ───────────────────────────────────
+
+class _SimWarning {
+  final String party;
+  final IconData icon;
+  final Color color;
+  final String message;
+  const _SimWarning({
+    required this.party,
+    required this.icon,
+    required this.color,
+    required this.message,
+  });
+}
+
 // ── Section definitions ───────────────────────────────────────────────────────
 
 class _SecDef {
@@ -1245,7 +1260,9 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
 
           const SizedBox(height: 4),
           _buildOverallSummary(),
-          const SizedBox(height: 14),
+          const SizedBox(height: 10),
+          _buildIntegrityWarnings(),
+          const SizedBox(height: 10),
 
           // Motivational message
           Container(
@@ -1568,6 +1585,213 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  // ── Integrity warnings for selected parties ───────────────────────────────
+
+  Widget _buildIntegrityWarnings() {
+    // Gather all selected party names across all sections
+    final allSelected = <String>[];
+    if (_presPartySelected != null) allSelected.add(_presPartySelected!);
+    for (final idx in _selParty) {
+      if (idx != null) allSelected.add(_kPartyOrder[idx]);
+    }
+    if (allSelected.isEmpty) return const SizedBox.shrink();
+
+    // Data sources — use asData so we don't block rendering
+    final proCrimenPartido =
+        ref.read(proCrimenPartidoProvider).asData?.value ?? {};
+    final porEstosNo =
+        ref.read(porEstosNoProvider).asData?.value ?? [];
+
+    // Normalize helper
+    String norm(String s) => s
+        .toUpperCase()
+        .replaceAll(',', ' ')
+        .replaceAll('Á', 'A').replaceAll('É', 'E')
+        .replaceAll('Í', 'I').replaceAll('Ó', 'O').replaceAll('Ú', 'U')
+        .replaceAll('Ñ', 'N')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+
+    // Resolve display name → JNE partido name for party data lookup
+    String resolveParty(String displayName) {
+      final mapped = _kPartyDataName[displayName];
+      return mapped ?? displayName;
+    }
+
+    final warnings = <_SimWarning>[];
+
+    for (final display in allSelected.toSet()) {
+      final jneName = resolveParty(display);
+      final normDisplay = norm(display);
+      final normJne = norm(jneName);
+
+      // 1. Pro-crimen: busca coincidencia parcial en el mapa
+      int pcCount = 0;
+      for (final entry in proCrimenPartido.entries) {
+        final k = entry.key; // already normalized uppercase
+        if (k == normDisplay || k == normJne ||
+            normDisplay.contains(k) || normJne.contains(k) ||
+            k.contains(normDisplay) || k.contains(normJne)) {
+          if (entry.value > pcCount) pcCount = entry.value;
+        }
+      }
+      if (pcCount > 0) {
+        warnings.add(_SimWarning(
+          party: display,
+          icon: Icons.dangerous_rounded,
+          color: Colors.deepOrange,
+          message:
+              'Su bancada anterior apoyó $pcCount ley(es) pro-crimen '
+              'que facilitaron la corrupción y debilitaron la justicia.',
+        ));
+      }
+
+      // 2. REINFO: candidatos del partido en minería informal
+      // Cross-ref by party name using candidatosConHVProcesoProvider:
+      final presAll = ref
+          .read(candidatosConHVProcesoProvider(ProcesoElectoral.presidentes))
+          .asData?.value ?? [];
+      final senAll = ref
+          .read(candidatosConHVProcesoProvider(ProcesoElectoral.senadores))
+          .asData?.value ?? [];
+      final dipAll = ref
+          .read(candidatosConHVProcesoProvider(ProcesoElectoral.diputados))
+          .asData?.value ?? [];
+      final paAll = ref
+          .read(candidatosConHVProcesoProvider(ProcesoElectoral.parlamentoAndino))
+          .asData?.value ?? [];
+      final allCands = [...presAll, ...senAll, ...dipAll, ...paAll];
+
+      final partyReinfoCount = allCands
+          .where((c) =>
+              (norm(c.hv.partido).contains(normDisplay) ||
+               normDisplay.contains(norm(c.hv.partido))) &&
+              c.hv.esReinfo)
+          .length;
+      if (partyReinfoCount > 0) {
+        warnings.add(_SimWarning(
+          party: display,
+          icon: Icons.terrain_rounded,
+          color: Colors.brown.shade700,
+          message:
+              '$partyReinfoCount candidato(s) de este partido aparecen en el '
+              'REINFO (registro de minería informal/ilegal). ¿Lo pensaste bien?',
+        ));
+      }
+
+      // 3. Sentencias: candidatos del partido con sentencias penales
+      final partySentCount = allCands
+          .where((c) =>
+              (norm(c.hv.partido).contains(normDisplay) ||
+               normDisplay.contains(norm(c.hv.partido))) &&
+              c.hv.totalSentenciasPenales > 0)
+          .length;
+      if (partySentCount > 0) {
+        warnings.add(_SimWarning(
+          party: display,
+          icon: Icons.gavel_rounded,
+          color: Colors.red.shade700,
+          message:
+              '$partySentCount candidato(s) de este partido tienen sentencias '
+              'penales registradas en el JNE.',
+        ));
+      }
+
+      // 4. Por estos no (alto riesgo de corrupción)
+      final isRiesgo = porEstosNo.any(
+          (p) => p == normDisplay || normDisplay.contains(p) || p.contains(normDisplay));
+      if (isRiesgo) {
+        warnings.add(_SimWarning(
+          party: display,
+          icon: Icons.warning_amber_rounded,
+          color: Colors.orange.shade800,
+          message:
+              'Este partido figura en #PORESTOSNO por antecedentes documentados '
+              'de corrupción. ¿Estás seguro de querer votarles?',
+        ));
+      }
+    }
+
+    if (warnings.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.red.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.red.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.report_problem_rounded,
+                  color: Colors.red.shade700, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '¡Atención! Alertas sobre tu voto simulado',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: Colors.red.shade800),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Gracias a partidos y candidatos como estos es que el Perú '
+            'sigue en la misma situación. Considera elegir mejor.',
+            style: TextStyle(
+                fontSize: 11, color: Colors.red.shade700, height: 1.4),
+          ),
+          const SizedBox(height: 10),
+          ...warnings.map((w) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PartyLogo(partyName: w.party, size: 28),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(w.icon, size: 13, color: w.color),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  w.party,
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      color: w.color),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 2),
+                          Text(w.message,
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.red.shade800,
+                                  height: 1.3)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )),
         ],
       ),
     );

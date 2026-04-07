@@ -306,10 +306,10 @@ final candidatosConHVProvider =
 
 // ─── Providers genéricos por proceso electoral (family) ──────────────────────
 
-/// Mapa suplementario DNI → departamento para diputados.
-/// El archivo bdActualizada_diputados.json solo contiene candidatos de Lima
-/// (ubigeo 140100). diputados_region.json pre-computa la región correcta
-/// a partir del antiguo bd_diputados.json.
+/// Mapa suplementario DNI → departamento para diputados (legado).
+/// bdActualizada_diputados.json ya contiene todos los candidatos con su
+/// región correcta. Este provider actúa como fallback por si algún candidato
+/// quedara sin departamento tras el parseo del BD.
 final diputadosRegionProvider =
     FutureProvider<Map<String, String>>((ref) async {
   String raw;
