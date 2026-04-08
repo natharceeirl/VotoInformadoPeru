@@ -79,7 +79,7 @@ class SelectionScreen extends StatelessWidget {
                     child: _ToolCard(
                       icon: Icons.how_to_vote_rounded,
                       title: 'Simulador de Voto',
-                      subtitle: 'Aprende a votar correctamente',
+                      subtitle: 'Aprende a votar correctamente y conocer por quién votaste',
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (_) => const VoteSimulatorScreen()),
@@ -91,7 +91,7 @@ class SelectionScreen extends StatelessWidget {
                     child: _ToolCard(
                       icon: Icons.grade,
                       title: 'Resumen General',
-                      subtitle: 'Top candidatos por integridad',
+                      subtitle: 'Top candidatos por integridad personal y en base a los datos',
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (_) => const ResumenGeneralScreen()),

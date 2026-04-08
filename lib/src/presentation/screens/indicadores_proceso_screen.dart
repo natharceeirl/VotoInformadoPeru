@@ -314,7 +314,7 @@ class _IndicadoresProcesoScreenState
                           ? Colors.orange
                           : Colors.red,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label], candidatos),
+                      _showDetail(context, b.label, statsMap[b.label], filtered),
                 ),
               ]),
 
@@ -338,7 +338,7 @@ class _IndicadoresProcesoScreenState
                           ? Colors.blue.shade400
                           : Colors.blueGrey,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label], candidatos),
+                      _showDetail(context, b.label, statsMap[b.label], filtered),
                 ),
               ]),
 
@@ -362,7 +362,7 @@ class _IndicadoresProcesoScreenState
                           ? Colors.orange
                           : Colors.red,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label], candidatos),
+                      _showDetail(context, b.label, statsMap[b.label], filtered),
                 ),
               ]),
 
@@ -386,7 +386,7 @@ class _IndicadoresProcesoScreenState
                   },
                   colorOf: (_) => Colors.teal,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label], candidatos),
+                      _showDetail(context, b.label, statsMap[b.label], filtered),
                 ),
               ]),
 
@@ -410,7 +410,7 @@ class _IndicadoresProcesoScreenState
                           ? Colors.deepOrange
                           : Colors.red,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label], candidatos),
+                      _showDetail(context, b.label, statsMap[b.label], filtered),
                 ),
               ]),
 
@@ -434,7 +434,7 @@ class _IndicadoresProcesoScreenState
                           ? Colors.indigo
                           : Colors.grey.shade600,
                   onTap: (b) =>
-                      _showDetail(context, b.label, statsMap[b.label], candidatos),
+                      _showDetail(context, b.label, statsMap[b.label], filtered),
                 ),
               ]),
 

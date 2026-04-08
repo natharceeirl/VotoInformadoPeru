@@ -1883,20 +1883,40 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
         ],
         Expanded(
           child: _currentPage < 5
-              ? FilledButton(
-                  onPressed: () => _goTo(_currentPage + 1),
-                  style: FilledButton.styleFrom(
-                      backgroundColor: _navy,
-                      padding: const EdgeInsets.symmetric(vertical: 12)),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Siguiente'),
-                      SizedBox(width: 6),
-                      Icon(Icons.arrow_forward_ios_rounded, size: 14),
-                    ],
-                  ),
-                )
+              ? Builder(builder: (_) {
+                  // Region is required on page 2 (Sec3) and page 3 (Sec4)
+                  final needsRegion =
+                      (_currentPage == 2 && _regionSenMultiple == null) ||
+                      (_currentPage == 3 && _regionDiputados == null);
+                  return FilledButton(
+                    onPressed: needsRegion
+                        ? null
+                        : () => _goTo(_currentPage + 1),
+                    style: FilledButton.styleFrom(
+                        backgroundColor: _navy,
+                        disabledBackgroundColor: Colors.grey.shade300,
+                        padding: const EdgeInsets.symmetric(vertical: 12)),
+                    child: needsRegion
+                        ? const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.location_on_rounded,
+                                  size: 14, color: Colors.grey),
+                              SizedBox(width: 6),
+                              Text('Selecciona tu región',
+                                  style: TextStyle(color: Colors.grey)),
+                            ],
+                          )
+                        : const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Siguiente'),
+                              SizedBox(width: 6),
+                              Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                            ],
+                          ),
+                  );
+                })
               : OutlinedButton.icon(
                   onPressed: () => showDialog(
                     context: context,
