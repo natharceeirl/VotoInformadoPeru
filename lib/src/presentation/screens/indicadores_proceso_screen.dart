@@ -169,16 +169,19 @@ class _IndicadoresProcesoScreenState
               ? (regionSource.map((c) => c.departamento).where((d) => d.isNotEmpty).toSet().toList()..sort())
               : <String>[];
           List<CandidatoConHV> filtered;
-          if (hasRegion && _regionFilter != null) {
-            if (widget.proceso == ProcesoElectoral.senadores) {
-              // Keep ÚNICO always; filter MÚLTIPLE by selected region
+          if (widget.proceso == ProcesoElectoral.senadores) {
+            if (_regionFilter != null) {
+              // Region selected: ÚNICO (national) + MÚLTIPLE from that region
               filtered = candidatos.where((c) =>
                 c.tipoDistrito == 'ÚNICO' ||
                 (c.tipoDistrito == 'MÚLTIPLE' && c.departamento == _regionFilter)
               ).toList();
             } else {
-              filtered = candidatos.where((c) => c.departamento == _regionFilter).toList();
+              // No region: show only ÚNICO (national district) — MÚLTIPLE needs a region
+              filtered = candidatos.where((c) => c.tipoDistrito == 'ÚNICO').toList();
             }
+          } else if (hasRegion && _regionFilter != null) {
+            filtered = candidatos.where((c) => c.departamento == _regionFilter).toList();
           } else {
             filtered = candidatos;
           }
@@ -254,9 +257,14 @@ class _IndicadoresProcesoScreenState
                         Text('Todas las regiones', style: TextStyle(fontSize: 12, color: Colors.grey)),
                       ]),
                       items: [
-                        const DropdownMenuItem<String?>(
+                        DropdownMenuItem<String?>(
                           value: null,
-                          child: Text('Todas las regiones', style: TextStyle(fontSize: 12)),
+                          child: Text(
+                            widget.proceso == ProcesoElectoral.senadores
+                                ? 'Solo Distrito Único (nacional)'
+                                : 'Todas las regiones',
+                            style: const TextStyle(fontSize: 12),
+                          ),
                         ),
                         ...regiones.map((r) => DropdownMenuItem<String?>(
                               value: r,
@@ -270,23 +278,34 @@ class _IndicadoresProcesoScreenState
                     ),
                   ),
                 ),
-              if (hasRegion && _regionFilter != null)
+              if (hasRegion)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
                   child: Row(
                     children: [
                       const Icon(Icons.filter_list_rounded, size: 13, color: Colors.indigo),
                       const SizedBox(width: 4),
-                      Text('Región: $_regionFilter · ${filtered.length} candidatos',
-                          style: const TextStyle(fontSize: 11, color: Colors.indigo)),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () => setState(() {
-                          _regionFilter = null;
-                          _selectedPartyRadar = null;
-                        }),
-                        child: const Text('Limpiar', style: TextStyle(fontSize: 11, color: Colors.indigo)),
+                      Expanded(
+                        child: Text(
+                          _regionFilter != null
+                              ? 'Región: $_regionFilter · ${filtered.length} candidatos'
+                              : widget.proceso == ProcesoElectoral.senadores
+                                  ? 'Distrito Único (nacional) · ${filtered.length} candidatos — Selecciona región para Múltiple'
+                                  : '${filtered.length} candidatos (todas las regiones)',
+                          style: const TextStyle(fontSize: 11, color: Colors.indigo),
+                          maxLines: 2,
+                        ),
                       ),
+                      if (_regionFilter != null) ...[
+                        const SizedBox(width: 4),
+                        GestureDetector(
+                          onTap: () => setState(() {
+                            _regionFilter = null;
+                            _selectedPartyRadar = null;
+                          }),
+                          child: const Text('Limpiar', style: TextStyle(fontSize: 11, color: Colors.indigo)),
+                        ),
+                      ],
                     ],
                   ),
                 ),
