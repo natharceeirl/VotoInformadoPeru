@@ -65,29 +65,40 @@ class _IndicadoresProcesoScreenState
     extends ConsumerState<IndicadoresProcesoScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  _Sort _sortSent   = _Sort.descValor;
-  _Sort _sortEdu    = _Sort.descValor;
-  _Sort _sortCero   = _Sort.descValor;
-  _Sort _sortIngr   = _Sort.descValor;
-  _Sort _sortReinfo = _Sort.descValor;
-  _Sort _sortFinal  = _Sort.descValor;
+  _Sort _sortSent     = _Sort.descValor;
+  _Sort _sortEdu      = _Sort.descValor;
+  _Sort _sortCero     = _Sort.descValor;
+  _Sort _sortIngr     = _Sort.descValor;
+  _Sort _sortReinfo   = _Sort.descValor;
+  _Sort _sortFinal    = _Sort.descValor;
+  _Sort _sortRegiones = _Sort.descValor;
   String? _selectedPartyRadar;
   String? _regionFilter;
+  // Senadores only: 'ÚNICO' = Nacional, 'MÚLTIPLE' = Regional
+  String  _distritoMode = 'ÚNICO';
 
-  static const _tabs = [
+  bool get _isSenadores => widget.proceso == ProcesoElectoral.senadores;
+
+  static const _tabsBase = [
     'Sentencias',
     'Preparación',
     'Ingrs. Anuales',
     'Ingrs. Promedio',
     'REINFO',
     'Score Final',
-    'Radar',
   ];
+  // Senadores gets an extra 'Regiones' tab before 'Radar'
+  static const _tabsRadar = ['Radar'];
+  static const _tabRegiones = 'Regiones';
+
+  List<String> get _tabs => _isSenadores
+      ? [..._tabsBase, _tabRegiones, ..._tabsRadar]
+      : [..._tabsBase, ..._tabsRadar];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
+    _tabController = TabController(length: _isSenadores ? 8 : 7, vsync: this);
   }
 
   @override
@@ -159,31 +170,52 @@ class _IndicadoresProcesoScreenState
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (candidatos) {
           final hasRegion = widget.proceso == ProcesoElectoral.diputados ||
-              widget.proceso == ProcesoElectoral.parlamentoAndino ||
-              widget.proceso == ProcesoElectoral.senadores;
-          // For senadores regions come only from MÚLTIPLE candidates
-          final regionSource = widget.proceso == ProcesoElectoral.senadores
-              ? candidatos.where((c) => c.tipoDistrito == 'MÚLTIPLE').toList()
-              : candidatos;
-          final regiones = hasRegion
-              ? (regionSource.map((c) => c.departamento).where((d) => d.isNotEmpty).toSet().toList()..sort())
-              : <String>[];
+              widget.proceso == ProcesoElectoral.parlamentoAndino;
+
+          // ── Senadores: filter by distrito mode + optional region ──────────
           List<CandidatoConHV> filtered;
-          if (widget.proceso == ProcesoElectoral.senadores) {
-            if (_regionFilter != null) {
-              // Region selected: ÚNICO (national) + MÚLTIPLE from that region
-              filtered = candidatos.where((c) =>
-                c.tipoDistrito == 'ÚNICO' ||
-                (c.tipoDistrito == 'MÚLTIPLE' && c.departamento == _regionFilter)
-              ).toList();
-            } else {
-              // No region: show only ÚNICO (national district) — MÚLTIPLE needs a region
+          List<String> regiones = [];
+          if (_isSenadores) {
+            if (_distritoMode == 'ÚNICO') {
               filtered = candidatos.where((c) => c.tipoDistrito == 'ÚNICO').toList();
+            } else {
+              // MÚLTIPLE: collect available regions, then optionally filter by one
+              regiones = candidatos
+                  .where((c) => c.tipoDistrito == 'MÚLTIPLE')
+                  .map((c) => c.departamento)
+                  .where((d) => d.isNotEmpty)
+                  .toSet()
+                  .toList()
+                ..sort();
+              filtered = _regionFilter != null
+                  ? candidatos.where((c) =>
+                      c.tipoDistrito == 'MÚLTIPLE' &&
+                      c.departamento == _regionFilter).toList()
+                  : candidatos.where((c) => c.tipoDistrito == 'MÚLTIPLE').toList();
             }
-          } else if (hasRegion && _regionFilter != null) {
-            filtered = candidatos.where((c) => c.departamento == _regionFilter).toList();
+          } else if (hasRegion) {
+            regiones = candidatos
+                .map((c) => c.departamento)
+                .where((d) => d.isNotEmpty)
+                .toSet()
+                .toList()
+              ..sort();
+            filtered = _regionFilter != null
+                ? candidatos.where((c) => c.departamento == _regionFilter).toList()
+                : candidatos;
           } else {
             filtered = candidatos;
+          }
+
+          // ── Regiones por partido (Senadores MÚLTIPLE only) ────────────────
+          // Map: partido → set of regions covered
+          final regionesPorPartido = <String, Set<String>>{};
+          if (_isSenadores) {
+            for (final c in candidatos.where((c) => c.tipoDistrito == 'MÚLTIPLE')) {
+              if (c.departamento.isNotEmpty) {
+                (regionesPorPartido[c.hv.partido] ??= {}).add(c.departamento);
+              }
+            }
           }
 
           final statsMap = _computeStats(filtered);
@@ -229,6 +261,14 @@ class _IndicadoresProcesoScreenState
             _sortFinal,
           );
 
+          // Regiones cubiertas (Senadores MÚLTIPLE)
+          final barsRegiones = _isSenadores ? _sorted(
+            regionesPorPartido.entries
+                .map((e) => _Bar(e.key, e.value.length.toDouble()))
+                .toList(),
+            _sortRegiones,
+          ) : <_Bar>[];
+
           // Radar party list
           final radarParties = parties.map((p) => p.partido).toList()..sort();
           _selectedPartyRadar ??=
@@ -236,6 +276,91 @@ class _IndicadoresProcesoScreenState
 
           return Column(
             children: [
+              // ── Senadores: Nacional / Regional toggle ────────────────────
+              if (_isSenadores) ...[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _DistritoToggle(
+                          mode: _distritoMode,
+                          onChanged: (m) => setState(() {
+                            _distritoMode = m;
+                            _regionFilter = null;
+                            _selectedPartyRadar = null;
+                          }),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Region dropdown — only in MÚLTIPLE mode
+                if (_distritoMode == 'MÚLTIPLE' && regiones.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 6, 12, 0),
+                    child: Container(
+                      height: 38,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: DropdownButton<String?>(
+                        value: _regionFilter,
+                        isExpanded: true,
+                        underline: const SizedBox.shrink(),
+                        hint: const Row(children: [
+                          Icon(Icons.map_outlined, size: 14, color: Colors.grey),
+                          SizedBox(width: 6),
+                          Text('Todas las regiones', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        ]),
+                        items: [
+                          const DropdownMenuItem<String?>(
+                            value: null,
+                            child: Text('Todas las regiones', style: TextStyle(fontSize: 12)),
+                          ),
+                          ...regiones.map((r) => DropdownMenuItem<String?>(
+                                value: r,
+                                child: Text(r, style: const TextStyle(fontSize: 12)),
+                              )),
+                        ],
+                        onChanged: (v) => setState(() {
+                          _regionFilter = v;
+                          _selectedPartyRadar = null;
+                        }),
+                      ),
+                    ),
+                  ),
+                // Info strip
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
+                  child: Row(children: [
+                    const Icon(Icons.filter_list_rounded, size: 13, color: Colors.indigo),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        _distritoMode == 'ÚNICO'
+                            ? 'Senado Nacional · ${filtered.length} candidatos'
+                            : _regionFilter != null
+                                ? 'Senado Regional · $_regionFilter · ${filtered.length} candidatos'
+                                : 'Senado Regional · todas las regiones · ${filtered.length} candidatos',
+                        style: const TextStyle(fontSize: 11, color: Colors.indigo),
+                      ),
+                    ),
+                    if (_regionFilter != null)
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          _regionFilter = null;
+                          _selectedPartyRadar = null;
+                        }),
+                        child: const Text('Limpiar', style: TextStyle(fontSize: 11, color: Colors.indigo)),
+                      ),
+                  ]),
+                ),
+              ],
+              // ── Diputados / Parlamento Andino: region dropdown ───────────
               if (hasRegion && regiones.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
@@ -257,14 +382,9 @@ class _IndicadoresProcesoScreenState
                         Text('Todas las regiones', style: TextStyle(fontSize: 12, color: Colors.grey)),
                       ]),
                       items: [
-                        DropdownMenuItem<String?>(
+                        const DropdownMenuItem<String?>(
                           value: null,
-                          child: Text(
-                            widget.proceso == ProcesoElectoral.senadores
-                                ? 'Solo Distrito Único (nacional)'
-                                : 'Todas las regiones',
-                            style: const TextStyle(fontSize: 12),
-                          ),
+                          child: Text('Todas las regiones', style: TextStyle(fontSize: 12)),
                         ),
                         ...regiones.map((r) => DropdownMenuItem<String?>(
                               value: r,
@@ -273,7 +393,7 @@ class _IndicadoresProcesoScreenState
                       ],
                       onChanged: (v) => setState(() {
                         _regionFilter = v;
-                        _selectedPartyRadar = null; // reset radar on region change
+                        _selectedPartyRadar = null;
                       }),
                     ),
                   ),
@@ -281,33 +401,26 @@ class _IndicadoresProcesoScreenState
               if (hasRegion)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.filter_list_rounded, size: 13, color: Colors.indigo),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          _regionFilter != null
-                              ? 'Región: $_regionFilter · ${filtered.length} candidatos'
-                              : widget.proceso == ProcesoElectoral.senadores
-                                  ? 'Distrito Único (nacional) · ${filtered.length} candidatos — Selecciona región para Múltiple'
-                                  : '${filtered.length} candidatos (todas las regiones)',
-                          style: const TextStyle(fontSize: 11, color: Colors.indigo),
-                          maxLines: 2,
-                        ),
+                  child: Row(children: [
+                    const Icon(Icons.filter_list_rounded, size: 13, color: Colors.indigo),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        _regionFilter != null
+                            ? 'Región: $_regionFilter · ${filtered.length} candidatos'
+                            : '${filtered.length} candidatos (todas las regiones)',
+                        style: const TextStyle(fontSize: 11, color: Colors.indigo),
                       ),
-                      if (_regionFilter != null) ...[
-                        const SizedBox(width: 4),
-                        GestureDetector(
-                          onTap: () => setState(() {
-                            _regionFilter = null;
-                            _selectedPartyRadar = null;
-                          }),
-                          child: const Text('Limpiar', style: TextStyle(fontSize: 11, color: Colors.indigo)),
-                        ),
-                      ],
-                    ],
-                  ),
+                    ),
+                    if (_regionFilter != null)
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          _regionFilter = null;
+                          _selectedPartyRadar = null;
+                        }),
+                        child: const Text('Limpiar', style: TextStyle(fontSize: 11, color: Colors.indigo)),
+                      ),
+                  ]),
                 ),
               Expanded(
                 child: TabBarView(
@@ -457,6 +570,45 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
+              // ── Regiones cubiertas (Senadores only) ──────────────────────
+              if (_isSenadores)
+                _TabScrollable(children: [
+                  _ChartSection(
+                    title: 'Regiones Cubiertas (Senado Regional)',
+                    subtitle:
+                        'Número de regiones del Perú en las que el partido postula '
+                        'candidatos al Senado Regional (Distrito Múltiple). '
+                        'Máximo posible: 27. Mayor cobertura = mayor presencia nacional.',
+                    icon: Icons.map_rounded,
+                    color: Colors.teal,
+                    sort: _sortRegiones,
+                    onSortChanged: (s) => setState(() => _sortRegiones = s),
+                    data: barsRegiones,
+                    maxValue: 27,
+                    valueLabel: (v) => v.toInt().toString(),
+                    colorOf: (v) => v >= 25
+                        ? Colors.teal.shade700
+                        : v >= 15
+                            ? Colors.teal
+                            : Colors.teal.shade300,
+                    onTap: (b) {
+                      // Show list of regions this party covers
+                      final regs = (regionesPorPartido[b.label] ?? {}).toList()..sort();
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (_) => _RegionesSheet(
+                          partyName: b.label,
+                          regiones: regs,
+                          proceso: widget.proceso,
+                        ),
+                      );
+                    },
+                  ),
+                ]),
+
               _selectedPartyRadar == null
                   ? const Center(child: Text('Sin datos'))
                   : _RadarTab(
@@ -472,6 +624,168 @@ class _IndicadoresProcesoScreenState
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+// ─── Nacional / Regional toggle ───────────────────────────────────────────────
+class _DistritoToggle extends StatelessWidget {
+  final String mode; // 'ÚNICO' or 'MÚLTIPLE'
+  final ValueChanged<String> onChanged;
+  const _DistritoToggle({required this.mode, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    const color = Color(0xFF154360); // senadores color
+    return Container(
+      height: 36,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        children: [
+          _Seg(
+            label: 'Nacional',
+            icon: Icons.public_rounded,
+            active: mode == 'ÚNICO',
+            color: color,
+            onTap: () => onChanged('ÚNICO'),
+          ),
+          _Seg(
+            label: 'Regional',
+            icon: Icons.map_rounded,
+            active: mode == 'MÚLTIPLE',
+            color: color,
+            onTap: () => onChanged('MÚLTIPLE'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Seg extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool active;
+  final Color color;
+  final VoidCallback onTap;
+  const _Seg({required this.label, required this.icon,
+               required this.active, required this.color, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          decoration: BoxDecoration(
+            color: active ? color : Colors.transparent,
+            borderRadius: BorderRadius.circular(9),
+          ),
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 14,
+                  color: active ? Colors.white : Colors.grey.shade600),
+              const SizedBox(width: 5),
+              Text(label,
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: active ? Colors.white : Colors.grey.shade600)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Regiones detail sheet ────────────────────────────────────────────────────
+class _RegionesSheet extends StatelessWidget {
+  final String partyName;
+  final List<String> regiones;
+  final ProcesoElectoral proceso;
+  const _RegionesSheet({
+    required this.partyName,
+    required this.regiones,
+    required this.proceso,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = proceso.color;
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.6,
+      minChildSize: 0.35,
+      maxChildSize: 0.9,
+      builder: (_, ctrl) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(children: [
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 14),
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(children: [
+              Center(
+                child: Container(
+                  width: 36, height: 4,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              Row(children: [
+                PartyLogo(partyName: partyName, size: 40, withBorder: true),
+                const SizedBox(width: 12),
+                Expanded(child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(partyName,
+                        style: const TextStyle(color: Colors.white,
+                            fontWeight: FontWeight.bold, fontSize: 14)),
+                    Text('${regiones.length} de 27 regiones cubiertas',
+                        style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.8),
+                            fontSize: 11)),
+                  ],
+                )),
+              ]),
+            ]),
+          ),
+          Expanded(
+            child: ListView.separated(
+              controller: ctrl,
+              padding: const EdgeInsets.all(16),
+              itemCount: regiones.length,
+              separatorBuilder: (_, __) => const Divider(height: 1),
+              itemBuilder: (_, i) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Row(children: [
+                  Icon(Icons.location_on_rounded, size: 16, color: color),
+                  const SizedBox(width: 10),
+                  Text(regiones[i],
+                      style: const TextStyle(fontSize: 13,
+                          fontWeight: FontWeight.w500)),
+                ]),
+              ),
+            ),
+          ),
+        ]),
       ),
     );
   }
