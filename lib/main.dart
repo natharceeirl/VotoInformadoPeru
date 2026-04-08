@@ -43,7 +43,7 @@ class SplashScreen extends StatelessWidget {
               Row(
                 children: [
                   _StatChip(
-                    value: '+2,000',
+                    value: '+5,000',
                     label: 'candidatos\nanalizados',
                     color: AppTheme.primaryColor,
                     icon: Icons.people,
