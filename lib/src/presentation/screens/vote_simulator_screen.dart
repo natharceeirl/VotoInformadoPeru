@@ -79,6 +79,17 @@ class _SimWarning {
   });
 }
 
+// ── Peruvian regions (for Senadores Múltiple and Diputados) ──────────────────
+const _kRegiones = [
+  'AMAZONAS', 'ANCASH', 'APURIMAC', 'AREQUIPA', 'AYACUCHO',
+  'CAJAMARCA', 'CALLAO', 'CUSCO', 'HUANCAVELICA', 'HUANUCO',
+  'ICA', 'JUNIN', 'LA LIBERTAD', 'LAMBAYEQUE',
+  'LIMA METROPOLITANA', 'LIMA PROVINCIAS', 'LORETO',
+  'MADRE DE DIOS', 'MOQUEGUA', 'PASCO',
+  'PERUANOS RESIDENTES EN EL EXTRANJERO',
+  'PIURA', 'PUNO', 'SAN MARTIN', 'TACNA', 'TUMBES', 'UCAYALI',
+];
+
 // ── Section definitions ───────────────────────────────────────────────────────
 
 class _SecDef {
@@ -269,6 +280,10 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
   // Sections 2–5 selected party per section (ctrlIdx 0-3)
   List<int?> _selParty = [null, null, null, null];
 
+  // Region for Senadores Múltiple (Sec3) and Diputados (Sec4)
+  String? _regionSenMultiple;
+  String? _regionDiputados;
+
   // Sections 2–5: [sectionControllerIdx][partyIdx][boxIdx]
   // sectionControllerIdx 0=Sec2, 1=Sec3, 2=Sec4, 3=Sec5
   late final List<List<List<TextEditingController>>> _ctrl;
@@ -311,6 +326,8 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
       _presPartySelected = null;
       _presNameSelected = null;
       _selParty = [null, null, null, null];
+      _regionSenMultiple = null;
+      _regionDiputados = null;
       _started = false;
     });
     for (final s in _ctrl) {
@@ -1010,11 +1027,84 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
 
   // ── Pages 1–4: Party section pages ────────────────────────────────────────
 
+  // ── Region picker card (Senadores Múltiple / Diputados) ──────────────────
+  Widget _regionPicker({
+    required String label,
+    required String? current,
+    required ValueChanged<String?> onChanged,
+    required Color color,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Icon(Icons.location_on_rounded, color: color, size: 18),
+            const SizedBox(width: 8),
+            Text(label,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    color: color)),
+          ]),
+          const SizedBox(height: 10),
+          DropdownButtonFormField<String?>(
+            initialValue: current,
+            decoration: InputDecoration(
+              labelText: 'Selecciona tu región',
+              border: const OutlineInputBorder(),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              filled: true,
+              fillColor: Colors.white,
+            ),
+            items: [
+              const DropdownMenuItem<String?>(
+                  value: null,
+                  child: Text('— No especificar —',
+                      style: TextStyle(fontSize: 12, color: Colors.grey))),
+              ..._kRegiones.map((r) => DropdownMenuItem<String?>(
+                    value: r,
+                    child: Text(r, style: const TextStyle(fontSize: 12)),
+                  )),
+            ],
+            onChanged: onChanged,
+          ),
+          if (current != null) ...[
+            const SizedBox(height: 8),
+            Row(children: [
+              Icon(Icons.check_circle_rounded,
+                  size: 14, color: color),
+              const SizedBox(width: 6),
+              Text('Tu voto es por candidatos de: $current',
+                  style: TextStyle(fontSize: 11, color: color,
+                      fontWeight: FontWeight.w500)),
+            ]),
+          ],
+        ],
+      ),
+    );
+  }
+
   Widget _buildPartyPage(int pageIdx) {
     // pageIdx: 1=Sec2, 2=Sec3, 3=Sec4, 4=Sec5
     final def = _kSections[pageIdx];
     final ctrlIdx = pageIdx - 1; // maps to _ctrl[0..3]
     final boxes = _ctrl[ctrlIdx][0].length;
+
+    // Region picker for Sec3 (Senadores Múltiple) and Sec4 (Diputados)
+    final showRegion = pageIdx == 2 || pageIdx == 3;
+    final regionLabel = pageIdx == 2
+        ? '¿En qué región votarás a Senadores Regionales?'
+        : '¿En qué región votarás a Diputados?';
+    final regionCurrent = pageIdx == 2 ? _regionSenMultiple : _regionDiputados;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
@@ -1022,6 +1112,16 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _secCard(def),
+          if (showRegion)
+            _regionPicker(
+              label: regionLabel,
+              current: regionCurrent,
+              color: def.color,
+              onChanged: (v) => setState(() {
+                if (pageIdx == 2) { _regionSenMultiple = v; }
+                else { _regionDiputados = v; }
+              }),
+            ),
           _rulesCard(),
           // Ballot card
           Card(
@@ -1254,6 +1354,9 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
                 prefs: prefs,
                 isSelected: selIdx != null,
                 sectionCandidates: sectionCandidates[ctrlIdx],
+                region: ctrlIdx == 1 ? _regionSenMultiple
+                       : ctrlIdx == 2 ? _regionDiputados
+                       : null,
               ),
             );
           }),
@@ -1325,6 +1428,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
     required List<String> prefs,
     required bool isSelected,
     List<CandidatoConHV>? sectionCandidates,
+    String? region,
   }) {
     final bool hasPref = prefs.isNotEmpty;
     final String statusText;
@@ -1391,6 +1495,18 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
           const SizedBox(height: 10),
           const Divider(height: 1),
           const SizedBox(height: 10),
+          if (region != null) ...[
+            Row(children: [
+              const Icon(Icons.location_on_rounded, size: 13, color: Colors.teal),
+              const SizedBox(width: 4),
+              Text('Región: $region',
+                  style: const TextStyle(
+                      fontSize: 11,
+                      color: Colors.teal,
+                      fontWeight: FontWeight.w500)),
+            ]),
+            const SizedBox(height: 8),
+          ],
           if (partyName != null) ...[
             Row(children: [
               PartyLogo(partyName: partyName, size: 32),

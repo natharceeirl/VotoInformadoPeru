@@ -1006,6 +1006,19 @@ class _CandidatoRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
         child: Row(
           children: [
+            // Photo
+            CircleAvatar(
+              radius: 14,
+              backgroundColor: proceso.color.withValues(alpha: 0.12),
+              backgroundImage: c.fotoUrl != null ? NetworkImage(c.fotoUrl!) : null,
+              onBackgroundImageError: c.fotoUrl != null ? (_, __) {} : null,
+              child: c.fotoUrl == null
+                  ? Text(hv.nombre.isNotEmpty ? hv.nombre[0] : '?',
+                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold,
+                          color: proceso.color))
+                  : null,
+            ),
+            const SizedBox(width: 6),
             Expanded(
               child: Text(hv.nombre,
                 style: const TextStyle(fontSize: 11),

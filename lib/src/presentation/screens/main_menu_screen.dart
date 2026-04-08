@@ -3,11 +3,13 @@ import 'dashboard_summary_screen.dart';
 import 'ranking_screen.dart';
 import 'candidates_directory_screen.dart';
 import 'regiones_screen.dart';
-import 'reinfo_alert_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'compare_parties_screen.dart';
 import 'charts_hub_screen.dart';
 import 'data_sources_screen.dart';
 import 'conoce_candidatos_screen.dart';
+import 'estadisticas_partido_screen.dart';
+import 'reinfo_proceso_screen.dart';
 import 'credits_screen.dart';
 import '../../domain/models/hoja_vida_models.dart';
 
@@ -138,37 +140,44 @@ class MainMenuScreen extends StatelessWidget {
                 icon: Icons.people_alt_outlined,
               ),
               const SizedBox(height: 12),
-              /*_MenuCard(
-                title: 'Directorio de Candidatos',
-                subtitle: 'Busca entre 963+ candidatos al Senado Nacional',
-                detail: 'Filtro por partido · DNI · Nivel educativo',
-                icon: Icons.manage_search_rounded,
-                color: Colors.teal,
-                badge: '963',
+              _MenuCard(
+                title: 'Estadísticas por Partido',
+                subtitle: 'Ranking · Puntaje promedio · Comparación por partido',
+                detail: 'Educación · Sentencias · Ingresos · Score final',
+                icon: Icons.poll_rounded,
+                color: const Color(0xFF1B5E20),
+                badge: null,
                 onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const CandidatesDirectoryScreen())),
+                    MaterialPageRoute(builder: (_) =>
+                        const EstadisticasPartidoScreen(proceso: ProcesoElectoral.senadores))),
               ),
               const SizedBox(height: 10),
               _MenuCard(
-                title: 'Senadores por Región',
-                subtitle: 'Candidatos por departamento y distrito',
-                detail: 'Distrito Múltiple · Distrito Único · Fotos y logos',
-                icon: Icons.map_rounded,
-                color: Colors.cyan,
-                badge: null,
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const RegionesScreen())),
-              ),
-              const SizedBox(height: 10),*/
-              _MenuCard(
                 title: 'Candidatos Mineros (REINFO)',
-                subtitle: 'Alertas de minería informal',
-                detail: 'Filtro por partido · Cantidad registros',
-                icon: Icons.warning_amber_rounded,
+                subtitle: 'Candidatos vinculados a minería informal',
+                detail: 'Foto · Logo partido · Hoja de vida · Filtro partido',
+                icon: Icons.terrain_rounded,
                 color: Colors.orange,
                 badge: null,
                 onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const ReinfoAlertScreen())),
+                    MaterialPageRoute(builder: (_) =>
+                        const ReinfoProcesoScreen(proceso: ProcesoElectoral.senadores))),
+              ),
+              const SizedBox(height: 16),
+              // JNE link
+              Center(
+                child: TextButton.icon(
+                  onPressed: () async {
+                    final uri = Uri.parse('https://votoinformado.jne.gob.pe/senadores');
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  },
+                  icon: const Icon(Icons.open_in_new, size: 14),
+                  label: const Text('Ver candidatos en el portal oficial del JNE'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: const Color(0xFF1E3A5F),
+                    textStyle: const TextStyle(fontSize: 12),
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
 

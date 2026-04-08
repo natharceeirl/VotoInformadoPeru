@@ -1,15 +1,16 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import '../providers/new_providers.dart';
 import '../../domain/models/hoja_vida_models.dart';
 import '../widgets/party_logo.dart';
+import 'estadisticas_partido_screen.dart' show showCandidatoDetalle;
 
-// ─── Sort enum ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Sort enum â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 enum _Sort { descValor, ascValor, alfa }
 
-// ─── Per-party aggregated stats ───────────────────────────────────────────────
+// â”€â”€â”€ Per-party aggregated stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _PStats {
   final String partido;
   int total = 0;
@@ -53,7 +54,7 @@ Map<String, _PStats> _computeStats(List<CandidatoConHV> lista) {
   return map;
 }
 
-// ─── Main Screen ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Main Screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class IndicadoresProcesoScreen extends ConsumerStatefulWidget {
   final ProcesoElectoral proceso;
   const IndicadoresProcesoScreen({super.key, required this.proceso});
@@ -78,7 +79,7 @@ class _IndicadoresProcesoScreenState
 
   static const _tabs = [
     'Sentencias',
-    'Preparación',
+    'PreparaciÃ³n',
     'Ingre. S/0',
     'Ing. Promedio',
     'REINFO',
@@ -143,7 +144,7 @@ class _IndicadoresProcesoScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Indicadores — ${widget.proceso.displayName}'),
+        title: Text('Indicadores â€” ${widget.proceso.displayName}'),
         centerTitle: true,
         bottom: TabBar(
           controller: _tabController,
@@ -160,7 +161,7 @@ class _IndicadoresProcesoScreenState
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (candidatos) {
-          // ── Region filter (Diputados / Parlamento Andino) ──────────────────
+          // â”€â”€ Region filter (Diputados / Parlamento Andino) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           final hasRegion = widget.proceso == ProcesoElectoral.diputados ||
               widget.proceso == ProcesoElectoral.parlamentoAndino;
           final regiones = hasRegion
@@ -220,7 +221,7 @@ class _IndicadoresProcesoScreenState
 
           return Column(
             children: [
-              // ── Region filter bar (Diputados / Parlamento Andino) ───────────
+              // â”€â”€ Region filter bar (Diputados / Parlamento Andino) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               if (hasRegion && regiones.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
@@ -265,7 +266,7 @@ class _IndicadoresProcesoScreenState
                     children: [
                       const Icon(Icons.filter_list_rounded, size: 13, color: Colors.indigo),
                       const SizedBox(width: 4),
-                      Text('Región: $_regionFilter · ${filtered.length} candidatos',
+                      Text('RegiÃ³n: $_regionFilter Â· ${filtered.length} candidatos',
                           style: const TextStyle(fontSize: 11, color: Colors.indigo)),
                       const Spacer(),
                       GestureDetector(
@@ -278,19 +279,19 @@ class _IndicadoresProcesoScreenState
                     ],
                   ),
                 ),
-              // ── Charts ───────────────────────────────────────────────────────
+              // â”€â”€ Charts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-              // ── Sentencias ────────────────────────────────────────────────
+              // â”€â”€ Sentencias â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: '% Candidatos con Sentencia',
                   subtitle:
                       'Porcentaje de candidatos del partido con al menos una '
                       'sentencia penal o de obligaciones registrada. '
-                      '0% = ningún candidato sentenciado. Toca un partido para ver detalles.',
+                      '0% = ningÃºn candidato sentenciado. Toca un partido para ver detalles.',
                   icon: Icons.gavel,
                   color: Colors.red,
                   sort: _sortSent,
@@ -308,14 +309,14 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // ── Preparación ───────────────────────────────────────────────
+              // â”€â”€ PreparaciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
-                  title: 'Preparación Académica Promedio',
+                  title: 'PreparaciÃ³n AcadÃ©mica Promedio',
                   subtitle:
-                      'Score educativo promedio (0–40 pts) de los candidatos '
-                      'del partido: Doctorado=40, Maestría=35, Universitaria=15, Técnica=8. '
-                      'Mayor puntaje = mejor preparación formal.',
+                      'Score educativo promedio (0â€“40 pts) de los candidatos '
+                      'del partido: Doctorado=40, MaestrÃ­a=35, Universitaria=15, TÃ©cnica=8. '
+                      'Mayor puntaje = mejor preparaciÃ³n formal.',
                   icon: Icons.school,
                   color: Colors.blue,
                   sort: _sortEdu,
@@ -333,14 +334,14 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // ── Ingresos S/0 ──────────────────────────────────────────────
+              // â”€â”€ Ingresos S/0 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: '% Candidatos con Ingresos S/ 0',
                   subtitle:
                       'Porcentaje de candidatos del partido que declararon '
                       'ingresos de S/ 0 en su hoja de vida. Un porcentaje alto '
-                      'puede indicar omisión de declaración de ingresos.',
+                      'puede indicar omisiÃ³n de declaraciÃ³n de ingresos.',
                   icon: Icons.money_off,
                   color: Colors.deepOrange,
                   sort: _sortCero,
@@ -358,7 +359,7 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // ── Ingresos Promedio ─────────────────────────────────────────
+              // â”€â”€ Ingresos Promedio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: 'Ingreso Anual Promedio (candidatos con ingresos)',
@@ -383,13 +384,13 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // ── REINFO ────────────────────────────────────────────────────
+              // â”€â”€ REINFO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: 'Candidatos en REINFO por Partido',
                   subtitle:
-                      'Número de candidatos del partido registrados en el REINFO '
-                      '(Registro Integral de Formalización Minera — minería informal). '
+                      'NÃºmero de candidatos del partido registrados en el REINFO '
+                      '(Registro Integral de FormalizaciÃ³n Minera â€” minerÃ­a informal). '
                       'Solo aparecen partidos con al menos un candidato en el registro.',
                   icon: Icons.terrain_rounded,
                   color: Colors.brown,
@@ -408,13 +409,13 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // ── Score Final ───────────────────────────────────────────────
+              // â”€â”€ Score Final â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: 'Score Final Promedio por Partido',
                   subtitle:
-                      'Score de integridad compuesto promedio (educación + '
-                      'sentencias − penalizaciones) de los candidatos del partido. '
+                      'Score de integridad compuesto promedio (educaciÃ³n + '
+                      'sentencias âˆ’ penalizaciones) de los candidatos del partido. '
                       'Mayor puntaje = mejor perfil de integridad global.',
                   icon: Icons.star_rate_rounded,
                   color: Colors.indigo,
@@ -433,7 +434,7 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // ── Radar ─────────────────────────────────────────────────────
+              // â”€â”€ Radar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _selectedPartyRadar == null
                   ? const Center(child: Text('Sin datos'))
                   : _RadarTab(
@@ -454,14 +455,14 @@ class _IndicadoresProcesoScreenState
   }
 }
 
-// ─── Simple data holder ───────────────────────────────────────────────────────
+// â”€â”€â”€ Simple data holder â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _Bar {
   final String label;
   final double value;
   const _Bar(this.label, this.value);
 }
 
-// ─── Party Detail Bottom Sheet ────────────────────────────────────────────────
+// â”€â”€â”€ Party Detail Bottom Sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _PartyDetailSheet extends StatelessWidget {
   final String partyName;
   final _PStats? ps;
@@ -521,7 +522,7 @@ class _PartyDetailSheet extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // ── Handle + header ──────────────────────────────────────────────
+            // â”€â”€ Handle + header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             Container(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 14),
               decoration: BoxDecoration(
@@ -556,7 +557,7 @@ class _PartyDetailSheet extends StatelessWidget {
                                     fontSize: 14)),
                             if (ps != null)
                               Text(
-                                '${ps!.total} candidatos · Score final prom. ${ps!.avgScoreFinal.toStringAsFixed(1)}/105',
+                                '${ps!.total} candidatos Â· Score final prom. ${ps!.avgScoreFinal.toStringAsFixed(1)}/105',
                                 style: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.8),
                                     fontSize: 11),
@@ -576,7 +577,7 @@ class _PartyDetailSheet extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(14, 14, 14, 28),
                 children: [
                   if (ps != null) ...[
-                    // ── Stats grid ─────────────────────────────────────────
+                    // â”€â”€ Stats grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                     GridView.count(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -614,7 +615,7 @@ class _PartyDetailSheet extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
 
-                    // ── Ingreso promedio ───────────────────────────────────
+                    // â”€â”€ Ingreso promedio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                     if (ps!.avgIngreso > 0)
                       Container(
                         padding: const EdgeInsets.all(10),
@@ -649,7 +650,7 @@ class _PartyDetailSheet extends StatelessWidget {
                         ),
                       ),
 
-                    // ── Pro-crimen alert ───────────────────────────────────
+                    // â”€â”€ Pro-crimen alert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                     if (ps!.conProCrimen > 0)
                       Container(
                         padding: const EdgeInsets.all(10),
@@ -680,7 +681,7 @@ class _PartyDetailSheet extends StatelessWidget {
                     const Divider(height: 20),
                   ],
 
-                  // ── Candidate list ─────────────────────────────────────────
+                  // â”€â”€ Candidate list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Row(
@@ -722,7 +723,7 @@ class _PartyDetailSheet extends StatelessWidget {
   }
 }
 
-// ─── Candidate tile inside detail sheet ──────────────────────────────────────
+// â”€â”€â”€ Candidate tile inside detail sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _CandidatoTile extends StatelessWidget {
   final CandidatoConHV c;
   final ProcesoElectoral proceso;
@@ -743,7 +744,7 @@ class _CandidatoTile extends StatelessWidget {
         hv.esReinfo;
 
     return InkWell(
-      onTap: () => _showCandidatoDetalleInd(context, c, proceso),
+      onTap: () => showCandidatoDetalle(context, c, proceso),
       borderRadius: BorderRadius.circular(10),
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
@@ -859,295 +860,6 @@ class _MiniChip extends StatelessWidget {
   }
 }
 
-// ─── Show candidate detail from indicadores screen ────────────────────────────
-void _showCandidatoDetalleInd(
-    BuildContext context, CandidatoConHV c, ProcesoElectoral proceso) {
-  final hv = c.hv;
-  final color = proceso.color;
-
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (_) => DraggableScrollableSheet(
-      expand: false,
-      initialChildSize: 0.78,
-      minChildSize: 0.4,
-      maxChildSize: 0.95,
-      builder: (_, ctrl) => SingleChildScrollView(
-        controller: ctrl,
-        padding: const EdgeInsets.fromLTRB(18, 8, 18, 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Handle
-            Center(
-              child: Container(
-                width: 36, height: 4,
-                margin: const EdgeInsets.only(bottom: 14),
-                decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(2)),
-              ),
-            ),
-            // Header
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: color.withValues(alpha: 0.12),
-                  backgroundImage:
-                      c.fotoUrl != null ? NetworkImage(c.fotoUrl!) : null,
-                  onBackgroundImageError:
-                      c.fotoUrl != null ? (_, __) {} : null,
-                  child: c.fotoUrl == null
-                      ? Text(hv.nombre.isNotEmpty ? hv.nombre[0] : '?',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: color))
-                      : null,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(hv.nombre,
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
-                      Text(hv.partido,
-                          style: TextStyle(
-                              fontSize: 12, color: Colors.grey.shade600)),
-                      if (c.cargo.isNotEmpty)
-                        Text(c.cargo,
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: color,
-                                fontWeight: FontWeight.w600)),
-                      if (c.departamento.isNotEmpty)
-                        Text(c.departamento,
-                            style: const TextStyle(
-                                fontSize: 11, color: Colors.teal)),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: hv.scoreBgColor,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: hv.scoreColor, width: 1.5),
-                  ),
-                  child: Column(
-                    children: [
-                      Text('${hv.scoreFinal}',
-                          style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
-                              color: hv.scoreColor,
-                              height: 1)),
-                      Text(hv.scoreLabel,
-                          style: TextStyle(
-                              fontSize: 8,
-                              color: hv.scoreColor,
-                              fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const Divider(height: 20),
-
-            // Educación
-            _indSection('EDUCACIÓN', color),
-            _indRow2(hv.educacionIcon, hv.educacionLabel, hv.educacionColor),
-            if (hv.universidades.isNotEmpty)
-              ...hv.universidades.map((u) => _indBullet(u)),
-            if (hv.posgrados.isNotEmpty)
-              ...hv.posgrados.map((p) => _indBullet(p)),
-            const Divider(height: 20),
-
-            // Integridad judicial
-            _indSection('INTEGRIDAD JUDICIAL', color),
-            _indRow2(
-              hv.totalSentenciasPenales == 0
-                  ? Icons.check_circle_rounded
-                  : Icons.gavel_rounded,
-              hv.totalSentenciasPenales == 0
-                  ? 'Sin sentencias penales'
-                  : '${hv.totalSentenciasPenales} sentencia(s) penal(es)',
-              hv.totalSentenciasPenales == 0
-                  ? const Color(0xFF2E7D32)
-                  : const Color(0xFFC62828),
-            ),
-            _indRow2(
-              hv.totalSentenciasObligaciones == 0
-                  ? Icons.check_circle_rounded
-                  : Icons.warning_amber_rounded,
-              hv.totalSentenciasObligaciones == 0
-                  ? 'Sin sentencias de obligación'
-                  : '${hv.totalSentenciasObligaciones} sentencia(s) de obligación',
-              hv.totalSentenciasObligaciones == 0
-                  ? const Color(0xFF2E7D32)
-                  : Colors.orange,
-            ),
-
-            // Alertas
-            if (hv.numLeyesProCrimen > 0 ||
-                hv.esReinfo ||
-                hv.investigacionesConocidas.isNotEmpty) ...[
-              const Divider(height: 20),
-              _indSection('ALERTAS DE INTEGRIDAD', Colors.red.shade700),
-              if (hv.numLeyesProCrimen > 0)
-                _indRow2(Icons.dangerous_rounded,
-                    'Votó a favor de ${hv.numLeyesProCrimen} ley(es) pro-crimen',
-                    Colors.deepOrange),
-              if (hv.esReinfo)
-                _indRow2(Icons.terrain_rounded,
-                    'Registrado en REINFO (minería informal) — ${hv.cantidadMineras} concesión(es)',
-                    Colors.brown),
-              if (hv.investigacionesConocidas.isNotEmpty)
-                _indRow2(Icons.report_rounded,
-                    hv.investigacionesConocidas, Colors.red.shade700),
-            ],
-
-            // Ingresos
-            const Divider(height: 20),
-            _indSection(
-                'INGRESOS DECLARADOS${hv.anioIngresos.isNotEmpty ? " — ${hv.anioIngresos}" : ""}',
-                const Color(0xFF1565C0)),
-            _indRow2(
-              Icons.attach_money_rounded,
-              'Ingreso total anual: ${hv.ingresoTotal > 0 ? NumberFormat.currency(locale: "es_PE", symbol: "S/ ", decimalDigits: 2).format(hv.ingresoTotal) : "S/ 0 declarado"}',
-              const Color(0xFF1565C0),
-            ),
-            if (hv.numInmuebles > 0)
-              _indRow2(Icons.home_rounded,
-                  '${hv.numInmuebles} inmueble(s) declarado(s)', Colors.teal),
-
-            // Score
-            const Divider(height: 20),
-            _indSection('DESGLOSE DEL PUNTAJE', color),
-            _ScoreBar('Educación', hv.scoreEducacion, 40, hv.educacionColor),
-            _ScoreBar('Integridad penal', hv.scoreIntegridadPenal, 35,
-                hv.scoreIntegridadPenal >= 30
-                    ? const Color(0xFF2E7D32)
-                    : const Color(0xFFC62828)),
-            _ScoreBar('Cumpl. obligaciones', hv.scoreIntegridadOblig, 25,
-                hv.scoreIntegridadOblig >= 20
-                    ? const Color(0xFF2E7D32)
-                    : Colors.orange),
-            const SizedBox(height: 6),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: hv.scoreBgColor,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                    color: hv.scoreColor.withValues(alpha: 0.4)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Puntaje total',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('${hv.scoreFinal} / 105',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: hv.scoreColor)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-Widget _indSection(String text, Color color) => Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(text,
-          style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              color: color,
-              letterSpacing: 0.8)),
-    );
-
-Widget _indRow2(IconData icon, String text, Color color) => Padding(
-      padding: const EdgeInsets.only(bottom: 5),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 13, color: color),
-          const SizedBox(width: 7),
-          Expanded(
-              child: Text(text,
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: color,
-                      fontWeight: FontWeight.w500))),
-        ],
-      ),
-    );
-
-Widget _indBullet(String text) => Padding(
-      padding: const EdgeInsets.only(left: 20, bottom: 3),
-      child: Text('• $text',
-          style: TextStyle(
-              fontSize: 11,
-              color: Colors.grey.shade700)),
-    );
-
-class _ScoreBar extends StatelessWidget {
-  final String label;
-  final int score;
-  final int max;
-  final Color color;
-  const _ScoreBar(this.label, this.score, this.max, this.color);
-
-  @override
-  Widget build(BuildContext context) {
-    final pct = max > 0 ? score / max : 0.0;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: [
-          Expanded(flex: 4, child: Text(label,
-              style: Theme.of(context).textTheme.bodySmall)),
-          Expanded(
-            flex: 5,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: pct,
-                backgroundColor: color.withValues(alpha: 0.12),
-                valueColor: AlwaysStoppedAnimation<Color>(color),
-                minHeight: 8,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text('$score/$max',
-              style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: color)),
-        ],
-      ),
-    );
-  }
-}
-
 // ─── Tab scrollable wrapper ───────────────────────────────────────────────────
 class _TabScrollable extends StatelessWidget {
   final List<Widget> children;
@@ -1165,7 +877,7 @@ class _TabScrollable extends StatelessWidget {
   }
 }
 
-// ─── Chart Section ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Chart Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _ChartSection extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -1238,9 +950,9 @@ class _ChartSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text('Ordenar: ', style: theme.textTheme.bodySmall),
-            _SortChip('↓ Mayor', _Sort.descValor, sort, onSortChanged, color),
+            _SortChip('â†“ Mayor', _Sort.descValor, sort, onSortChanged, color),
             const SizedBox(width: 6),
-            _SortChip('↑ Menor', _Sort.ascValor, sort, onSortChanged, color),
+            _SortChip('â†‘ Menor', _Sort.ascValor, sort, onSortChanged, color),
             const SizedBox(width: 6),
             _SortChip('A-Z', _Sort.alfa, sort, onSortChanged, color),
           ],
@@ -1269,7 +981,7 @@ class _ChartSection extends StatelessWidget {
   }
 }
 
-// ─── Sort Chip ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Sort Chip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _SortChip extends StatelessWidget {
   final String label;
   final _Sort value;
@@ -1306,7 +1018,7 @@ class _SortChip extends StatelessWidget {
   }
 }
 
-// ─── Bar Row ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Bar Row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _BarRow extends StatelessWidget {
   final _Bar bar;
   final double max;
@@ -1392,7 +1104,7 @@ class _BarRow extends StatelessWidget {
   }
 }
 
-// ─── Radar Tab ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Radar Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _RadarTab extends StatelessWidget {
   final Map<String, _PStats> statsMap;
   final List<String> partyNames;
@@ -1409,7 +1121,7 @@ class _RadarTab extends StatelessWidget {
   // Axis labels (6 dimensions)
   static const _axisLabels = [
     'Sin Sentencias',
-    'Preparación',
+    'PreparaciÃ³n',
     'Ingresos',
     'Sin REINFO',
     'Score Final',
@@ -1419,17 +1131,17 @@ class _RadarTab extends StatelessWidget {
   List<double> _radarValues(_PStats? ps) {
     if (ps == null) return List.filled(6, 0);
     return [
-      // Sin sentencias: inverse of pct with sentence, 0–100 → 0–1
+      // Sin sentencias: inverse of pct with sentence, 0â€“100 â†’ 0â€“1
       ((100 - ps.pctSentencia) / 100).clamp(0.0, 1.0),
-      // Preparación: avg edu score 0–40 → 0–1
+      // PreparaciÃ³n: avg edu score 0â€“40 â†’ 0â€“1
       (ps.avgScoreEdu / 40).clamp(0.0, 1.0),
-      // Ingresos: avg income capped at 200k, 0–1
+      // Ingresos: avg income capped at 200k, 0â€“1
       (ps.avgIngreso / 200000).clamp(0.0, 1.0),
       // Sin REINFO: inverse of reinfo fraction
       ps.total > 0
           ? ((ps.total - ps.enReinfo) / ps.total).clamp(0.0, 1.0)
           : 0.0,
-      // Score Final: avg final score capped at 80 → 0–1
+      // Score Final: avg final score capped at 80 â†’ 0â€“1
       (ps.avgScoreFinal / 80).clamp(0.0, 1.0),
       // Sin Pro-Crimen: inverse of pro-crimen fraction
       ps.total > 0
@@ -1458,7 +1170,18 @@ class _RadarTab extends StatelessWidget {
                   EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             ),
             items: partyNames
-                .map((p) => DropdownMenuItem(value: p, child: Text(p)))
+                .map((p) => DropdownMenuItem(
+                      value: p,
+                      child: Row(children: [
+                        PartyLogo(partyName: p, size: 20),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(p,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 13)),
+                        ),
+                      ]),
+                    ))
                 .toList(),
             onChanged: (v) {
               if (v != null) onPartyChanged(v);
@@ -1482,7 +1205,7 @@ class _RadarTab extends StatelessWidget {
                     ),
                     if (ps != null)
                       Text(
-                        '${ps.total} candidato(s) · Score final promedio: ${ps.avgScoreFinal.toStringAsFixed(1)}',
+                        '${ps.total} candidato(s) Â· Score final promedio: ${ps.avgScoreFinal.toStringAsFixed(1)}',
                         style: TextStyle(
                             color: Colors.grey.shade600, fontSize: 12),
                       ),
@@ -1571,8 +1294,8 @@ class _RadarTab extends StatelessWidget {
               border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
             ),
             child: Text(
-              'El gráfico radar muestra el perfil multidimensional del partido. '
-              'Valores más cercanos al 100% indican mejor desempeño en cada dimensión. '
+              'El grÃ¡fico radar muestra el perfil multidimensional del partido. '
+              'Valores mÃ¡s cercanos al 100% indican mejor desempeÃ±o en cada dimensiÃ³n. '
               'Datos calculados sobre los candidatos inscritos con hoja de vida disponible.',
               style: TextStyle(
                   fontSize: 11,
