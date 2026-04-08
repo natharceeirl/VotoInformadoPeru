@@ -7,10 +7,8 @@ import '../../domain/models/hoja_vida_models.dart';
 import '../widgets/party_logo.dart';
 import 'estadisticas_partido_screen.dart' show showCandidatoDetalle;
 
-// â”€â”€â”€ Sort enum â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 enum _Sort { descValor, ascValor, alfa }
 
-// â”€â”€â”€ Per-party aggregated stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _PStats {
   final String partido;
   int total = 0;
@@ -54,7 +52,6 @@ Map<String, _PStats> _computeStats(List<CandidatoConHV> lista) {
   return map;
 }
 
-// â”€â”€â”€ Main Screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class IndicadoresProcesoScreen extends ConsumerStatefulWidget {
   final ProcesoElectoral proceso;
   const IndicadoresProcesoScreen({super.key, required this.proceso});
@@ -79,9 +76,9 @@ class _IndicadoresProcesoScreenState
 
   static const _tabs = [
     'Sentencias',
-    'PreparaciÃ³n',
-    'Ingre. S/0',
-    'Ing. Promedio',
+    'Preparación',
+    'Ingrs. Anuales',
+    'Ingrs. Promedio',
     'REINFO',
     'Score Final',
     'Radar',
@@ -144,7 +141,7 @@ class _IndicadoresProcesoScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Indicadores â€” ${widget.proceso.displayName}'),
+        title: Text('Indicadores ${widget.proceso.displayName}'),
         centerTitle: true,
         bottom: TabBar(
           controller: _tabController,
@@ -161,15 +158,30 @@ class _IndicadoresProcesoScreenState
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (candidatos) {
-          // â”€â”€ Region filter (Diputados / Parlamento Andino) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           final hasRegion = widget.proceso == ProcesoElectoral.diputados ||
-              widget.proceso == ProcesoElectoral.parlamentoAndino;
-          final regiones = hasRegion
-              ? (candidatos.map((c) => c.departamento).where((d) => d.isNotEmpty).toSet().toList()..sort())
-              : <String>[];
-          final filtered = (hasRegion && _regionFilter != null)
-              ? candidatos.where((c) => c.departamento == _regionFilter).toList()
+              widget.proceso == ProcesoElectoral.parlamentoAndino ||
+              widget.proceso == ProcesoElectoral.senadores;
+          // For senadores regions come only from MÚLTIPLE candidates
+          final regionSource = widget.proceso == ProcesoElectoral.senadores
+              ? candidatos.where((c) => c.tipoDistrito == 'MÚLTIPLE').toList()
               : candidatos;
+          final regiones = hasRegion
+              ? (regionSource.map((c) => c.departamento).where((d) => d.isNotEmpty).toSet().toList()..sort())
+              : <String>[];
+          List<CandidatoConHV> filtered;
+          if (hasRegion && _regionFilter != null) {
+            if (widget.proceso == ProcesoElectoral.senadores) {
+              // Keep ÚNICO always; filter MÚLTIPLE by selected region
+              filtered = candidatos.where((c) =>
+                c.tipoDistrito == 'ÚNICO' ||
+                (c.tipoDistrito == 'MÚLTIPLE' && c.departamento == _regionFilter)
+              ).toList();
+            } else {
+              filtered = candidatos.where((c) => c.departamento == _regionFilter).toList();
+            }
+          } else {
+            filtered = candidatos;
+          }
 
           final statsMap = _computeStats(filtered);
           final parties = statsMap.values.toList();
@@ -221,7 +233,6 @@ class _IndicadoresProcesoScreenState
 
           return Column(
             children: [
-              // â”€â”€ Region filter bar (Diputados / Parlamento Andino) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               if (hasRegion && regiones.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
@@ -266,7 +277,7 @@ class _IndicadoresProcesoScreenState
                     children: [
                       const Icon(Icons.filter_list_rounded, size: 13, color: Colors.indigo),
                       const SizedBox(width: 4),
-                      Text('RegiÃ³n: $_regionFilter Â· ${filtered.length} candidatos',
+                      Text('Región: $_regionFilter · ${filtered.length} candidatos',
                           style: const TextStyle(fontSize: 11, color: Colors.indigo)),
                       const Spacer(),
                       GestureDetector(
@@ -279,19 +290,17 @@ class _IndicadoresProcesoScreenState
                     ],
                   ),
                 ),
-              // â”€â”€ Charts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-              // â”€â”€ Sentencias â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: '% Candidatos con Sentencia',
                   subtitle:
                       'Porcentaje de candidatos del partido con al menos una '
                       'sentencia penal o de obligaciones registrada. '
-                      '0% = ningÃºn candidato sentenciado. Toca un partido para ver detalles.',
+                      '0% = ningún candidato sentenciado. Toca un partido para ver detalles.',
                   icon: Icons.gavel,
                   color: Colors.red,
                   sort: _sortSent,
@@ -309,14 +318,13 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // â”€â”€ PreparaciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: 'PreparaciÃ³n AcadÃ©mica Promedio',
                   subtitle:
-                      'Score educativo promedio (0â€“40 pts) de los candidatos '
-                      'del partido: Doctorado=40, MaestrÃ­a=35, Universitaria=15, TÃ©cnica=8. '
-                      'Mayor puntaje = mejor preparaciÃ³n formal.',
+                      'Score educativo promedio (40 pts) de los candidatos '
+                      'del partido: Doctorado=40, Maestría=35, Universitaria=15, Técnica=8. '
+                      'Mayor puntaje = mejor preparación formal.',
                   icon: Icons.school,
                   color: Colors.blue,
                   sort: _sortEdu,
@@ -334,14 +342,13 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // â”€â”€ Ingresos S/0 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: '% Candidatos con Ingresos S/ 0',
                   subtitle:
                       'Porcentaje de candidatos del partido que declararon '
                       'ingresos de S/ 0 en su hoja de vida. Un porcentaje alto '
-                      'puede indicar omisiÃ³n de declaraciÃ³n de ingresos.',
+                      'puede indicar omisión de declaración de ingresos.',
                   icon: Icons.money_off,
                   color: Colors.deepOrange,
                   sort: _sortCero,
@@ -359,7 +366,6 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // â”€â”€ Ingresos Promedio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: 'Ingreso Anual Promedio (candidatos con ingresos)',
@@ -384,13 +390,12 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // â”€â”€ REINFO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: 'Candidatos en REINFO por Partido',
                   subtitle:
-                      'NÃºmero de candidatos del partido registrados en el REINFO '
-                      '(Registro Integral de FormalizaciÃ³n Minera â€” minerÃ­a informal). '
+                      'Número de candidatos del partido registrados en el REINFO '
+                      '(Registro Integral de Formalización Minera - minería informal). '
                       'Solo aparecen partidos con al menos un candidato en el registro.',
                   icon: Icons.terrain_rounded,
                   color: Colors.brown,
@@ -409,13 +414,12 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // â”€â”€ Score Final â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _TabScrollable(children: [
                 _ChartSection(
                   title: 'Score Final Promedio por Partido',
                   subtitle:
-                      'Score de integridad compuesto promedio (educaciÃ³n + '
-                      'sentencias âˆ’ penalizaciones) de los candidatos del partido. '
+                      'Score de integridad compuesto promedio (educación + '
+                      'sentencias - penalizaciones) de los candidatos del partido. '
                       'Mayor puntaje = mejor perfil de integridad global.',
                   icon: Icons.star_rate_rounded,
                   color: Colors.indigo,
@@ -434,7 +438,6 @@ class _IndicadoresProcesoScreenState
                 ),
               ]),
 
-              // â”€â”€ Radar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _selectedPartyRadar == null
                   ? const Center(child: Text('Sin datos'))
                   : _RadarTab(
@@ -455,14 +458,12 @@ class _IndicadoresProcesoScreenState
   }
 }
 
-// â”€â”€â”€ Simple data holder â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _Bar {
   final String label;
   final double value;
   const _Bar(this.label, this.value);
 }
 
-// â”€â”€â”€ Party Detail Bottom Sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _PartyDetailSheet extends StatelessWidget {
   final String partyName;
   final _PStats? ps;
@@ -522,7 +523,6 @@ class _PartyDetailSheet extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // â”€â”€ Handle + header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             Container(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 14),
               decoration: BoxDecoration(
@@ -557,7 +557,7 @@ class _PartyDetailSheet extends StatelessWidget {
                                     fontSize: 14)),
                             if (ps != null)
                               Text(
-                                '${ps!.total} candidatos Â· Score final prom. ${ps!.avgScoreFinal.toStringAsFixed(1)}/105',
+                                '${ps!.total} candidatos · Score final prom. ${ps!.avgScoreFinal.toStringAsFixed(1)}/105',
                                 style: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.8),
                                     fontSize: 11),
@@ -577,7 +577,6 @@ class _PartyDetailSheet extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(14, 14, 14, 28),
                 children: [
                   if (ps != null) ...[
-                    // â”€â”€ Stats grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                     GridView.count(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -615,7 +614,6 @@ class _PartyDetailSheet extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
 
-                    // â”€â”€ Ingreso promedio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                     if (ps!.avgIngreso > 0)
                       Container(
                         padding: const EdgeInsets.all(10),
@@ -650,7 +648,6 @@ class _PartyDetailSheet extends StatelessWidget {
                         ),
                       ),
 
-                    // â”€â”€ Pro-crimen alert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                     if (ps!.conProCrimen > 0)
                       Container(
                         padding: const EdgeInsets.all(10),
@@ -681,7 +678,6 @@ class _PartyDetailSheet extends StatelessWidget {
                     const Divider(height: 20),
                   ],
 
-                  // â”€â”€ Candidate list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Row(
@@ -723,7 +719,6 @@ class _PartyDetailSheet extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€ Candidate tile inside detail sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _CandidatoTile extends StatelessWidget {
   final CandidatoConHV c;
   final ProcesoElectoral proceso;
@@ -877,7 +872,6 @@ class _TabScrollable extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€ Chart Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _ChartSection extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -950,9 +944,9 @@ class _ChartSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text('Ordenar: ', style: theme.textTheme.bodySmall),
-            _SortChip('â†“ Mayor', _Sort.descValor, sort, onSortChanged, color),
+            _SortChip('Mayor', _Sort.descValor, sort, onSortChanged, color),
             const SizedBox(width: 6),
-            _SortChip('â†‘ Menor', _Sort.ascValor, sort, onSortChanged, color),
+            _SortChip('Menor', _Sort.ascValor, sort, onSortChanged, color),
             const SizedBox(width: 6),
             _SortChip('A-Z', _Sort.alfa, sort, onSortChanged, color),
           ],
@@ -981,7 +975,6 @@ class _ChartSection extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€ Sort Chip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _SortChip extends StatelessWidget {
   final String label;
   final _Sort value;
@@ -1018,7 +1011,6 @@ class _SortChip extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€ Bar Row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _BarRow extends StatelessWidget {
   final _Bar bar;
   final double max;
@@ -1104,7 +1096,6 @@ class _BarRow extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€ Radar Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _RadarTab extends StatelessWidget {
   final Map<String, _PStats> statsMap;
   final List<String> partyNames;
@@ -1121,7 +1112,7 @@ class _RadarTab extends StatelessWidget {
   // Axis labels (6 dimensions)
   static const _axisLabels = [
     'Sin Sentencias',
-    'PreparaciÃ³n',
+    'Preparación',
     'Ingresos',
     'Sin REINFO',
     'Score Final',
@@ -1205,7 +1196,7 @@ class _RadarTab extends StatelessWidget {
                     ),
                     if (ps != null)
                       Text(
-                        '${ps.total} candidato(s) Â· Score final promedio: ${ps.avgScoreFinal.toStringAsFixed(1)}',
+                        '${ps.total} candidato(s) · Score final promedio: ${ps.avgScoreFinal.toStringAsFixed(1)}',
                         style: TextStyle(
                             color: Colors.grey.shade600, fontSize: 12),
                       ),
@@ -1294,8 +1285,8 @@ class _RadarTab extends StatelessWidget {
               border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
             ),
             child: Text(
-              'El grÃ¡fico radar muestra el perfil multidimensional del partido. '
-              'Valores mÃ¡s cercanos al 100% indican mejor desempeÃ±o en cada dimensiÃ³n. '
+              'El gráfico radar muestra el perfil multidimensional del partido. '
+              'Valores más cercanos al 100% indican mejor desempeño en cada dimensión. '
               'Datos calculados sobre los candidatos inscritos con hoja de vida disponible.',
               style: TextStyle(
                   fontSize: 11,

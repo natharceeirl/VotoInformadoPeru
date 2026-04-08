@@ -1277,8 +1277,13 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
         [];
     final sectionCandidates = [
       senadoresAll.where((c) => c.tipoDistrito == 'ÚNICO').toList(),
-      senadoresAll.where((c) => c.tipoDistrito == 'MÚLTIPLE').toList(),
-      diputados,
+      senadoresAll.where((c) =>
+        c.tipoDistrito == 'MÚLTIPLE' &&
+        (_regionSenMultiple == null || c.departamento == _regionSenMultiple)
+      ).toList(),
+      _regionDiputados == null
+          ? diputados
+          : diputados.where((c) => c.departamento == _regionDiputados).toList(),
       parlAnd,
     ];
 
@@ -1720,8 +1725,6 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
     // Data sources — use asData so we don't block rendering
     final proCrimenPartido =
         ref.read(proCrimenPartidoProvider).asData?.value ?? {};
-    final porEstosNo =
-        ref.read(porEstosNoProvider).asData?.value ?? [];
 
     // Normalize helper
     String norm(String s) => s
@@ -1746,7 +1749,7 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
       final normDisplay = norm(display);
       final normJne = norm(jneName);
 
-      // 1. Pro-crimen: busca coincidencia parcial en el mapa
+      // Pro-crimen: busca coincidencia parcial en el mapa
       int pcCount = 0;
       for (final entry in proCrimenPartido.entries) {
         final k = entry.key; // already normalized uppercase
@@ -1764,71 +1767,6 @@ class _VoteSimulatorState extends ConsumerState<VoteSimulatorScreen> {
           message:
               'Su bancada anterior apoyó $pcCount ley(es) pro-crimen '
               'que facilitaron la corrupción y debilitaron la justicia.',
-        ));
-      }
-
-      // 2. REINFO: candidatos del partido en minería informal
-      // Cross-ref by party name using candidatosConHVProcesoProvider:
-      final presAll = ref
-          .read(candidatosConHVProcesoProvider(ProcesoElectoral.presidentes))
-          .asData?.value ?? [];
-      final senAll = ref
-          .read(candidatosConHVProcesoProvider(ProcesoElectoral.senadores))
-          .asData?.value ?? [];
-      final dipAll = ref
-          .read(candidatosConHVProcesoProvider(ProcesoElectoral.diputados))
-          .asData?.value ?? [];
-      final paAll = ref
-          .read(candidatosConHVProcesoProvider(ProcesoElectoral.parlamentoAndino))
-          .asData?.value ?? [];
-      final allCands = [...presAll, ...senAll, ...dipAll, ...paAll];
-
-      final partyReinfoCount = allCands
-          .where((c) =>
-              (norm(c.hv.partido).contains(normDisplay) ||
-               normDisplay.contains(norm(c.hv.partido))) &&
-              c.hv.esReinfo)
-          .length;
-      if (partyReinfoCount > 0) {
-        warnings.add(_SimWarning(
-          party: display,
-          icon: Icons.terrain_rounded,
-          color: Colors.brown.shade700,
-          message:
-              '$partyReinfoCount candidato(s) de este partido aparecen en el '
-              'REINFO (registro de minería informal/ilegal). ¿Lo pensaste bien?',
-        ));
-      }
-
-      // 3. Sentencias: candidatos del partido con sentencias penales
-      final partySentCount = allCands
-          .where((c) =>
-              (norm(c.hv.partido).contains(normDisplay) ||
-               normDisplay.contains(norm(c.hv.partido))) &&
-              c.hv.totalSentenciasPenales > 0)
-          .length;
-      if (partySentCount > 0) {
-        warnings.add(_SimWarning(
-          party: display,
-          icon: Icons.gavel_rounded,
-          color: Colors.red.shade700,
-          message:
-              '$partySentCount candidato(s) de este partido tienen sentencias '
-              'penales registradas en el JNE.',
-        ));
-      }
-
-      // 4. Por estos no (alto riesgo de corrupción)
-      final isRiesgo = porEstosNo.any(
-          (p) => p == normDisplay || normDisplay.contains(p) || p.contains(normDisplay));
-      if (isRiesgo) {
-        warnings.add(_SimWarning(
-          party: display,
-          icon: Icons.warning_amber_rounded,
-          color: Colors.orange.shade800,
-          message:
-              'Este partido figura en #PORESTOSNO por antecedentes documentados '
-              'de corrupción. ¿Estás seguro de querer votarles?',
         ));
       }
     }

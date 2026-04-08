@@ -144,7 +144,7 @@ class MainMenuScreen extends StatelessWidget {
                 title: 'Estadísticas por Partido',
                 subtitle: 'Ranking · Puntaje promedio · Comparación por partido',
                 detail: 'Educación · Sentencias · Ingresos · Score final',
-                icon: Icons.poll_rounded,
+                icon: Icons.poll,
                 color: const Color(0xFF1B5E20),
                 badge: null,
                 onTap: () => Navigator.push(context,
